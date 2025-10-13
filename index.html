@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centro Oftalmológico El Otorongo</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-eye"></i>
+                <h1>Centro Oftalmológico El Otorongo</h1>
+            </div>
+            <nav class="nav">
+                <a href="#inicio" class="nav-link active">Inicio</a>
+                <a href="#servicios" class="nav-link">Servicios</a>
+                <a href="#nosotros" class="nav-link">Nosotros</a>
+                <a href="#contacto" class="nav-link">Contacto</a>
+                <button class="btn-login" onclick="window.location.href='login.html'">
+                    <i class="fas fa-user"></i> Acceder al Sistema
+                </button>
+            </nav>
+            <div class="mobile-menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </header>
+ 
+    <!-- Hero Section -->
+    <section id="inicio" class="hero">
+        <div class="hero-content">
+            <h2>Cuidamos tu Visión con Excelencia</h2>
+            <p>Atención oftalmológica integral y de alta calidad con tecnología avanzada y personal médico especializado</p>
+            <div class="hero-buttons">
+                <button class="btn-primary" onclick="window.location.href='login.html'">
+                    <i class="fas fa-calendar-alt"></i> Agendar Cita
+                </button>
+                <button class="btn-secondary" onclick="scrollToSection('servicios')">
+                    <i class="fas fa-info-circle"></i> Nuestros Servicios
+                </button>
+            </div>
+        </div>
+        <div class="hero-image">
+            <i class="fas fa-eye hero-icon"></i>
+        </div>
+    </section>
+
+    <!-- Servicios Section -->
+    <section id="servicios" class="services">
+        <div class="container">
+            <h2 class="section-title">Nuestros Servicios</h2>
+            <p class="section-subtitle">Ofrecemos una amplia gama de servicios oftalmológicos especializados</p>
+            
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h3>Consultas Oftalmológicas</h3>
+                    <p>Evaluaciones completas de la salud visual con equipos de última generación</p>
+                    <ul>
+                        <li>Examen de agudeza visual</li>
+                        <li>Evaluación del fondo de ojo</li>
+                        <li>Medición de presión intraocular</li>
+                    </ul>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <h3>Cirugía de Cataratas</h3>
+                    <p>Procedimientos quirúrgicos especializados con técnicas modernas y seguras</p>
+                    <ul>
+                        <li>Facoemulsificación</li>
+                        <li>Implante de lentes intraoculares</li>
+                        <li>Seguimiento post-operatorio</li>
+                    </ul>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-microscope"></i>
+                    </div>
+                    <h3>Tratamiento de Pterigión</h3>
+                    <p>Diagnóstico y tratamiento especializado para pterigión y otras afecciones</p>
+                    <ul>
+                        <li>Evaluación especializada</li>
+                        <li>Cirugía ambulatoria</li>
+                        <li>Cuidados post-operatorios</li>
+                    </ul>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-glasses"></i>
+                    </div>
+                    <h3>Refracción y Lentes</h3>
+                    <p>Evaluación de errores refractivos y prescripción de lentes correctivos</p>
+                    <ul>
+                        <li>Examen de refracción</li>
+                        <li>Prescripción de lentes</li>
+                        <li>Adaptación de lentes de contacto</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="nosotros" class="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>Sobre Nosotros</h2>
+                    <p class="about-description">
+                        El Centro Oftalmológico El Otorongo es una institución especializada en salud visual 
+                        que ofrece una amplia gama de servicios, incluyendo consultas oftalmológicas, 
+                        diagnósticos de enfermedades oculares, tratamientos, y cirugías.
+                    </p>
+                    
+                    <div class="mission-vision">
+                        <div class="mission">
+                            <h3><i class="fas fa-bullseye"></i> Misión</h3>
+                            <p>Brindar atención oftalmológica integral y de alta calidad, con un enfoque 
+                            profesional y empático, utilizando tecnología avanzada y personal médico 
+                            especializado, con el objetivo de mejorar la salud visual de nuestros pacientes.</p>
+                        </div>
+                        
+                        <div class="vision">
+                            <h3><i class="fas fa-eye"></i> Visión</h3>
+                            <p>Ser una clínica oftalmológica líder a nivel regional, reconocida por su 
+                            excelencia en diagnóstico, tratamiento y cirugía en cataratas y pterigión, 
+                            y su contribución al bienestar visual de la población.</p>
+                        </div>
+                    </div>
+
+                    <div class="stats">
+                        <div class="stat">
+                            <h4>500+</h4>
+                            <p>Pacientes Atendidos</p>
+                        </div>
+                        <div class="stat">
+                            <h4>10+</h4>
+                            <p>Años de Experiencia</p>
+                        </div>
+                        <div class="stat">
+                            <h4>95%</h4>
+                            <p>Satisfacción del Cliente</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="about-image">
+                    <div class="image-placeholder">
+                        <i class="fas fa-hospital"></i>
+                        <p>Centro Oftalmológico El Otorongo</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contacto" class="contact">
+        <div class="container">
+            <h2 class="section-title">Contáctanos</h2>
+            <p class="section-subtitle">Estamos aquí para cuidar tu salud visual</p>
+            
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h3>Ubicación</h3>
+                            <p>Faucett 326, Callao<br>Lima, Perú</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h3>Teléfono</h3>
+                            <p>(01) 555-0123<br>(01) 555-0124</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h3>Email</h3>
+                            <p>info@otorongo.com<br>citas@otorongo.com</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h3>Horarios</h3>
+                            <p>Lun - Vie: 8:00 AM - 6:00 PM<br>Sáb: 8:00 AM - 2:00 PM</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-form">
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="nombre">Nombre Completo</label>
+                            <input type="text" id="nombre" name="nombre" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="telefono">Teléfono</label>
+                            <input type="tel" id="telefono" name="telefono" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="mensaje">Mensaje</label>
+                            <textarea id="mensaje" name="mensaje" rows="4" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-paper-plane"></i> Enviar Mensaje
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-eye"></i>
+                        <h3>Centro Oftalmológico El Otorongo</h3>
+                    </div>
+                    <p>Cuidando tu visión con excelencia y tecnología de vanguardia.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Enlaces Rápidos</h4>
+                    <ul>
+                        <li><a href="#inicio">Inicio</a></li>
+                        <li><a href="#servicios">Servicios</a></li>
+                        <li><a href="#nosotros">Nosotros</a></li>
+                        <li><a href="#contacto">Contacto</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Servicios</h4>
+                    <ul>
+                        <li><a href="#">Consultas Oftalmológicas</a></li>
+                        <li><a href="#">Cirugía de Cataratas</a></li>
+                        <li><a href="#">Tratamiento de Pterigión</a></li>
+                        <li><a href="#">Refracción y Lentes</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Contacto</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> Faucett 326, Callao</p>
+                    <p><i class="fas fa-phone"></i> (01) 555-0123</p>
+                    <p><i class="fas fa-envelope"></i> info@otorongo.com</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Centro Oftalmológico El Otorongo. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

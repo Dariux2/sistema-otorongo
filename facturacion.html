@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Facturación - Centro Oftalmológico El Otorongo</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="dashboard-page">
+    <!-- Header del Dashboard -->
+    <header class="dashboard-header-main">
+        <div class="container">
+            <div class="dashboard-brand">
+                <i class="fas fa-eye"></i>
+                <h1>Centro Oftalmológico El Otorongo</h1>
+            </div>
+            
+            <div class="dashboard-user-info">
+                <div class="user-welcome">
+                    <span class="user-greeting">Bienvenido,</span>
+                    <span class="user-name" id="userName">Usuario</span>
+                    <span class="user-role" id="userRole">Rol</span>
+                </div>
+                <div class="user-actions">
+                    <button class="btn-notification" onclick="showNotifications()">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge" id="notificationCount">3</span>
+                    </button>
+                    <button class="btn-profile" onclick="showProfile()">
+                        <i class="fas fa-user-circle"></i>
+                    </button>
+                    <button class="btn-logout" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Salir</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navegación Principal -->
+    <nav class="dashboard-nav">
+        <div class="container">
+            <ul class="nav-menu" id="dashboardMenu">
+                <!-- El menú se carga dinámicamente según el rol -->
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <main class="dashboard-main">
+        <div class="container">
+            <!-- Header de la página -->
+            <div class="page-header">
+                <div class="page-title">
+                    <h2><i class="fas fa-file-invoice-dollar"></i> Sistema de Facturación</h2>
+                    <p>Gestione la facturación y pagos del centro oftalmológico</p>
+                </div>
+                <div class="page-actions">
+                    <button class="btn-primary" onclick="openModal('newInvoiceModal')">
+                        <i class="fas fa-plus"></i> Nueva Factura
+                    </button>
+                    <button class="btn-secondary" onclick="refreshInvoices()">
+                        <i class="fas fa-sync-alt"></i> Actualizar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Estadísticas de facturación -->
+            <div class="billing-stats">
+                <div class="stats-grid">
+                    <div class="stat-card primary">
+                        <div class="stat-icon">
+                            <i class="fas fa-file-invoice"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="totalInvoices">0</div>
+                            <div class="stat-label">Total Facturas</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card success">
+                        <div class="stat-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="paidInvoices">0</div>
+                            <div class="stat-label">Facturas Pagadas</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card warning">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="pendingInvoices">0</div>
+                            <div class="stat-label">Facturas Pendientes</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card info">
+                        <div class="stat-icon">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="totalRevenue">S/. 0.00</div>
+                            <div class="stat-label">Ingresos del Mes</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lista de facturas -->
+            <div class="invoices-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-list"></i> Lista de Facturas</h3>
+                        <div class="list-controls">
+                            <input type="text" id="searchInvoice" placeholder="Buscar facturas..." style="margin-right: 1rem;">
+                            <select id="invoicesPerPage" onchange="changeInvoicesPerPage()">
+                                <option value="10">10 por página</option>
+                                <option value="25">25 por página</option>
+                                <option value="50">50 por página</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table class="table" id="invoicesTable">
+                            <thead>
+                                <tr>
+                                    <th>N° Factura</th>
+                                    <th>Fecha</th>
+                                    <th>Paciente</th>
+                                    <th>Total</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="invoicesTableBody">
+                                <!-- Las facturas se cargan dinámicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pagination" id="invoicesPagination">
+                        <!-- La paginación se genera dinámicamente -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Nueva Factura -->
+    <div id="newInvoiceModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-file-invoice-dollar"></i> Nueva Factura
+                </h3>
+                <button class="modal-close" onclick="closeModal('newInvoiceModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="newInvoiceForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="invoicePatient">
+                                <i class="fas fa-user"></i> Paciente *
+                            </label>
+                            <select id="invoicePatient" name="pacienteId" required>
+                                <option value="">Seleccione un paciente</option>
+                                <!-- Los pacientes se cargan dinámicamente -->
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="invoiceDate">
+                                <i class="fas fa-calendar"></i> Fecha *
+                            </label>
+                            <input type="date" id="invoiceDate" name="fecha" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="serviceType">
+                                <i class="fas fa-stethoscope"></i> Servicio *
+                            </label>
+                            <select id="serviceType" name="servicio" required>
+                                <option value="">Seleccione un servicio</option>
+                                <option value="Consulta General|80">Consulta General - S/. 80.00</option>
+                                <option value="Examen Especializado|120">Examen Especializado - S/. 120.00</option>
+                                <option value="Cirugía de Cataratas|1500">Cirugía de Cataratas - S/. 1,500.00</option>
+                                <option value="Control Post-Operatorio|60">Control Post-Operatorio - S/. 60.00</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="paymentMethod">
+                                <i class="fas fa-credit-card"></i> Método de Pago
+                            </label>
+                            <select id="paymentMethod" name="metodoPago">
+                                <option value="efectivo">Efectivo</option>
+                                <option value="tarjeta">Tarjeta</option>
+                                <option value="seguro">Seguro Médico</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="invoiceNotes">
+                                <i class="fas fa-notes-medical"></i> Observaciones
+                            </label>
+                            <textarea id="invoiceNotes" name="observaciones" rows="3"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-save"></i> Generar Factura
+                        </button>
+                        <button type="button" class="btn-secondary" onclick="closeModal('newInvoiceModal')">
+                            <i class="fas fa-times"></i> Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Ver Factura -->
+    <div id="viewInvoiceModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-file-invoice"></i> Detalles de Factura
+                </h3>
+                <button class="modal-close" onclick="closeModal('viewInvoiceModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="invoice-details" id="invoiceDetailsContent">
+                    <!-- Los detalles se cargan dinámicamente -->
+                </div>
+                <div class="modal-actions">
+                    <button class="btn-primary" onclick="printInvoice()">
+                        <i class="fas fa-print"></i> Imprimir
+                    </button>
+                    <button class="btn-success" onclick="markAsPaid()" id="markPaidBtn">
+                        <i class="fas fa-check"></i> Marcar como Pagada
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Variables globales para facturación
+        let currentUser = null;
+        let invoices = [];
+        let filteredInvoices = [];
+        let currentPage = 1;
+        let invoicesPerPage = 10;
+        let selectedInvoiceId = null;
+
+        // Inicializar página de facturación
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeBillingPage();
+        });
+
+        function initializeBillingPage() {
+            if (!checkAuthentication()) return;
+            loadUserData();
+            setupRoleBasedMenu();
+            loadInvoices();
+            loadPatients();
+            setupBillingForms();
+            setupFilters();
+            loadBillingStats();
+            setDefaultDate();
+        }
+
+        function checkAuthentication() {
+            const savedUser = localStorage.getItem('otorongo_current_user');
+            if (!savedUser) {
+                showNotification('Sesión expirada. Redirigiendo al login...', 'warning');
+                setTimeout(() => window.location.href = 'login.html', 2000);
+                return false;
+            }
+            currentUser = JSON.parse(savedUser);
+            return true;
+        }
+
+        function loadUserData() {
+            if (!currentUser) return;
+            document.getElementById('userName').textContent = currentUser.name;
+            document.getElementById('userRole').textContent = getRoleDisplayName(currentUser.role);
+        }
+
+        function getRoleDisplayName(role) {
+            const roleNames = {
+                'administrador': 'Administrador',
+                'medico': 'Médico',
+                'recepcionista': 'Recepcionista'
+            };
+            return roleNames[role] || role;
+        }
+
+        function setupRoleBasedMenu() {
+            const menuContainer = document.getElementById('dashboardMenu');
+            const menus = {
+                'administrador': [
+                    { icon: 'fas fa-tachometer-alt', text: 'Dashboard', page: 'dashboard' },
+                    { icon: 'fas fa-users', text: 'Pacientes', page: 'pacientes' },
+                    { icon: 'fas fa-calendar-alt', text: 'Citas', page: 'citas' },
+                    { icon: 'fas fa-file-invoice-dollar', text: 'Facturación', page: 'facturacion', active: true },
+                    { icon: 'fas fa-chart-bar', text: 'Reportes', page: 'reportes' }
+                ],
+                'recepcionista': [
+                    { icon: 'fas fa-tachometer-alt', text: 'Dashboard', page: 'dashboard' },
+                    { icon: 'fas fa-users', text: 'Pacientes', page: 'pacientes' },
+                    { icon: 'fas fa-calendar-alt', text: 'Citas', page: 'citas' },
+                    { icon: 'fas fa-file-invoice', text: 'Facturación', page: 'facturacion', active: true }
+                ]
+            };
+
+            const userMenu = menus[currentUser.role] || menus['recepcionista'];
+            
+            menuContainer.innerHTML = userMenu.map(item => `
+                <li>
+                    <a href="${item.page}.html" class="nav-item ${item.active ? 'active' : ''}">
+                        <i class="${item.icon}"></i>
+                        <span>${item.text}</span>
+                    </a>
+                </li>
+            `).join('');
+        }
+
+        function loadInvoices() {
+            invoices = OtorongoSystem.getInvoices();
+            filteredInvoices = [...invoices];
+            displayInvoices();
+        }
+
+        function loadPatients() {
+            const patients = OtorongoSystem.getPatients();
+            const patientSelect = document.getElementById('invoicePatient');
+            
+            if (patientSelect) {
+                patientSelect.innerHTML = '<option value="">Seleccione un paciente</option>';
+                patients.forEach(patient => {
+                    const option = document.createElement('option');
+                    option.value = patient.id;
+                    option.textContent = `${patient.nombres} ${patient.apellidos} - DNI: ${patient.dni}`;
+                    patientSelect.appendChild(option);
+                });
+            }
+        }
+
+        function setupBillingForms() {
+            const newForm = document.getElementById('newInvoiceForm');
+            if (newForm) {
+                newForm.addEventListener('submit', handleNewInvoice);
+            }
+        }
+
+        function setupFilters() {
+            const searchInput = document.getElementById('searchInvoice');
+            if (searchInput) {
+                searchInput.addEventListener('input', debounce(applyFilters, 300));
+            }
+        }
+
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        function setDefaultDate() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('invoiceDate').value = today;
+        }
+
+        function loadBillingStats() {
+            const totalInvoices = invoices.length;
+            const paidInvoices = invoices.filter(inv => inv.estado === 'pagada').length;
+            const pendingInvoices = invoices.filter(inv => inv.estado === 'pendiente').length;
+            
+            const currentMonth = new Date().getMonth();
+            const currentYear = new Date().getFullYear();
+            const monthlyRevenue = invoices
+                .filter(inv => {
+                    const invDate = new Date(inv.fecha);
+                    return invDate.getMonth() === currentMonth && 
+                           invDate.getFullYear() === currentYear &&
+                           inv.estado === 'pagada';
+                })
+                .reduce((sum, inv) => sum + inv.total, 0);
+
+            document.getElementById('totalInvoices').textContent = totalInvoices;
+            document.getElementById('paidInvoices').textContent = paidInvoices;
+            document.getElementById('pendingInvoices').textContent = pendingInvoices;
+            document.getElementById('totalRevenue').textContent = OtorongoSystem.formatCurrency(monthlyRevenue);
+        }
+
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchInvoice').value.toLowerCase();
+
+            filteredInvoices = invoices.filter(invoice => {
+                const patient = OtorongoSystem.getPatientById(invoice.pacienteId);
+                const patientName = patient ? `${patient.nombres} ${patient.apellidos}`.toLowerCase() : '';
+                
+                return !searchTerm || 
+                    patientName.includes(searchTerm) ||
+                    invoice.numero.includes(searchTerm);
+            });
+
+            currentPage = 1;
+            displayInvoices();
+        }
+
+        function displayInvoices() {
+            const tbody = document.getElementById('invoicesTableBody');
+            const startIndex = (currentPage - 1) * invoicesPerPage;
+            const endIndex = startIndex + invoicesPerPage;
+            const pageInvoices = filteredInvoices.slice(startIndex, endIndex);
+
+            if (pageInvoices.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center">
+                            <div class="empty-state">
+                                <i class="fas fa-file-times"></i>
+                                <p>No se encontraron facturas</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = pageInvoices.map(invoice => {
+                const patient = OtorongoSystem.getPatientById(invoice.pacienteId);
+                const patientName = patient ? `${patient.nombres} ${patient.apellidos}` : 'Paciente no encontrado';
+                
+                return `
+                    <tr>
+                        <td>#${invoice.numero || invoice.id.slice(-6)}</td>
+                        <td>${OtorongoSystem.formatDate(invoice.fecha)}</td>
+                        <td>${patientName}</td>
+                        <td>${OtorongoSystem.formatCurrency(invoice.total)}</td>
+                        <td><span class="badge ${invoice.estado}">${invoice.estado}</span></td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn-action" onclick="viewInvoice('${invoice.id}')" title="Ver detalles">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn-action" onclick="printInvoice('${invoice.id}')" title="Imprimir">
+                                    <i class="fas fa-print"></i>
+                                </button>
+                                ${invoice.estado === 'pendiente' ? `
+                                    <button class="btn-action btn-success" onclick="markAsPaid('${invoice.id}')" title="Marcar como pagada">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                ` : ''}
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            generatePagination();
+        }
+
+        function generatePagination() {
+            const totalPages = Math.ceil(filteredInvoices.length / invoicesPerPage);
+            const paginationContainer = document.getElementById('invoicesPagination');
+            
+            if (totalPages <= 1) {
+                paginationContainer.innerHTML = '';
+                return;
+            }
+
+            let paginationHTML = '<div class="pagination-controls">';
+            
+            if (currentPage > 1) {
+                paginationHTML += `<button class="btn-pagination" onclick="changePage(${currentPage - 1})">
+                    <i class="fas fa-chevron-left"></i>
+                </button>`;
+            }
+
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === currentPage) {
+                    paginationHTML += `<button class="btn-pagination active">${i}</button>`;
+                } else {
+                    paginationHTML += `<button class="btn-pagination" onclick="changePage(${i})">${i}</button>`;
+                }
+            }
+
+            if (currentPage < totalPages) {
+                paginationHTML += `<button class="btn-pagination" onclick="changePage(${currentPage + 1})">
+                    <i class="fas fa-chevron-right"></i>
+                </button>`;
+            }
+
+            paginationHTML += '</div>';
+            paginationContainer.innerHTML = paginationHTML;
+        }
+
+        function changePage(page) {
+            currentPage = page;
+            displayInvoices();
+        }
+
+        function changeInvoicesPerPage() {
+            invoicesPerPage = parseInt(document.getElementById('invoicesPerPage').value);
+            currentPage = 1;
+            displayInvoices();
+        }
+
+        function handleNewInvoice(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const serviceData = formData.get('servicio').split('|');
+            const serviceName = serviceData[0];
+            const servicePrice = parseFloat(serviceData[1]);
+            
+            const subtotal = servicePrice;
+            const igv = subtotal * 0.18;
+            const total = subtotal + igv;
+
+            const invoiceData = {
+                id: OtorongoSystem.generateId(),
+                numero: generateInvoiceNumber(),
+                pacienteId: formData.get('pacienteId'),
+                fecha: formData.get('fecha'),
+                servicios: [{
+                    descripcion: serviceName,
+                    cantidad: 1,
+                    precio: servicePrice
+                }],
+                subtotal: subtotal,
+                igv: igv,
+                total: total,
+                estado: 'pendiente',
+                metodoPago: formData.get('metodoPago'),
+                observaciones: formData.get('observaciones') || '',
+                fechaCreacion: new Date().toISOString()
+            };
+
+            invoices.push(invoiceData);
+            OtorongoSystem.saveInvoices(invoices);
+            
+            loadInvoices();
+            loadBillingStats();
+            closeModal('newInvoiceModal');
+            e.target.reset();
+            setDefaultDate();
+            
+            showNotification('Factura generada correctamente', 'success');
+        }
+
+        function generateInvoiceNumber() {
+            const existingNumbers = invoices.map(inv => parseInt(inv.numero || '0')).filter(n => !isNaN(n));
+            const lastNumber = existingNumbers.length > 0 ? Math.max(...existingNumbers) : 0;
+            return (lastNumber + 1).toString().padStart(6, '0');
+        }
+
+        function viewInvoice(invoiceId) {
+            const invoice = invoices.find(inv => inv.id === invoiceId);
+            if (!invoice) return;
+
+            selectedInvoiceId = invoiceId;
+            const patient = OtorongoSystem.getPatientById(invoice.pacienteId);
+            const patientName = patient ? `${patient.nombres} ${patient.apellidos}` : 'Paciente no encontrado';
+
+            const detailsContainer = document.getElementById('invoiceDetailsContent');
+            detailsContainer.innerHTML = `
+                <div class="invoice-header">
+                    <div class="invoice-info">
+                        <h3>Factura #${invoice.numero || invoice.id.slice(-6)}</h3>
+                        <p>Fecha: ${OtorongoSystem.formatDate(invoice.fecha)}</p>
+                        <p>Estado: <span class="badge ${invoice.estado}">${invoice.estado}</span></p>
+                    </div>
+                    <div class="patient-info">
+                        <h4>Paciente:</h4>
+                        <p>${patientName}</p>
+                        <p>DNI: ${patient ? patient.dni : 'N/A'}</p>
+                    </div>
+                </div>
+
+                <div class="services-detail">
+                    <h4>Servicios:</h4>
+                    <table class="services-table">
+                        <thead>
+                            <tr>
+                                <th>Descripción</th>
+                                <th>Cantidad</th>
+                                <th>Precio Unit.</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${invoice.servicios.map(service => `
+                                <tr>
+                                    <td>${service.descripcion}</td>
+                                    <td>${service.cantidad}</td>
+                                    <td>${OtorongoSystem.formatCurrency(service.precio)}</td>
+                                    <td>${OtorongoSystem.formatCurrency(service.cantidad * service.precio)}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="invoice-totals-detail">
+                    <div class="totals-row">
+                        <span>Subtotal:</span>
+                        <span>${OtorongoSystem.formatCurrency(invoice.subtotal)}</span>
+                    </div>
+                    <div class="totals-row">
+                        <span>IGV (18%):</span>
+                        <span>${OtorongoSystem.formatCurrency(invoice.igv)}</span>
+                    </div>
+                    <div class="totals-row total-final">
+                        <span>Total:</span>
+                        <span>${OtorongoSystem.formatCurrency(invoice.total)}</span>
+                    </div>
+                </div>
+            `;
+
+            // Configurar botones según estado
+            const markPaidBtn = document.getElementById('markPaidBtn');
+            if (invoice.estado === 'pagada') {
+                markPaidBtn.style.display = 'none';
+            } else {
+                markPaidBtn.style.display = 'inline-flex';
+            }
+
+            openModal('viewInvoiceModal');
+        }
+
+        function markAsPaid(invoiceId = null) {
+            const id = invoiceId || selectedInvoiceId;
+            if (!id) return;
+
+            const invoiceIndex = invoices.findIndex(inv => inv.id === id);
+            if (invoiceIndex !== -1) {
+                invoices[invoiceIndex].estado = 'pagada';
+                invoices[invoiceIndex].fechaPago = new Date().toISOString();
+                OtorongoSystem.saveInvoices(invoices);
+                
+                loadInvoices();
+                loadBillingStats();
+                
+                if (!invoiceId) {
+                    closeModal('viewInvoiceModal');
+                }
+                
+                showNotification('Factura marcada como pagada', 'success');
+            }
+        }
+
+        function printInvoice(invoiceId = null) {
+            const id = invoiceId || selectedInvoiceId;
+            if (!id) return;
+
+            const invoice = invoices.find(inv => inv.id === id);
+            if (!invoice) return;
+
+            const patient = OtorongoSystem.getPatientById(invoice.pacienteId);
+            
+            const printContent = `
+                <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px;">
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <h1>Centro Oftalmológico El Otorongo</h1>
+                        <p>Faucett 326, Callao - Lima, Perú</p>
+                        <p>Teléfono: (01) 555-0123</p>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                        <div>
+                            <h3>Factura #${invoice.numero || invoice.id.slice(-6)}</h3>
+                            <p>Fecha: ${OtorongoSystem.formatDate(invoice.fecha)}</p>
+                        </div>
+                        <div>
+                            <h4>Paciente:</h4>
+                            <p>${patient ? `${patient.nombres} ${patient.apellidos}` : 'N/A'}</p>
+                            <p>DNI: ${patient ? patient.dni : 'N/A'}</p>
+                        </div>
+                    </div>
+                    
+                    <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                        <thead>
+                            <tr style="background-color: #f2f2f2;">
+                                <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Descripción</th>
+                                <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Cantidad</th>
+                                <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Precio Unitario</th>
+                                <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${invoice.servicios.map(service => `
+                                <tr>
+                                    <td style="border: 1px solid #ddd; padding: 8px;">${service.descripcion}</td>
+                                    <td style="border: 1px solid #ddd; padding: 8px;">${service.cantidad}</td>
+                                    <td style="border: 1px solid #ddd; padding: 8px;">${OtorongoSystem.formatCurrency(service.precio)}</td>
+                                    <td style="border: 1px solid #ddd; padding: 8px;">${OtorongoSystem.formatCurrency(service.cantidad * service.precio)}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                    
+                    <div style="text-
+                
