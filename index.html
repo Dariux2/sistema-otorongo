@@ -31,8 +31,9 @@
     </header>
  
     <!-- Hero Section -->
-    <section id="inicio" class="hero">
-        <div class="hero-content">
+    <section id="inicio" class="hero" style="position: relative;">
+        <img src="assets/images/Plantilla Inicio.jpg" alt="Examen visual oftalmológico" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; opacity: 0.25;">
+        <div class="hero-content" style="position: relative; z-index: 1;">
             <h2>Cuidamos tu Visión con Excelencia</h2>
             <p>Atención oftalmológica integral y de alta calidad con tecnología avanzada y personal médico especializado</p>
             <div class="hero-buttons">
@@ -56,7 +57,7 @@
             <p class="section-subtitle">Ofrecemos una amplia gama de servicios oftalmológicos especializados</p>
             
             <div class="services-grid">
-                <div class="service-card">
+                <div class="service-card" data-service="consultas">
                     <div class="service-icon">
                         <i class="fas fa-eye"></i>
                     </div>
@@ -69,7 +70,7 @@
                     </ul>
                 </div>
 
-                <div class="service-card">
+                <div class="service-card" data-service="cataratas">
                     <div class="service-icon">
                         <i class="fas fa-user-md"></i>
                     </div>
@@ -82,7 +83,7 @@
                     </ul>
                 </div>
 
-                <div class="service-card">
+                <div class="service-card" data-service="pterigion">
                     <div class="service-icon">
                         <i class="fas fa-microscope"></i>
                     </div>
@@ -95,7 +96,7 @@
                     </ul>
                 </div>
 
-                <div class="service-card">
+                <div class="service-card" data-service="refraccion">
                     <div class="service-icon">
                         <i class="fas fa-glasses"></i>
                     </div>

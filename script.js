@@ -5,6 +5,46 @@
 let currentUser = null;
 let currentPage = 'inicio';
 
+// Inicializar usuarios de prueba si no existen
+if (!localStorage.getItem('otorongo_users')) {
+    const demoUsers = [
+        { username: 'admin', password: 'admin123', role: 'administrador' },
+        { username: 'medico', password: 'medico123', role: 'medico' },
+        { username: 'recepcion', password: 'recep123', role: 'recepcionista' }
+    ];
+    localStorage.setItem('otorongo_users', JSON.stringify(demoUsers));
+}
+
+// Proteger acceso solo para usuarios autenticados (solo en dashboards, no en index/login)
+if (
+    window.location.pathname.includes('dashboard-admin.html') ||
+    window.location.pathname.includes('dashboard-medico.html') ||
+    window.location.pathname.includes('dashboard-recepcion.html') ||
+    window.location.pathname.includes('reportes.html')
+) {
+    document.addEventListener('DOMContentLoaded', function() {
+        const currentUser = localStorage.getItem('otorongo_current_user');
+        if (!currentUser) {
+            window.location.href = 'login.html';
+        } else {
+            // Mostrar usuario y rol en el dashboard
+            const userObj = JSON.parse(currentUser);
+            if (document.getElementById('userName')) {
+                document.getElementById('userName').textContent = userObj.username || 'Usuario';
+            }
+            if (document.getElementById('userRole')) {
+                document.getElementById('userRole').textContent = userObj.role || 'Rol';
+            }
+        }
+    });
+}
+
+// Función para cerrar sesión
+function logout() {
+    localStorage.removeItem('otorongo_current_user');
+    window.location.href = 'login.html';
+}
+
 // Inicialización del sistema
 document.addEventListener('DOMContentLoaded', function() {
     initializeSystem();
@@ -24,8 +64,51 @@ function initializeSystem() {
     
     // Configurar formularios
     setupForms();
+
+    // Poblar imágenes de servicios dinámicamente
+    populateServiceImages();
     
     console.log('Sistema Centro Oftalmológico El Otorongo inicializado');
+}
+
+// Rellena las imágenes en los cards de servicios según el atributo data-service
+function populateServiceImages() {
+    const mapping = {
+        consultas: 'Consultas Oftalmológicas',
+        cataratas: 'Cirugía de Cataratas',
+        pterigion: 'Tratamiento de Pterigión',
+        refraccion: 'Refracción y Lentes'
+    };
+
+    const cards = document.querySelectorAll('.service-card[data-service]');
+    cards.forEach(card => {
+        const key = card.getAttribute('data-service');
+        const fileName = mapping[key];
+        if (!fileName) return;
+
+        const iconContainer = card.querySelector('.service-icon');
+        if (!iconContainer) return;
+
+        // Crear elemento img y reemplazar contenido. Intentar .webp primero, si falla usar .jpg
+        const img = document.createElement('img');
+        const tryWebp = `assets/images/${fileName}.webp`;
+        const tryJpg = `assets/images/${fileName}.jpg`;
+        img.src = tryWebp;
+        img.alt = card.querySelector('h3') ? card.querySelector('h3').textContent : 'Servicio';
+        img.loading = 'lazy';
+
+        // Si no se carga .webp, intentar .jpg
+        img.onerror = () => {
+            if (img.src !== tryJpg) {
+                img.src = tryJpg;
+            }
+        };
+
+        iconContainer.innerHTML = '';
+        iconContainer.appendChild(img);
+        // marcar que el contenedor ahora tiene imagen para ajustar estilos
+        iconContainer.classList.add('has-image');
+    });
 }
 
 // Configurar event listeners
@@ -661,3 +744,4 @@ window.OtorongoSystem = {
 };
 
 console.log('Sistema Centro Oftalmológico El Otorongo cargado correctamente');
+// Sistema Centro Oftalmológico El Otorongo - Fin
