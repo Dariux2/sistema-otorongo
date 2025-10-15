@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso al Sistema - Centro Oftalmológico El Otorongo</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="login-page">
+    <!-- Header simplificado -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-eye"></i>
+                <h1>Centro Oftalmológico El Otorongo</h1>
+            </div>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-home"></i> Volver al Inicio
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Login Section -->
+    <section class="login-section">
+        <div class="login-container">
+            <div class="login-card">
+                <div class="login-header">
+                    <div class="login-logo">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <h2>Acceso al Sistema</h2>
+                    <p>Ingrese sus credenciales para acceder</p>
+                </div>
+
+                <form id="loginForm" class="login-form">
+                    <div class="form-group">
+                        <label for="username">
+                            <i class="fas fa-user"></i> Usuario
+                        </label>
+                        <input 
+                            type="text" 
+                            id="username" 
+                            name="username" 
+                            required 
+                            placeholder="Ingrese su usuario"
+                            autocomplete="username"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">
+                            <i class="fas fa-lock"></i> Contraseña
+                        </label>
+                        <div class="password-input">
+                            <input 
+                                type="password" 
+                                id="password" 
+                                name="password" 
+                                required 
+                                placeholder="Ingrese su contraseña"
+                                autocomplete="current-password"
+                            >
+                            <button type="button" class="password-toggle" onclick="togglePassword()">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="role">
+                            <i class="fas fa-user-tag"></i> Rol
+                        </label>
+                        <select id="role" name="role" required>
+                            <option value="">Seleccione su rol</option>
+                            <option value="administrador">Administrador</option>
+                            <option value="medico">Médico</option>
+                            <option value="recepcionista">Recepcionista</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn-login-submit">
+                        <i class="fas fa-sign-in-alt"></i>
+                        <span>Iniciar Sesión</span>
+                        <div class="login-spinner hidden">
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </div>
+                    </button>
+                </form>
+
+                <div class="login-help">
+                    <p>¿Olvidó su contraseña? <a href="#" onclick="showForgotPassword()">Recuperar aquí</a></p>
+                </div>
+
+                <!-- Credenciales de prueba -->
+                <div class="demo-credentials">
+                    <h4><i class="fas fa-info-circle"></i> Credenciales de Prueba</h4>
+                    <div class="credentials-grid">
+                        <div class="credential-item">
+                            <strong>Administrador:</strong>
+                            <span>admin / admin123</span>
+                        </div>
+                        <div class="credential-item">
+                            <strong>Médico:</strong>
+                            <span>medico / medico123</span>
+                        </div>
+                        <div class="credential-item">
+                            <strong>Recepcionista:</strong>
+                            <span>recepcion / recep123</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Información del sistema -->
+            <div class="system-info">
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Sistema Seguro</h3>
+                    <p>Acceso protegido con autenticación por roles para garantizar la seguridad de los datos médicos.</p>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>Disponible 24/7</h3>
+                    <p>Sistema disponible las 24 horas para gestión de citas, pacientes y reportes médicos.</p>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Acceso Móvil</h3>
+                    <p>Compatible con dispositivos móviles para acceso desde cualquier lugar de forma segura.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal de recuperación de contraseña -->
+    <div id="forgotPasswordModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Recuperar Contraseña</h3>
+                <button class="modal-close" onclick="closeModal('forgotPasswordModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Para recuperar su contraseña, contacte al administrador del sistema:</p>
+                <div class="contact-info">
+                    <p><i class="fas fa-envelope"></i> admin@otorongo.com</p>
+                    <p><i class="fas fa-phone"></i> (01) 555-0123</p>
+                </div>
+                <p class="text-muted">Se requiere verificación de identidad para el restablecimiento de credenciales.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Variables específicas del login
+        let loginAttempts = 0;
+        const maxAttempts = 3;
+
+        // Inicializar página de login
+        document.addEventListener('DOMContentLoaded', function() {
+            // Verificar si ya hay una sesión activa
+            checkExistingSession();
+            
+            // Configurar formulario de login
+            setupLoginForm();
+            
+            // Enfocar el campo de usuario
+            document.getElementById('username').focus();
+        });
+
+        // Verificar sesión existente
+        function checkExistingSession() {
+            const currentUser = localStorage.getItem('otorongo_current_user');
+            if (currentUser) {
+                const user = JSON.parse(currentUser);
+                redirectToDashboard(user.role);
+            }
+        }
+
+        // Configurar formulario de login
+        function setupLoginForm() {
+            const loginForm = document.getElementById('loginForm');
+            loginForm.addEventListener('submit', handleLogin);
+
+            // Auto-completar rol basado en usuario
+            const usernameField = document.getElementById('username');
+            usernameField.addEventListener('input', function() {
+                const username = this.value.toLowerCase();
+                const roleField = document.getElementById('role');
+                
+                if (username === 'admin') {
+                    roleField.value = 'administrador';
+                } else if (username === 'medico') {
+                    roleField.value = 'medico';
+                } else if (username === 'recepcion') {
+                    roleField.value = 'recepcionista';
+                }
+            });
+        }
+
+        // Manejar login
+        async function handleLogin(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const credentials = {
+                username: formData.get('username').trim(),
+                password: formData.get('password'),
+                role: formData.get('role')
+            };
+
+            // Validar campos
+            if (!credentials.username || !credentials.password || !credentials.role) {
+                showNotification('Por favor, complete todos los campos', 'error');
+                return;
+            }
+
+            // Mostrar loading
+            showLoginLoading(true);
+
+            try {
+                // Simular delay de autenticación
+                await new Promise(resolve => setTimeout(resolve, 1500));
+
+                // Verificar credenciales
+                const user = authenticateUser(credentials);
+                
+                if (user) {
+                    // Login exitoso
+                    loginAttempts = 0;
+                    
+                    // Guardar sesión
+                    localStorage.setItem('otorongo_current_user', JSON.stringify(user));
+                    localStorage.setItem('otorongo_login_time', new Date().toISOString());
+                    
+                    showNotification('¡Bienvenido al sistema!', 'success');
+                    
+                    // Redirigir después de un breve delay
+                    setTimeout(() => {
+                        redirectToDashboard(user.role);
+                    }, 1000);
+                    
+                } else {
+                    // Login fallido
+                    loginAttempts++;
+                    
+                    if (loginAttempts >= maxAttempts) {
+                        showNotification(`Demasiados intentos fallidos. Intente nuevamente en 5 minutos.`, 'error');
+                        disableLoginForm(300000); // 5 minutos
+                    } else {
+                        const remainingAttempts = maxAttempts - loginAttempts;
+                        showNotification(`Credenciales incorrectas. ${remainingAttempts} intentos restantes.`, 'error');
+                    }
+                }
+                
+            } catch (error) {
+                showNotification('Error en el sistema. Intente nuevamente.', 'error');
+                console.error('Error de login:', error);
+            } finally {
+                showLoginLoading(false);
+            }
+        }
+
+        // Autenticar usuario
+        function authenticateUser(credentials) {
+            const users = JSON.parse(localStorage.getItem('otorongo_users') || '[]');
+            
+            return users.find(user => 
+                user.username === credentials.username &&
+                user.password === credentials.password &&
+                user.role === credentials.role
+            );
+        }
+
+        // Mostrar/ocultar loading en botón de login
+        function showLoginLoading(show) {
+            const button = document.querySelector('.btn-login-submit');
+            const spinner = button.querySelector('.login-spinner');
+            const text = button.querySelector('span');
+            
+            if (show) {
+                button.disabled = true;
+                button.classList.add('loading');
+                spinner.classList.remove('hidden');
+                text.textContent = 'Verificando...';
+            } else {
+                button.disabled = false;
+                button.classList.remove('loading');
+                spinner.classList.add('hidden');
+                text.textContent = 'Iniciar Sesión';
+            }
+        }
+
+        // Deshabilitar formulario temporalmente
+        function disableLoginForm(duration) {
+            const form = document.getElementById('loginForm');
+            const inputs = form.querySelectorAll('input, select, button');
+            
+            inputs.forEach(input => input.disabled = true);
+            
+            setTimeout(() => {
+                inputs.forEach(input => input.disabled = false);
+                loginAttempts = 0;
+                showNotification('Puede intentar iniciar sesión nuevamente', 'info');
+            }, duration);
+        }
+
+        // Redirigir al dashboard según el rol
+        function redirectToDashboard(role) {
+            const dashboards = {
+                'administrador': 'dashboard-admin.html',
+                'medico': 'dashboard-medico.html',
+                'recepcionista': 'dashboard-recepcion.html'
+            };
+            
+            const dashboardUrl = dashboards[role] || 'dashboard.html';
+            window.location.href = dashboardUrl;
+        }
+
+        // Toggle visibilidad de contraseña
+        function togglePassword() {
+            const passwordField = document.getElementById('password');
+            const toggleButton = document.querySelector('.password-toggle i');
+            
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                toggleButton.className = 'fas fa-eye-slash';
+            } else {
+                passwordField.type = 'password';
+                toggleButton.className = 'fas fa-eye';
+            }
+        }
+
+        // Mostrar modal de recuperación de contraseña
+        function showForgotPassword() {
+            openModal('forgotPasswordModal');
+        }
+
+        // Manejar tecla Enter en campos
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.target.tagName !== 'BUTTON') {
+                const form = document.getElementById('loginForm');
+                if (form.checkValidity()) {
+                    form.dispatchEvent(new Event('submit'));
+                }
+            }
+        });
+    </script>
+
+    <style>
+        /* Estilos específicos para la página de login */
+        .login-page {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            min-height: 100vh;
+        }
+
+        .login-section {
+            margin-top: 80px;
+            padding: 2rem 0;
+            min-height: calc(100vh - 80px);
+            display: flex;
+            align-items: center;
+        }
+
+        .login-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .login-card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 3rem;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            color: var(--white);
+            font-size: 2rem;
+        }
+
+        .login-header h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .login-header p {
+            color: var(--gray-600);
+            font-size: 1.1rem;
+        }
+
+        .login-form {
+            margin-bottom: 2rem;
+        }
+
+        .login-form .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .login-form label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .password-input {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--gray-500);
+            cursor: pointer;
+            padding: 0.25rem;
+        }
+
+        .password-toggle:hover {
+            color: var(--primary-color);
+        }
+
+        .btn-login-submit {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--white);
+            border: none;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            position: relative;
+        }
+
+        .btn-login-submit:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(44, 90, 160, 0.3);
+        }
+
+        .btn-login-submit:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .login-spinner {
+            position: absolute;
+            right: 1rem;
+        }
+
+        .login-help {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-help a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .login-help a:hover {
+            text-decoration: underline;
+        }
+
+        .demo-credentials {
+            background: var(--gray-100);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--gray-200);
+        }
+
+        .demo-credentials h4 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .credentials-grid {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .credential-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            background: var(--white);
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .credential-item strong {
+            color: var(--dark-color);
+        }
+
+        .credential-item span {
+            font-family: monospace;
+            background: var(--gray-100);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            color: var(--gray-700);
+        }
+
+        .system-info {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .info-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            color: var(--white);
+            text-align: center;
+        }
+
+        .info-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+        }
+
+        .info-card h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .info-card p {
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .contact-info {
+            background: var(--gray-100);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin: 1rem 0;
+        }
+
+        .contact-info p {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+        }
+
+        .contact-info p:last-child {
+            margin-bottom: 0;
+        }
+
+        .text-muted {
+            color: var(--gray-600);
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .login-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .login-card {
+                padding: 2rem;
+            }
+
+            .system-info {
+                order: -1;
+            }
+
+            .info-card {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-section {
+                padding: 1rem 0;
+            }
+
+            .login-card {
+                padding: 1.5rem;
+            }
+
+            .login-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .credentials-grid {
+                gap: 0.5rem;
+            }
+
+            .credential-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.25rem;
+            }
+        }
+    </style>
+</body>
+</html>

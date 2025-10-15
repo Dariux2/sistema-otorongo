@@ -1,0 +1,61 @@
+{
+  "name": "sistema-centro-oftalmologico-el-otorongo",
+  "version": "1.0.0",
+  "description": "Sistema de información integral para la optimización de la atención al paciente en el Centro Oftalmológico El Otorongo",
+  "main": "index.html",
+  "scripts": {
+    "start": "live-server --port=3000 --open=index.html",
+    "dev": "live-server --port=3000 --open=index.html --watch=.",
+    "build": "echo 'Proyecto listo para producción'",
+    "test": "echo 'Ejecutando pruebas del sistema...'",
+    "validate": "echo 'Validando archivos HTML, CSS y JS...'"
+  },
+  "keywords": [
+    "oftalmologia",
+    "sistema-medico",
+    "gestion-pacientes",
+    "citas-medicas",
+    "facturacion",
+    "html",
+    "css",
+    "javascript",
+    "apf1-integrador"
+  ],
+  "author": {
+    "name": "Grupo 9 - APF1 Integrador",
+    "members": [
+      "Abigail Ana Alvarez Tallla",
+      "Jeremy Yosmar Alvarez Luque", 
+      "Ramos Verano Mark Antony"
+    ]
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/grupo9/sistema-otorongo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/grupo9/sistema-otorongo/issues"
+  },
+  "homepage": "https://github.com/grupo9/sistema-otorongo#readme",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ],
+  "project": {
+    "title": "Centro Oftalmológico El Otorongo",
+    "subtitle": "Sistema de Gestión Médica Integral",
+    "course": "APF1 - Avance de Proyecto Final 1",
+    "institution": "Carrera de Ingeniería de Sistemas e Informática",
+    "professor": "Jose Manuel Bruno Sarmiento",
+    "year": "2025",
+    "video": "https://youtu.be/L6rDaF81g3Y"
+  }
+}
