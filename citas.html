@@ -25,7 +25,7 @@
                 <div class="user-actions">
                     <button class="btn-notification" onclick="showNotifications()">
                         <i class="fas fa-bell"></i>
-                        <span class="notification-badge" id="notificationCount">3</span>
+                        <span class="notification-badge" id="notificationCount">0</span>
                     </button>
                     <button class="btn-profile" onclick="showProfile()">
                         <i class="fas fa-user-circle"></i>
@@ -55,11 +55,11 @@
             <div class="page-header">
                 <div class="page-title">
                     <h2><i class="fas fa-calendar-alt"></i> Gestión de Citas</h2>
-                    <p>Administre las citas médicas del centro oftalmológico</p>
+                    <p>Programe y administre las citas médicas</p>
                 </div>
                 <div class="page-actions">
                     <button class="btn-primary" onclick="openModal('newAppointmentModal')">
-                        <i class="fas fa-plus"></i> Nueva Cita
+                        <i class="fas fa-calendar-plus"></i> Nueva Cita
                     </button>
                     <button class="btn-secondary" onclick="refreshAppointments()">
                         <i class="fas fa-sync-alt"></i> Actualizar
@@ -67,111 +67,71 @@
                 </div>
             </div>
 
-            <!-- Filtros y búsqueda -->
-            <div class="filters-section">
-                <div class="card">
-                    <div class="card-header">
-                        <h3><i class="fas fa-filter"></i> Filtros de Búsqueda</h3>
-                    </div>
-                    <div class="filters-content">
-                        <div class="filter-group">
-                            <label for="searchAppointment">Buscar:</label>
-                            <input type="text" id="searchAppointment" placeholder="Buscar por paciente, médico o tipo de cita">
+            <!-- Vista de Calendario y Lista -->
+            <div class="appointments-layout">
+                <!-- Calendario -->
+                <div class="calendar-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-calendar"></i> Calendario de Citas</h3>
+                            <div class="calendar-controls">
+                                <button class="btn-icon" onclick="previousMonth()">
+                                    <i class="fas fa-chevron-left"></i>
+                                </button>
+                                <span id="currentMonthYear" class="current-month"></span>
+                                <button class="btn-icon" onclick="nextMonth()">
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
                         </div>
-                        
-                        <div class="filter-group">
-                            <label for="filterDate">Fecha:</label>
-                            <input type="date" id="filterDate">
+                        <div class="calendar-container">
+                            <div class="calendar-weekdays">
+                                <div class="weekday">Dom</div>
+                                <div class="weekday">Lun</div>
+                                <div class="weekday">Mar</div>
+                                <div class="weekday">Mié</div>
+                                <div class="weekday">Jue</div>
+                                <div class="weekday">Vie</div>
+                                <div class="weekday">Sáb</div>
+                            </div>
+                            <div class="calendar-days" id="calendarDays">
+                                <!-- Los días se generan dinámicamente -->
+                            </div>
                         </div>
-                        
-                        <div class="filter-group">
-                            <label for="filterDoctor">Médico:</label>
-                            <select id="filterDoctor">
-                                <option value="">Todos los médicos</option>
-                                <option value="Dr. Carlos Mendoza">Dr. Carlos Mendoza</option>
-                                <option value="Dra. Ana García">Dra. Ana García</option>
-                            </select>
-                        </div>
-                        
-                        <div class="filter-group">
-                            <label for="filterStatus">Estado:</label>
-                            <select id="filterStatus">
-                                <option value="">Todos los estados</option>
-                                <option value="programada">Programada</option>
-                                <option value="completada">Completada</option>
-                                <option value="cancelada">Cancelada</option>
-                                <option value="no-asistio">No asistió</option>
-                            </select>
-                        </div>
-                        
-                        <div class="filter-actions">
-                            <button class="btn-primary" onclick="applyFilters()">
-                                <i class="fas fa-search"></i> Buscar
-                            </button>
-                            <button class="btn-secondary" onclick="clearFilters()">
-                                <i class="fas fa-times"></i> Limpiar
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Vista de calendario -->
-            <div class="calendar-section">
-                <div class="card">
-                    <div class="card-header">
-                        <h3><i class="fas fa-calendar"></i> Calendario de Citas</h3>
-                        <div class="calendar-controls">
-                            <button class="btn-calendar-nav" onclick="previousMonth()">
-                                <i class="fas fa-chevron-left"></i>
-                            </button>
-                            <span class="calendar-month" id="currentMonth">Enero 2025</span>
-                            <button class="btn-calendar-nav" onclick="nextMonth()">
-                                <i class="fas fa-chevron-right"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="calendar-container">
-                        <div class="calendar" id="appointmentCalendar">
-                            <!-- El calendario se genera dinámicamente -->
+                        <div class="calendar-legend">
+                            <div class="legend-item">
+                                <span class="legend-color available"></span>
+                                <span>Disponible</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color has-appointments"></span>
+                                <span>Con citas</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color selected"></span>
+                                <span>Seleccionado</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Lista de citas -->
-            <div class="appointments-section">
-                <div class="card">
-                    <div class="card-header">
-                        <h3><i class="fas fa-list"></i> Lista de Citas</h3>
-                        <div class="list-controls">
-                            <select id="appointmentsPerPage" onchange="changeAppointmentsPerPage()">
-                                <option value="10">10 por página</option>
-                                <option value="25">25 por página</option>
-                                <option value="50">50 por página</option>
-                            </select>
+                <!-- Lista de Citas -->
+                <div class="appointments-list-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-list"></i> Citas del Día</h3>
+                            <div class="filter-controls">
+                                <select id="filterStatus" onchange="filterAppointments()">
+                                    <option value="">Todos los estados</option>
+                                    <option value="programada">Programada</option>
+                                    <option value="completada">Completada</option>
+                                    <option value="cancelada">Cancelada</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="table-container">
-                        <table class="table" id="appointmentsTable">
-                            <thead>
-                                <tr>
-                                    <th>Fecha</th>
-                                    <th>Hora</th>
-                                    <th>Paciente</th>
-                                    <th>Médico</th>
-                                    <th>Tipo</th>
-                                    <th>Estado</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody id="appointmentsTableBody">
-                                <!-- Las citas se cargan dinámicamente -->
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="pagination" id="appointmentsPagination">
-                        <!-- La paginación se genera dinámicamente -->
+                        <div class="appointments-list" id="appointmentsList">
+                            <!-- Las citas se cargan dinámicamente -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -198,21 +158,6 @@
                             </label>
                             <select id="appointmentPatient" name="pacienteId" required>
                                 <option value="">Seleccione un paciente</option>
-                                <!-- Los pacientes se cargan dinámicamente -->
-                            </select>
-                            <button type="button" class="btn-link" onclick="openModal('newPatientModal')">
-                                <i class="fas fa-plus"></i> Registrar nuevo paciente
-                            </button>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="appointmentDoctor">
-                                <i class="fas fa-user-md"></i> Médico *
-                            </label>
-                            <select id="appointmentDoctor" name="medico" required>
-                                <option value="">Seleccione un médico</option>
-                                <option value="Dr. Carlos Mendoza">Dr. Carlos Mendoza</option>
-                                <option value="Dra. Ana García">Dra. Ana García</option>
                             </select>
                         </div>
 
@@ -229,7 +174,18 @@
                             </label>
                             <select id="appointmentTime" name="hora" required>
                                 <option value="">Seleccione una hora</option>
-                                <!-- Las horas disponibles se cargan dinámicamente -->
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="appointmentDoctor">
+                                <i class="fas fa-user-md"></i> Médico *
+                            </label>
+                            <select id="appointmentDoctor" name="medico" required>
+                                <option value="">Seleccione un médico</option>
+                                <option value="Dr. Carlos Mendoza">Dr. Carlos Mendoza</option>
+                                <option value="Dra. Ana García">Dra. Ana García</option>
+                                <option value="Dr. Luis Ramírez">Dr. Luis Ramírez</option>
                             </select>
                         </div>
 
@@ -243,18 +199,16 @@
                                 <option value="Control">Control</option>
                                 <option value="Cirugía">Cirugía</option>
                                 <option value="Emergencia">Emergencia</option>
-                                <option value="Examen Especializado">Examen Especializado</option>
                             </select>
                         </div>
 
                         <div class="form-group">
                             <label for="appointmentDuration">
-                                <i class="fas fa-hourglass-half"></i> Duración (minutos)
+                                <i class="fas fa-hourglass-half"></i> Duración
                             </label>
                             <select id="appointmentDuration" name="duracion">
                                 <option value="30">30 minutos</option>
-                                <option value="45">45 minutos</option>
-                                <option value="60">60 minutos</option>
+                                <option value="60" selected>60 minutos</option>
                                 <option value="90">90 minutos</option>
                             </select>
                         </div>
@@ -263,14 +217,13 @@
                             <label for="appointmentNotes">
                                 <i class="fas fa-notes-medical"></i> Observaciones
                             </label>
-                            <textarea id="appointmentNotes" name="observaciones" rows="3" 
-                                placeholder="Observaciones adicionales sobre la cita"></textarea>
+                            <textarea id="appointmentNotes" name="observaciones" rows="3" placeholder="Motivo de la consulta u observaciones adicionales"></textarea>
                         </div>
                     </div>
 
                     <div class="form-actions">
                         <button type="submit" class="btn-primary">
-                            <i class="fas fa-save"></i> Programar Cita
+                            <i class="fas fa-save"></i> Agendar Cita
                         </button>
                         <button type="button" class="btn-secondary" onclick="closeModal('newAppointmentModal')">
                             <i class="fas fa-times"></i> Cancelar
@@ -281,124 +234,30 @@
         </div>
     </div>
 
-    <!-- Modal Editar Cita -->
-    <div id="editAppointmentModal" class="modal">
-        <div class="modal-content large">
-            <div class="modal-header">
-                <h3 class="modal-title">
-                    <i class="fas fa-edit"></i> Editar Cita
-                </h3>
-                <button class="modal-close" onclick="closeModal('editAppointmentModal')">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="editAppointmentForm">
-                    <input type="hidden" id="editAppointmentId" name="id">
-                    
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="editAppointmentPatient">
-                                <i class="fas fa-user"></i> Paciente *
-                            </label>
-                            <select id="editAppointmentPatient" name="pacienteId" required>
-                                <!-- Los pacientes se cargan dinámicamente -->
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="editAppointmentDoctor">
-                                <i class="fas fa-user-md"></i> Médico *
-                            </label>
-                            <select id="editAppointmentDoctor" name="medico" required>
-                                <option value="Dr. Carlos Mendoza">Dr. Carlos Mendoza</option>
-                                <option value="Dra. Ana García">Dra. Ana García</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="editAppointmentDate">
-                                <i class="fas fa-calendar"></i> Fecha *
-                            </label>
-                            <input type="date" id="editAppointmentDate" name="fecha" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="editAppointmentTime">
-                                <i class="fas fa-clock"></i> Hora *
-                            </label>
-                            <select id="editAppointmentTime" name="hora" required>
-                                <!-- Las horas disponibles se cargan dinámicamente -->
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="editAppointmentType">
-                                <i class="fas fa-stethoscope"></i> Tipo de Consulta *
-                            </label>
-                            <select id="editAppointmentType" name="tipo" required>
-                                <option value="Consulta General">Consulta General</option>
-                                <option value="Control">Control</option>
-                                <option value="Cirugía">Cirugía</option>
-                                <option value="Emergencia">Emergencia</option>
-                                <option value="Examen Especializado">Examen Especializado</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="editAppointmentStatus">
-                                <i class="fas fa-info-circle"></i> Estado
-                            </label>
-                            <select id="editAppointmentStatus" name="estado">
-                                <option value="programada">Programada</option>
-                                <option value="completada">Completada</option>
-                                <option value="cancelada">Cancelada</option>
-                                <option value="no-asistio">No asistió</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group full-width">
-                            <label for="editAppointmentNotes">
-                                <i class="fas fa-notes-medical"></i> Observaciones
-                            </label>
-                            <textarea id="editAppointmentNotes" name="observaciones" rows="3"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="form-actions">
-                        <button type="submit" class="btn-primary">
-                            <i class="fas fa-save"></i> Guardar Cambios
-                        </button>
-                        <button type="button" class="btn-secondary" onclick="closeModal('editAppointmentModal')">
-                            <i class="fas fa-times"></i> Cancelar
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Ver Detalles de Cita -->
+    <!-- Modal Ver Cita -->
     <div id="viewAppointmentModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h3 class="modal-title">
-                    <i class="fas fa-eye"></i> Detalles de la Cita
+                    <i class="fas fa-calendar-check"></i> Detalles de la Cita
                 </h3>
                 <button class="modal-close" onclick="closeModal('viewAppointmentModal')">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             <div class="modal-body">
-                <div class="appointment-details-grid" id="appointmentDetailsContent">
+                <div id="appointmentDetails">
                     <!-- Los detalles se cargan dinámicamente -->
                 </div>
                 <div class="modal-actions">
-                    <button class="btn-primary" onclick="editAppointmentFromView()">
-                        <i class="fas fa-edit"></i> Editar
+                    <button class="btn-success" onclick="completeAppointment()">
+                        <i class="fas fa-check"></i> Completar
                     </button>
-                    <button class="btn-danger" onclick="cancelAppointmentFromView()">
-                        <i class="fas fa-ban"></i> Cancelar Cita
+                    <button class="btn-warning" onclick="rescheduleAppointment()">
+                        <i class="fas fa-calendar-alt"></i> Reprogramar
+                    </button>
+                    <button class="btn-danger" onclick="cancelAppointment()">
+                        <i class="fas fa-times-circle"></i> Cancelar
                     </button>
                 </div>
             </div>
@@ -407,75 +266,48 @@
 
     <script src="script.js"></script>
     <script>
-        // Variables globales para citas
+        // Variables globales
         let currentUser = null;
         let appointments = [];
-        let filteredAppointments = [];
-        let currentPage = 1;
-        let appointmentsPerPage = 10;
+        let patients = [];
         let currentDate = new Date();
+        let selectedDate = new Date();
         let selectedAppointmentId = null;
 
-        // Inicializar página de citas
+        // Inicializar página
         document.addEventListener('DOMContentLoaded', function() {
             initializeAppointmentsPage();
         });
 
-        // Inicializar página
         function initializeAppointmentsPage() {
-            // Verificar autenticación
-            if (!checkAuthentication()) {
-                return;
-            }
-
-            // Cargar datos del usuario
+            if (!checkAuthentication()) return;
             loadUserData();
-            
-            // Configurar menú según rol
             setupRoleBasedMenu();
-            
-            // Cargar datos iniciales
-            loadAppointments();
             loadPatients();
-            
-            // Configurar formularios
-            setupAppointmentForms();
-            
-            // Configurar filtros
-            setupFilters();
-            
-            // Generar calendario
+            loadAppointments();
             generateCalendar();
-            
-            // Configurar fecha mínima para citas
-            setupDateConstraints();
+            setupForms();
+            setMinDate();
+            generateTimeSlots();
         }
 
-        // Verificar autenticación
         function checkAuthentication() {
             const savedUser = localStorage.getItem('otorongo_current_user');
-            
             if (!savedUser) {
                 showNotification('Sesión expirada. Redirigiendo al login...', 'warning');
-                setTimeout(() => {
-                    window.location.href = 'login.html';
-                }, 2000);
+                setTimeout(() => window.location.href = 'login.html', 2000);
                 return false;
             }
-            
             currentUser = JSON.parse(savedUser);
             return true;
         }
 
-        // Cargar datos del usuario
         function loadUserData() {
             if (!currentUser) return;
-            
-            document.getElementById('userName').textContent = currentUser.name;
+            document.getElementById('userName').textContent = currentUser.name || currentUser.username;
             document.getElementById('userRole').textContent = getRoleDisplayName(currentUser.role);
         }
 
-        // Obtener nombre de rol para mostrar
         function getRoleDisplayName(role) {
             const roleNames = {
                 'administrador': 'Administrador',
@@ -485,7 +317,6 @@
             return roleNames[role] || role;
         }
 
-        // Configurar menú según rol
         function setupRoleBasedMenu() {
             const menuContainer = document.getElementById('dashboardMenu');
             const menus = {
@@ -522,370 +353,168 @@
             `).join('');
         }
 
-        // Cargar citas
+        function loadPatients() {
+            patients = OtorongoSystem.getPatients();
+            const select = document.getElementById('appointmentPatient');
+            select.innerHTML = '<option value="">Seleccione un paciente</option>' +
+                patients.map(p => `<option value="${p.id}">${p.nombres} ${p.apellidos} - DNI: ${p.dni}</option>`).join('');
+        }
+
         function loadAppointments() {
             appointments = OtorongoSystem.getAppointments();
-            
-            // Filtrar por médico si es necesario
-            if (currentUser.role === 'medico') {
-                appointments = appointments.filter(apt => apt.medico === currentUser.name);
-            }
-            
-            filteredAppointments = [...appointments];
-            displayAppointments();
-            updateCalendar();
+            displayAppointmentsForDate(selectedDate);
+            updateNotificationCount();
         }
 
-        // Cargar pacientes para los selects
-        function loadPatients() {
-            const patients = OtorongoSystem.getPatients();
-            const patientSelects = ['appointmentPatient', 'editAppointmentPatient'];
-            
-            patientSelects.forEach(selectId => {
-                const select = document.getElementById(selectId);
-                if (select) {
-                    select.innerHTML = '<option value="">Seleccione un paciente</option>';
-                    patients.forEach(patient => {
-                        const option = document.createElement('option');
-                        option.value = patient.id;
-                        option.textContent = `${patient.nombres} ${patient.apellidos} - DNI: ${patient.dni}`;
-                        select.appendChild(option);
-                    });
-                }
-            });
-        }
-
-        // Configurar formularios
-        function setupAppointmentForms() {
-            // Formulario nueva cita
-            const newForm = document.getElementById('newAppointmentForm');
-            if (newForm) {
-                newForm.addEventListener('submit', handleNewAppointment);
-            }
-
-            // Formulario editar cita
-            const editForm = document.getElementById('editAppointmentForm');
-            if (editForm) {
-                editForm.addEventListener('submit', handleEditAppointment);
-            }
-
-            // Configurar cambios de fecha para actualizar horas disponibles
-            const dateInputs = ['appointmentDate', 'editAppointmentDate'];
-            dateInputs.forEach(inputId => {
-                const input = document.getElementById(inputId);
-                if (input) {
-                    input.addEventListener('change', function() {
-                        updateAvailableHours(this.value, inputId.replace('Date', 'Time'));
-                    });
-                }
-            });
-        }
-
-        // Configurar restricciones de fecha
-        function setupDateConstraints() {
+        function setMinDate() {
             const today = new Date().toISOString().split('T')[0];
-            const dateInputs = ['appointmentDate', 'editAppointmentDate', 'filterDate'];
-            
-            dateInputs.forEach(inputId => {
-                const input = document.getElementById(inputId);
-                if (input && inputId !== 'filterDate') {
-                    input.min = today;
-                }
-            });
+            document.getElementById('appointmentDate').setAttribute('min', today);
         }
 
-        // Actualizar horas disponibles
-        function updateAvailableHours(date, timeSelectId) {
-            const timeSelect = document.getElementById(timeSelectId);
-            if (!timeSelect || !date) return;
-
-            // Generar horas de trabajo (8:00 AM - 6:00 PM)
-            const workingHours = [];
-            for (let hour = 8; hour < 18; hour++) {
-                for (let minute = 0; minute < 60; minute += 30) {
-                    const timeString = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
-                    workingHours.push(timeString);
+        function generateTimeSlots() {
+            const select = document.getElementById('appointmentTime');
+            const slots = [];
+            
+            for (let hour = 8; hour <= 18; hour++) {
+                for (let min = 0; min < 60; min += 30) {
+                    const time = `${hour.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}`;
+                    slots.push(`<option value="${time}">${time}</option>`);
                 }
             }
-
-            // Filtrar horas ocupadas
-            const occupiedHours = appointments
-                .filter(apt => apt.fecha === date && apt.estado !== 'cancelada')
-                .map(apt => apt.hora);
-
-            timeSelect.innerHTML = '<option value="">Seleccione una hora</option>';
             
-            workingHours.forEach(hour => {
-                if (!occupiedHours.includes(hour)) {
-                    const option = document.createElement('option');
-                    option.value = hour;
-                    option.textContent = OtorongoSystem.formatTime(hour);
-                    timeSelect.appendChild(option);
-                }
-            });
+            select.innerHTML = '<option value="">Seleccione una hora</option>' + slots.join('');
         }
 
-        // Configurar filtros
-        function setupFilters() {
-            const searchInput = document.getElementById('searchAppointment');
-            if (searchInput) {
-                searchInput.addEventListener('input', debounce(applyFilters, 300));
-            }
-
-            const filterInputs = ['filterDate', 'filterDoctor', 'filterStatus'];
-            filterInputs.forEach(inputId => {
-                const input = document.getElementById(inputId);
-                if (input) {
-                    input.addEventListener('change', applyFilters);
-                }
-            });
-        }
-
-        // Función debounce para búsqueda
-        function debounce(func, wait) {
-            let timeout;
-            return function executedFunction(...args) {
-                const later = () => {
-                    clearTimeout(timeout);
-                    func(...args);
-                };
-                clearTimeout(timeout);
-                timeout = setTimeout(later, wait);
-            };
-        }
-
-        // Aplicar filtros
-        function applyFilters() {
-            const searchTerm = document.getElementById('searchAppointment').value.toLowerCase();
-            const filterDate = document.getElementById('filterDate').value;
-            const filterDoctor = document.getElementById('filterDoctor').value;
-            const filterStatus = document.getElementById('filterStatus').value;
-
-            filteredAppointments = appointments.filter(appointment => {
-                const patient = OtorongoSystem.getPatientById(appointment.pacienteId);
-                const patientName = patient ? `${patient.nombres} ${patient.apellidos}`.toLowerCase() : '';
-                
-                const matchesSearch = !searchTerm || 
-                    patientName.includes(searchTerm) ||
-                    appointment.medico.toLowerCase().includes(searchTerm) ||
-                    appointment.tipo.toLowerCase().includes(searchTerm);
-                
-                const matchesDate = !filterDate || appointment.fecha === filterDate;
-                const matchesDoctor = !filterDoctor || appointment.medico === filterDoctor;
-                const matchesStatus = !filterStatus || appointment.estado === filterStatus;
-
-                return matchesSearch && matchesDate && matchesDoctor && matchesStatus;
-            });
-
-            currentPage = 1;
-            displayAppointments();
-        }
-
-        // Limpiar filtros
-        function clearFilters() {
-            document.getElementById('searchAppointment').value = '';
-            document.getElementById('filterDate').value = '';
-            document.getElementById('filterDoctor').value = '';
-            document.getElementById('filterStatus').value = '';
-            
-            filteredAppointments = [...appointments];
-            currentPage = 1;
-            displayAppointments();
-        }
-
-        // Mostrar citas en la tabla
-        function displayAppointments() {
-            const tbody = document.getElementById('appointmentsTableBody');
-            const startIndex = (currentPage - 1) * appointmentsPerPage;
-            const endIndex = startIndex + appointmentsPerPage;
-            const pageAppointments = filteredAppointments.slice(startIndex, endIndex);
-
-            if (pageAppointments.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="7" class="text-center">
-                            <div class="empty-state">
-                                <i class="fas fa-calendar-times"></i>
-                                <p>No se encontraron citas</p>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-                return;
-            }
-
-            tbody.innerHTML = pageAppointments.map(appointment => {
-                const patient = OtorongoSystem.getPatientById(appointment.pacienteId);
-                const patientName = patient ? `${patient.nombres} ${patient.apellidos}` : 'Paciente no encontrado';
-                
-                return `
-                    <tr>
-                        <td>${OtorongoSystem.formatDate(appointment.fecha)}</td>
-                        <td>${OtorongoSystem.formatTime(appointment.hora)}</td>
-                        <td>${patientName}</td>
-                        <td>${appointment.medico}</td>
-                        <td>${appointment.tipo}</td>
-                        <td><span class="badge ${appointment.estado}">${appointment.estado}</span></td>
-                        <td>
-                            <div class="action-buttons">
-                                <button class="btn-action" onclick="viewAppointment('${appointment.id}')" title="Ver detalles">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                                <button class="btn-action" onclick="editAppointment('${appointment.id}')" title="Editar">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="btn-action btn-danger" onclick="cancelAppointment('${appointment.id}')" title="Cancelar">
-                                    <i class="fas fa-ban"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-            }).join('');
-
-            generatePagination();
-        }
-
-        // Generar paginación
-        function generatePagination() {
-            const totalPages = Math.ceil(filteredAppointments.length / appointmentsPerPage);
-            const paginationContainer = document.getElementById('appointmentsPagination');
-            
-            if (totalPages <= 1) {
-                paginationContainer.innerHTML = '';
-                return;
-            }
-
-            let paginationHTML = '<div class="pagination-controls">';
-            
-            // Botón anterior
-            if (currentPage > 1) {
-                paginationHTML += `<button class="btn-pagination" onclick="changePage(${currentPage - 1})">
-                    <i class="fas fa-chevron-left"></i>
-                </button>`;
-            }
-
-            // Números de página
-            for (let i = 1; i <= totalPages; i++) {
-                if (i === currentPage) {
-                    paginationHTML += `<button class="btn-pagination active">${i}</button>`;
-                } else {
-                    paginationHTML += `<button class="btn-pagination" onclick="changePage(${i})">${i}</button>`;
-                }
-            }
-
-            // Botón siguiente
-            if (currentPage < totalPages) {
-                paginationHTML += `<button class="btn-pagination" onclick="changePage(${currentPage + 1})">
-                    <i class="fas fa-chevron-right"></i>
-                </button>`;
-            }
-
-            paginationHTML += '</div>';
-            paginationContainer.innerHTML = paginationHTML;
-        }
-
-        // Cambiar página
-        function changePage(page) {
-            currentPage = page;
-            displayAppointments();
-        }
-
-        // Cambiar citas por página
-        function changeAppointmentsPerPage() {
-            appointmentsPerPage = parseInt(document.getElementById('appointmentsPerPage').value);
-            currentPage = 1;
-            displayAppointments();
-        }
-
-        // Generar calendario
         function generateCalendar() {
-            const calendar = document.getElementById('appointmentCalendar');
-            const monthNames = [
-                'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-                'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
-            ];
-            
             const year = currentDate.getFullYear();
             const month = currentDate.getMonth();
             
-            document.getElementById('currentMonth').textContent = `${monthNames[month]} ${year}`;
+            document.getElementById('currentMonthYear').textContent = 
+                new Date(year, month).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
             
-            const firstDay = new Date(year, month, 1);
-            const lastDay = new Date(year, month + 1, 0);
-            const startDate = new Date(firstDay);
-            startDate.setDate(startDate.getDate() - firstDay.getDay());
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
             
-            let calendarHTML = `
-                <div class="calendar-header">
-                    <div class="calendar-day-header">Dom</div>
-                    <div class="calendar-day-header">Lun</div>
-                    <div class="calendar-day-header">Mar</div>
-                    <div class="calendar-day-header">Mié</div>
-                    <div class="calendar-day-header">Jue</div>
-                    <div class="calendar-day-header">Vie</div>
-                    <div class="calendar-day-header">Sáb</div>
-                </div>
-                <div class="calendar-body">
-            `;
+            const calendarDays = document.getElementById('calendarDays');
+            calendarDays.innerHTML = '';
             
-            const currentDateObj = new Date(startDate);
-            
-            for (let week = 0; week < 6; week++) {
-                calendarHTML += '<div class="calendar-week">';
-                
-                for (let day = 0; day < 7; day++) {
-                    const dateStr = currentDateObj.toISOString().split('T')[0];
-                    const dayAppointments = appointments.filter(apt => apt.fecha === dateStr);
-                    const isCurrentMonth = currentDateObj.getMonth() === month;
-                    const isToday = dateStr === new Date().toISOString().split('T')[0];
-                    
-                    let dayClass = 'calendar-day';
-                    if (!isCurrentMonth) dayClass += ' other-month';
-                    if (isToday) dayClass += ' today';
-                    if (dayAppointments.length > 0) dayClass += ' has-appointments';
-                    
-                    calendarHTML += `
-                        <div class="${dayClass}" data-date="${dateStr}" onclick="selectCalendarDate('${dateStr}')">
-                            <div class="day-number">${currentDateObj.getDate()}</div>
-                            ${dayAppointments.length > 0 ? `<div class="appointment-count">${dayAppointments.length}</div>` : ''}
-                        </div>
-                    `;
-                    
-                    currentDateObj.setDate(currentDateObj.getDate() + 1);
-                }
-                
-                calendarHTML += '</div>';
+            // Días vacíos del mes anterior
+            for (let i = 0; i < firstDay; i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.className = 'calendar-day empty';
+                calendarDays.appendChild(emptyDay);
             }
             
-            calendarHTML += '</div>';
-            calendar.innerHTML = calendarHTML;
+            // Días del mes actual
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayElement = document.createElement('div');
+                const currentDateStr = `${year}-${(month + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+                const dayAppointments = appointments.filter(apt => apt.fecha === currentDateStr);
+                
+                dayElement.className = 'calendar-day';
+                dayElement.innerHTML = `
+                    <span class="day-number">${day}</span>
+                    ${dayAppointments.length > 0 ? `<span class="appointment-count">${dayAppointments.length}</span>` : ''}
+                `;
+                
+                if (dayAppointments.length > 0) {
+                    dayElement.classList.add('has-appointments');
+                }
+                
+                const today = new Date();
+                if (year === today.getFullYear() && month === today.getMonth() && day === today.getDate()) {
+                    dayElement.classList.add('today');
+                }
+                
+                if (year === selectedDate.getFullYear() && month === selectedDate.getMonth() && day === selectedDate.getDate()) {
+                    dayElement.classList.add('selected');
+                }
+                
+                dayElement.addEventListener('click', () => selectDate(year, month, day));
+                calendarDays.appendChild(dayElement);
+            }
         }
 
-        // Navegar mes anterior
+        function selectDate(year, month, day) {
+            selectedDate = new Date(year, month, day);
+            generateCalendar();
+            displayAppointmentsForDate(selectedDate);
+        }
+
         function previousMonth() {
             currentDate.setMonth(currentDate.getMonth() - 1);
             generateCalendar();
         }
 
-        // Navegar mes siguiente
         function nextMonth() {
             currentDate.setMonth(currentDate.getMonth() + 1);
             generateCalendar();
         }
 
-        // Seleccionar fecha en calendario
-        function selectCalendarDate(date) {
-            document.getElementById('filterDate').value = date;
-            applyFilters();
+        function displayAppointmentsForDate(date) {
+            const dateStr = date.toISOString().split('T')[0];
+            let dayAppointments = appointments.filter(apt => apt.fecha === dateStr);
+            
+            // Filtrar por estado si hay filtro activo
+            const filterStatus = document.getElementById('filterStatus').value;
+            if (filterStatus) {
+                dayAppointments = dayAppointments.filter(apt => apt.estado === filterStatus);
+            }
+            
+            // Filtrar por médico si es rol médico
+            if (currentUser.role === 'medico') {
+                dayAppointments = dayAppointments.filter(apt => apt.medico === currentUser.name);
+            }
+            
+            const container = document.getElementById('appointmentsList');
+            
+            if (dayAppointments.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-calendar-times"></i>
+                        <p>No hay citas para ${date.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            dayAppointments.sort((a, b) => a.hora.localeCompare(b.hora));
+            
+            container.innerHTML = dayAppointments.map(apt => {
+                const patient = patients.find(p => p.id === apt.pacienteId);
+                const patientName = patient ? `${patient.nombres} ${patient.apellidos}` : 'Paciente no encontrado';
+                
+                return `
+                    <div class="appointment-card ${apt.estado}" onclick="viewAppointmentDetails('${apt.id}')">
+                        <div class="appointment-time">
+                            <i class="fas fa-clock"></i>
+                            <span>${apt.hora}</span>
+                        </div>
+                        <div class="appointment-info">
+                            <h4>${patientName}</h4>
+                            <p><i class="fas fa-user-md"></i> ${apt.medico}</p>
+                            <p><i class="fas fa-stethoscope"></i> ${apt.tipo}</p>
+                        </div>
+                        <div class="appointment-status">
+                            <span class="badge ${apt.estado}">${apt.estado}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
         }
 
-        // Actualizar calendario
-        function updateCalendar() {
-            generateCalendar();
+        function setupForms() {
+            const form = document.getElementById('newAppointmentForm');
+            form.addEventListener('submit', handleNewAppointment);
+            
+            // Verificar paciente preseleccionado
+            const preselectedPatient = localStorage.getItem('preselected_patient');
+            if (preselectedPatient) {
+                document.getElementById('appointmentPatient').value = preselectedPatient;
+                localStorage.removeItem('preselected_patient');
+            }
         }
 
-        // Manejar nueva cita
         function handleNewAppointment(e) {
             e.preventDefault();
             
@@ -893,202 +522,154 @@
             const appointmentData = {
                 id: OtorongoSystem.generateId(),
                 pacienteId: formData.get('pacienteId'),
-                medico: formData.get('medico'),
                 fecha: formData.get('fecha'),
                 hora: formData.get('hora'),
+                medico: formData.get('medico'),
                 tipo: formData.get('tipo'),
-                estado: 'programada',
+                duracion: formData.get('duracion') || '60',
                 observaciones: formData.get('observaciones') || '',
+                estado: 'programada',
                 fechaCreacion: new Date().toISOString()
             };
-
-            // Validar que no haya conflictos de horario
-            const conflict = appointments.find(apt => 
+            
+            // Verificar conflictos de horario
+            const hasConflict = appointments.some(apt => 
                 apt.fecha === appointmentData.fecha &&
                 apt.hora === appointmentData.hora &&
                 apt.medico === appointmentData.medico &&
                 apt.estado !== 'cancelada'
             );
-
-            if (conflict) {
-                showNotification('Ya existe una cita programada para esa fecha y hora con el mismo médico', 'error');
+            
+            if (hasConflict) {
+                showNotification('Ya existe una cita programada para ese médico en ese horario', 'error');
                 return;
             }
-
-            // Guardar cita
+            
             appointments.push(appointmentData);
             OtorongoSystem.saveAppointments(appointments);
             
-            // Actualizar vista
             loadAppointments();
             closeModal('newAppointmentModal');
             e.target.reset();
             
-            showNotification('Cita programada correctamente', 'success');
+            showNotification('Cita agendada correctamente', 'success');
         }
 
-        // Ver detalles de cita
-        function viewAppointment(appointmentId) {
+        function viewAppointmentDetails(appointmentId) {
             const appointment = appointments.find(apt => apt.id === appointmentId);
             if (!appointment) return;
-
-            const patient = OtorongoSystem.getPatientById(appointment.pacienteId);
-            const patientName = patient ? `${patient.nombres} ${patient.apellidos}` : 'Paciente no encontrado';
-
+            
             selectedAppointmentId = appointmentId;
-
-            const detailsContainer = document.getElementById('appointmentDetailsContent');
+            const patient = patients.find(p => p.id === appointment.pacienteId);
+            const patientName = patient ? `${patient.nombres} ${patient.apellidos}` : 'Paciente no encontrado';
+            
+            const detailsContainer = document.getElementById('appointmentDetails');
             detailsContainer.innerHTML = `
-                <div class="detail-item">
-                    <label><i class="fas fa-user"></i> Paciente:</label>
-                    <span>${patientName}</span>
-                </div>
-                <div class="detail-item">
-                    <label><i class="fas fa-id-card"></i> DNI:</label>
-                    <span>${patient ? patient.dni : 'N/A'}</span>
-                </div>
-                <div class="detail-item">
-                    <label><i class="fas fa-user-md"></i> Médico:</label>
-                    <span>${appointment.medico}</span>
-                </div>
-                <div class="detail-item">
-                    <label><i class="fas fa-calendar"></i> Fecha:</label>
-                    <span>${OtorongoSystem.formatDate(appointment.fecha)}</span>
-                </div>
-                <div class="detail-item">
-                    <label><i class="fas fa-clock"></i> Hora:</label>
-                    <span>${OtorongoSystem.formatTime(appointment.hora)}</span>
-                </div>
-                <div class="detail-item">
-                    <label><i class="fas fa-stethoscope"></i> Tipo:</label>
-                    <span>${appointment.tipo}</span>
-                </div>
-                <div class="detail-item">
-                    <label><i class="fas fa-info-circle"></i> Estado:</label>
-                    <span class="badge ${appointment.estado}">${appointment.estado}</span>
-                </div>
-                ${appointment.observaciones ? `
-                    <div class="detail-item full-width">
-                        <label><i class="fas fa-notes-medical"></i> Observaciones:</label>
-                        <span>${appointment.observaciones}</span>
+                <div class="appointment-detail-card">
+                    <div class="detail-row">
+                        <label><i class="fas fa-user"></i> Paciente:</label>
+                        <span>${patientName}</span>
                     </div>
-                ` : ''}
+                    <div class="detail-row">
+                        <label><i class="fas fa-calendar"></i> Fecha:</label>
+                        <span>${OtorongoSystem.formatDate(appointment.fecha)}</span>
+                    </div>
+                    <div class="detail-row">
+                        <label><i class="fas fa-clock"></i> Hora:</label>
+                        <span>${appointment.hora}</span>
+                    </div>
+                    <div class="detail-row">
+                        <label><i class="fas fa-user-md"></i> Médico:</label>
+                        <span>${appointment.medico}</span>
+                    </div>
+                    <div class="detail-row">
+                        <label><i class="fas fa-stethoscope"></i> Tipo:</label>
+                        <span>${appointment.tipo}</span>
+                    </div>
+                    <div class="detail-row">
+                        <label><i class="fas fa-hourglass-half"></i> Duración:</label>
+                        <span>${appointment.duracion} minutos</span>
+                    </div>
+                    ${appointment.observaciones ? `
+                        <div class="detail-row full-width">
+                            <label><i class="fas fa-notes-medical"></i> Observaciones:</label>
+                            <span>${appointment.observaciones}</span>
+                        </div>
+                    ` : ''}
+                    <div class="detail-row">
+                        <label><i class="fas fa-info-circle"></i> Estado:</label>
+                        <span class="badge ${appointment.estado}">${appointment.estado}</span>
+                    </div>
+                </div>
             `;
-
+            
             openModal('viewAppointmentModal');
         }
 
-        // Editar cita
-        function editAppointment(appointmentId) {
-            const appointment = appointments.find(apt => apt.id === appointmentId);
-            if (!appointment) return;
-
-            selectedAppointmentId = appointmentId;
-
-            // Llenar formulario de edición
-            document.getElementById('editAppointmentId').value = appointment.id;
-            document.getElementById('editAppointmentPatient').value = appointment.pacienteId;
-            document.getElementById('editAppointmentDoctor').value = appointment.medico;
-            document.getElementById('editAppointmentDate').value = appointment.fecha;
-            document.getElementById('editAppointmentType').value = appointment.tipo;
-            document.getElementById('editAppointmentStatus').value = appointment.estado;
-            document.getElementById('editAppointmentNotes').value = appointment.observaciones;
-
-            // Actualizar horas disponibles
-            updateAvailableHours(appointment.fecha, 'editAppointmentTime');
-            setTimeout(() => {
-                document.getElementById('editAppointmentTime').value = appointment.hora;
-            }, 100);
-
-            openModal('editAppointmentModal');
-        }
-
-        // Manejar edición de cita
-        function handleEditAppointment(e) {
-            e.preventDefault();
+        function completeAppointment() {
+            if (!selectedAppointmentId) return;
             
-            const formData = new FormData(e.target);
-            const appointmentId = formData.get('id');
+            const appointment = appointments.find(apt => apt.id === selectedAppointmentId);
+            if (appointment) {
+                appointment.estado = 'completada';
+                OtorongoSystem.saveAppointments(appointments);
+                loadAppointments();
+                closeModal('viewAppointmentModal');
+                showNotification('Cita marcada como completada', 'success');
+            }
+        }
+
+        function rescheduleAppointment() {
+            closeModal('viewAppointmentModal');
+            showNotification('Función de reprogramar en desarrollo', 'info');
+        }
+
+        function cancelAppointment() {
+            if (!selectedAppointmentId) return;
             
-            const updatedData = {
-                pacienteId: formData.get('pacienteId'),
-                medico: formData.get('medico'),
-                fecha: formData.get('fecha'),
-                hora: formData.get('hora'),
-                tipo: formData.get('tipo'),
-                estado: formData.get('estado'),
-                observaciones: formData.get('observaciones') || ''
-            };
-
-            // Validar conflictos (excluyendo la cita actual)
-            const conflict = appointments.find(apt => 
-                apt.id !== appointmentId &&
-                apt.fecha === updatedData.fecha &&
-                apt.hora === updatedData.hora &&
-                apt.medico === updatedData.medico &&
-                apt.estado !== 'cancelada'
-            );
-
-            if (conflict) {
-                showNotification('Ya existe una cita programada para esa fecha y hora con el mismo médico', 'error');
-                return;
-            }
-
-            // Actualizar cita
-            const appointmentIndex = appointments.findIndex(apt => apt.id === appointmentId);
-            if (appointmentIndex !== -1) {
-                appointments[appointmentIndex] = { ...appointments[appointmentIndex], ...updatedData };
-                OtorongoSystem.saveAppointments(appointments);
-                
-                loadAppointments();
-                closeModal('editAppointmentModal');
-                
-                showNotification('Cita actualizada correctamente', 'success');
+            if (confirm('¿Está seguro que desea cancelar esta cita?')) {
+                const appointment = appointments.find(apt => apt.id === selectedAppointmentId);
+                if (appointment) {
+                    appointment.estado = 'cancelada';
+                    OtorongoSystem.saveAppointments(appointments);
+                    loadAppointments();
+                    closeModal('viewAppointmentModal');
+                    showNotification('Cita cancelada', 'warning');
+                }
             }
         }
 
-        // Cancelar cita
-        function cancelAppointment(appointmentId) {
-            if (!confirm('¿Está seguro que desea cancelar esta cita?')) {
-                return;
-            }
-
-            const appointmentIndex = appointments.findIndex(apt => apt.id === appointmentId);
-            if (appointmentIndex !== -1) {
-                appointments[appointmentIndex].estado = 'cancelada';
-                OtorongoSystem.saveAppointments(appointments);
-                
-                loadAppointments();
-                showNotification('Cita cancelada correctamente', 'success');
-            }
+        function filterAppointments() {
+            displayAppointmentsForDate(selectedDate);
         }
 
-        // Editar desde vista de detalles
-        function editAppointmentFromView() {
-            closeModal('viewAppointmentModal');
-            editAppointment(selectedAppointmentId);
-        }
-
-        // Cancelar desde vista de detalles
-        function cancelAppointmentFromView() {
-            closeModal('viewAppointmentModal');
-            cancelAppointment(selectedAppointmentId);
-        }
-
-        // Actualizar citas
         function refreshAppointments() {
             loadAppointments();
             showNotification('Citas actualizadas', 'success');
         }
 
-        // Funciones de navegación y utilidad
+        function updateNotificationCount() {
+            const today = new Date().toISOString().split('T')[0];
+            const todayAppointments = appointments.filter(apt => 
+                apt.fecha === today && apt.estado === 'programada'
+            );
+            document.getElementById('notificationCount').textContent = todayAppointments.length;
+        }
+
         function showNotifications() {
-            // Implementar notificaciones
-            showNotification('Función de notificaciones en desarrollo', 'info');
+            const today = new Date().toISOString().split('T')[0];
+            const todayAppointments = appointments.filter(apt => 
+                apt.fecha === today && apt.estado === 'programada'
+            );
+            
+            if (todayAppointments.length === 0) {
+                showNotification('No hay citas pendientes para hoy', 'info');
+            } else {
+                showNotification(`Tiene ${todayAppointments.length} cita(s) programada(s) para hoy`, 'info');
+            }
         }
 
         function showProfile() {
-            // Implementar perfil
             showNotification('Función de perfil en desarrollo', 'info');
         }
 
@@ -1097,179 +678,96 @@
                 localStorage.removeItem('otorongo_current_user');
                 localStorage.removeItem('otorongo_login_time');
                 showNotification('Sesión cerrada correctamente', 'success');
-                setTimeout(() => {
-                    window.location.href = 'login.html';
-                }, 1500);
+                setTimeout(() => window.location.href = 'login.html', 1500);
             }
         }
     </script>
 
     <style>
-        /* Estilos específicos para la página de citas */
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            padding: 1.5rem;
-            background: var(--white);
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-        }
-
-        .page-title h2 {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--dark-color);
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .page-title p {
-            color: var(--gray-600);
-            margin: 0;
-        }
-
-        .page-actions {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .filters-section {
-            margin-bottom: 2rem;
-        }
-
-        .filters-content {
+        .appointments-layout {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            align-items: end;
-        }
-
-        .filter-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .filter-group label {
-            font-weight: 600;
-            color: var(--dark-color);
-        }
-
-        .filter-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .calendar-section {
-            margin-bottom: 2rem;
-        }
-
-        .calendar-controls {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .btn-calendar-nav {
-            background: var(--primary-color);
-            color: var(--white);
-            border: none;
-            padding: 0.5rem;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .btn-calendar-nav:hover {
-            background: #1e3d6f;
-        }
-
-        .calendar-month {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--dark-color);
-            min-width: 150px;
-            text-align: center;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
         }
 
         .calendar-container {
             padding: 1rem;
         }
 
-        .calendar {
-            width: 100%;
-        }
-
-        .calendar-header {
+        .calendar-weekdays {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 1px;
-            margin-bottom: 1px;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
         }
 
-        .calendar-day-header {
-            background: var(--primary-color);
-            color: var(--white);
-            padding: 0.75rem;
+        .weekday {
             text-align: center;
             font-weight: 600;
-            font-size: 0.9rem;
+            color: var(--primary-color);
+            padding: 0.5rem;
         }
 
-        .calendar-body {
-            display: grid;
-            grid-template-rows: repeat(6, 1fr);
-            gap: 1px;
-        }
-
-        .calendar-week {
+        .calendar-days {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 1px;
+            gap: 0.5rem;
         }
 
         .calendar-day {
-            background: var(--white);
-            border: 1px solid var(--gray-200);
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             padding: 0.5rem;
-            min-height: 80px;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--border-radius);
             cursor: pointer;
             transition: var(--transition);
             position: relative;
-            display: flex;
-            flex-direction: column;
+            background: var(--white);
         }
 
-        .calendar-day:hover {
-            background: var(--gray-50);
+        .calendar-day.empty {
+            border: none;
+            cursor: default;
         }
 
-        .calendar-day.other-month {
-            background: var(--gray-100);
-            color: var(--gray-400);
+        .calendar-day:not(.empty):hover {
+            border-color: var(--primary-color);
+            transform: scale(1.05);
+            box-shadow: var(--box-shadow);
         }
 
         .calendar-day.today {
-            background: var(--accent-color);
+            border-color: var(--accent-color);
+            background: rgba(0, 168, 204, 0.1);
+        }
+
+        .calendar-day.selected {
+            background: var(--primary-color);
             color: var(--white);
+            border-color: var(--primary-color);
         }
 
         .calendar-day.has-appointments {
-            background: var(--success-color);
-            color: var(--white);
+            background: rgba(40, 167, 69, 0.1);
+            border-color: var(--success-color);
         }
 
         .day-number {
             font-weight: 600;
-            margin-bottom: 0.25rem;
+            font-size: 1.1rem;
         }
 
         .appointment-count {
-            background: rgba(255, 255, 255, 0.2);
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: var(--success-color);
+            color: var(--white);
             border-radius: 50%;
             width: 20px;
             height: 20px;
@@ -1278,110 +776,170 @@
             justify-content: center;
             font-size: 0.75rem;
             font-weight: 600;
-            margin-top: auto;
-            align-self: flex-end;
         }
 
-        .appointments-section {
-            margin-bottom: 2rem;
+        .calendar-legend {
+            display: flex;
+            gap: 1.5rem;
+            padding: 1rem;
+            border-top: 1px solid var(--gray-200);
+            justify-content: center;
         }
 
-        .list-controls {
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            border: 2px solid var(--gray-300);
+        }
+
+        .legend-color.available {
+            background: var(--white);
+        }
+
+        .legend-color.has-appointments {
+            background: rgba(40, 167, 69, 0.1);
+            border-color: var(--success-color);
+        }
+
+        .legend-color.selected {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .calendar-controls {
             display: flex;
             align-items: center;
             gap: 1rem;
         }
 
-        .action-buttons {
-            display: flex;
-            gap: 0.25rem;
+        .current-month {
+            font-weight: 600;
+            color: var(--dark-color);
+            text-transform: capitalize;
+            min-width: 200px;
+            text-align: center;
         }
 
-        .btn-action.btn-danger {
-            color: var(--danger-color);
-        }
-
-        .btn-action.btn-danger:hover {
-            background: var(--danger-color);
-            color: var(--white);
-        }
-
-        .pagination {
-            margin-top: 1rem;
-            display: flex;
-            justify-content: center;
-        }
-
-        .pagination-controls {
-            display: flex;
-            gap: 0.25rem;
-        }
-
-        .btn-pagination {
-            background: var(--white);
+        .btn-icon {
+            background: var(--gray-100);
             border: 1px solid var(--gray-300);
-            color: var(--gray-700);
-            padding: 0.5rem 0.75rem;
+            color: var(--gray-600);
+            padding: 0.5rem;
             border-radius: var(--border-radius);
             cursor: pointer;
             transition: var(--transition);
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .btn-pagination:hover {
-            background: var(--gray-100);
-        }
-
-        .btn-pagination.active {
+        .btn-icon:hover {
             background: var(--primary-color);
             color: var(--white);
             border-color: var(--primary-color);
         }
 
-        .modal-content.large {
-            max-width: 800px;
+        .appointments-list {
+            max-height: 600px;
+            overflow-y: auto;
+            padding: 1rem;
         }
 
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
-
-        .form-group.full-width {
-            grid-column: 1 / -1;
-        }
-
-        .btn-link {
-            background: none;
-            border: none;
-            color: var(--primary-color);
-            cursor: pointer;
-            font-size: 0.9rem;
-            text-decoration: underline;
-            margin-top: 0.25rem;
-        }
-
-        .btn-link:hover {
-            color: #1e3d6f;
-        }
-
-        .form-actions {
-            grid-column: 1 / -1;
+        .appointment-card {
             display: flex;
+            align-items: center;
             gap: 1rem;
-            justify-content: flex-end;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--gray-200);
+            padding: 1rem;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--border-radius);
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            background: var(--white);
         }
 
-        .appointment-details-grid {
+        .appointment-card:hover {
+            border-color: var(--primary-color);
+            box-shadow: var(--box-shadow);
+            transform: translateX(5px);
+        }
+
+        .appointment-card.programada {
+            border-left: 4px solid var(--warning-color);
+        }
+
+        .appointment-card.completada {
+            border-left: 4px solid var(--success-color);
+            opacity: 0.7;
+        }
+
+        .appointment-card.cancelada {
+            border-left: 4px solid var(--danger-color);
+            opacity: 0.6;
+        }
+
+        .appointment-time {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            min-width: 80px;
+            padding: 0.5rem;
+            background: var(--gray-100);
+            border-radius: var(--border-radius);
+        }
+
+        .appointment-time i {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+
+        .appointment-time span {
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .appointment-info {
+            flex: 1;
+        }
+
+        .appointment-info h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .appointment-info p {
+            color: var(--gray-600);
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .appointment-status {
+            display: flex;
+            align-items: center;
+        }
+
+        .appointment-detail-card {
             display: grid;
             gap: 1rem;
-            margin-bottom: 2rem;
         }
 
-        .detail-item {
+        .detail-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -1390,13 +948,13 @@
             border-radius: var(--border-radius);
         }
 
-        .detail-item.full-width {
+        .detail-row.full-width {
             flex-direction: column;
             align-items: flex-start;
             gap: 0.5rem;
         }
 
-        .detail-item label {
+        .detail-row label {
             font-weight: 600;
             color: var(--dark-color);
             display: flex;
@@ -1404,65 +962,57 @@
             gap: 0.5rem;
         }
 
-        .modal-actions {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            padding-top: 1rem;
-            border-top: 1px solid var(--gray-200);
+        .detail-row span {
+            color: var(--gray-600);
         }
 
-        /* Responsive */
+        .filter-controls {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .filter-controls select {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--border-radius);
+            background: var(--white);
+            cursor: pointer;
+        }
+
+        @media (max-width: 1024px) {
+            .appointments-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
         @media (max-width: 768px) {
-            .page-header {
-                flex-direction: column;
-                gap: 1rem;
-                align-items: flex-start;
-            }
-
-            .page-actions {
-                width: 100%;
-                justify-content: flex-start;
-            }
-
-            .filters-content {
-                grid-template-columns: 1fr;
-            }
-
-            .form-grid {
-                grid-template-columns: 1fr;
+            .calendar-days {
+                gap: 0.25rem;
             }
 
             .calendar-day {
-                min-height: 60px;
                 padding: 0.25rem;
             }
 
-            .action-buttons {
+            .day-number {
+                font-size: 0.9rem;
+            }
+
+            .appointment-count {
+                width: 16px;
+                height: 16px;
+                font-size: 0.65rem;
+            }
+
+            .appointment-card {
                 flex-direction: column;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .page-title h2 {
-                font-size: 1.5rem;
+                align-items: flex-start;
             }
 
-            .calendar-day-header {
-                padding: 0.5rem 0.25rem;
-                font-size: 0.8rem;
-            }
-
-            .calendar-day {
-                min-height: 50px;
-            }
-
-            .form-actions {
-                flex-direction: column;
-            }
-
-            .modal-actions {
-                flex-direction: column;
+            .appointment-time {
+                width: 100%;
+                flex-direction: row;
+                justify-content: center;
             }
         }
     </style>

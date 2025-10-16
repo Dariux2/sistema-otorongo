@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentación - Centro Oftalmológico El Otorongo</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-eye"></i>
+                <h1>Centro Oftalmológico El Otorongo</h1>
+            </div>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">Inicio</a>
+                <a href="documentacion.html" class="nav-link active">Documentación</a>
+                <button class="btn-login" onclick="window.location.href='login.html'">
+                    <i class="fas fa-user"></i> Acceder al Sistema
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Documentación Principal -->
+    <main class="documentation-main">
+        <div class="container">
+            <div class="doc-layout">
+                <!-- Sidebar de Navegación -->
+                <aside class="doc-sidebar">
+                    <div class="sidebar-sticky">
+                        <h3><i class="fas fa-book"></i> Contenido</h3>
+                        <nav class="doc-nav">
+                            <a href="#introduccion" class="doc-nav-link active">Introducción</a>
+                            <a href="#caracteristicas" class="doc-nav-link">Características</a>
+                            <a href="#instalacion" class="doc-nav-link">Instalación</a>
+                            <a href="#uso" class="doc-nav-link">Guía de Uso</a>
+                            <a href="#modulos" class="doc-nav-link">Módulos del Sistema</a>
+                            <a href="#roles" class="doc-nav-link">Roles de Usuario</a>
+                            <a href="#api" class="doc-nav-link">API y Funciones</a>
+                            <a href="#soporte" class="doc-nav-link">Soporte Técnico</a>
+                            <a href="#faq" class="doc-nav-link">Preguntas Frecuentes</a>
+                        </nav>
+                    </div>
+                </aside>
+
+                <!-- Contenido de Documentación -->
+                <div class="doc-content">
+                    <!-- Introducción -->
+                    <section id="introduccion" class="doc-section">
+                        <h1><i class="fas fa-info-circle"></i> Introducción</h1>
+                        <p class="lead">Sistema de Información Integral para la Gestión del Centro Oftalmológico El Otorongo</p>
+                        
+                        <div class="alert alert-info">
+                            <i class="fas fa-lightbulb"></i>
+                            <div>
+                                <strong>Versión Actual:</strong> 1.0.0<br>
+                                <strong>Última Actualización:</strong> Enero 2025<br>
+                                <strong>Estado:</strong> Producción
+                            </div>
+                        </div>
+
+                        <h2>¿Qué es el Sistema Otorongo?</h2>
+                        <p>El Sistema Centro Oftalmológico El Otorongo es una solución integral diseñada para optimizar la gestión de servicios médicos oftalmológicos. Desarrollado con tecnologías web modernas, ofrece una interfaz intuitiva y funcionalidades completas para la administración de pacientes, citas, facturación y reportes.</p>
+
+                        <h2>Objetivos del Sistema</h2>
+                        <ul>
+                            <li>Automatizar la gestión de citas médicas</li>
+                            <li>Centralizar el registro de pacientes y su historial médico</li>
+                            <li>Optimizar el proceso de facturación</li>
+                            <li>Generar reportes automáticos para toma de decisiones</li>
+                            <li>Mejorar la comunicación entre el personal médico y administrativo</li>
+                        </ul>
+                    </section>
+
+                    <!-- Características -->
+                    <section id="caracteristicas" class="doc-section">
+                        <h1><i class="fas fa-star"></i> Características Principales</h1>
+
+                        <div class="features-grid">
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i class="fas fa-lock"></i>
+                                </div>
+                                <h3>Sistema de Autenticación</h3>
+                                <p>Control de acceso basado en roles con tres niveles: Administrador, Médico y Recepcionista.</p>
+                            </div>
+
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i class="fas fa-calendar-alt"></i>
+                                </div>
+                                <h3>Gestión de Citas</h3>
+                                <p>Calendario interactivo con prevención automática de solapamientos y notificaciones.</p>
+                            </div>
+
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <h3>Registro de Pacientes</h3>
+                                <p>Base de datos completa con historial médico, validaciones y búsqueda avanzada.</p>
+                            </div>
+
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i class="fas fa-file-invoice-dollar"></i>
+                                </div>
+                                <h3>Facturación Automatizada</h3>
+                                <p>Generación de facturas con cálculo automático de IGV y múltiples métodos de pago.</p>
+                            </div>
+
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i class="fas fa-chart-bar"></i>
+                                </div>
+                                <h3>Reportes en Tiempo Real</h3>
+                                <p>Dashboard con métricas actualizadas y gráficos interactivos para análisis.</p>
+                            </div>
+
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <i class="fas fa-mobile-alt"></i>
+                                </div>
+                                <h3>Diseño Responsivo</h3>
+                                <p>Interfaz adaptable a dispositivos móviles, tablets y computadoras de escritorio.</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Instalación -->
+                    <section id="instalacion" class="doc-section">
+                        <h1><i class="fas fa-download"></i> Instalación</h1>
+
+                        <h2>Requisitos del Sistema</h2>
+                        <div class="requirements">
+                            <div class="requirement-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Navegador web moderno (Chrome, Firefox, Safari, Edge)</span>
+                            </div>
+                            <div class="requirement-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>JavaScript habilitado</span>
+                            </div>
+                            <div class="requirement-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Conexión a Internet (para recursos externos)</span>
+                            </div>
+                            <div class="requirement-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Resolución mínima: 1024x768 (recomendado: 1920x1080)</span>
+                            </div>
+                        </div>
+
+                        <h2>Pasos de Instalación</h2>
+                        <div class="steps">
+                            <div class="step">
+                                <div class="step-number">1</div>
+                                <div class="step-content">
+                                    <h3>Descargar el Sistema</h3>
+                                    <p>Descargue todos los archivos del sistema y mantenga la estructura de carpetas intacta.</p>
+                                    <div class="code-block">
+                                        <code>
+sistema-otorongo/<br>
+├── index.html<br>
+├── login.html<br>
+├── dashboard.html<br>
+├── citas.html<br>
+├── pacientes.html<br>
+├── facturacion.html<br>
+├── reportes.html<br>
+├── documentacion.html<br>
+├── styles.css<br>
+├── script.js<br>
+└── assets/
+                                        </code>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="step">
+                                <div class="step-number">2</div>
+                                <div class="step-content">
+                                    <h3>Abrir el Sistema</h3>
+                                    <p>Abra el archivo <code>index.html</code> en su navegador web preferido.</p>
+                                </div>
+                            </div>
+
+                            <div class="step">
+                                <div class="step-number">3</div>
+                                <div class="step-content">
+                                    <h3>Acceder al Sistema</h3>
+                                    <p>Haga clic en "Acceder al Sistema" y use las credenciales de prueba proporcionadas.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Guía de Uso -->
+                    <section id="uso" class="doc-section">
+                        <h1><i class="fas fa-book-open"></i> Guía de Uso</h1>
+
+                        <h2>Inicio de Sesión</h2>
+                        <p>Para acceder al sistema, utilice una de las siguientes credenciales de prueba:</p>
+
+                        <div class="credentials-table">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Rol</th>
+                                        <th>Usuario</th>
+                                        <th>Contraseña</th>
+                                        <th>Permisos</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="badge primary">Administrador</span></td>
+                                        <td><code>admin</code></td>
+                                        <td><code>admin123</code></td>
+                                        <td>Acceso completo a todos los módulos</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="badge success">Médico</span></td>
+                                        <td><code>medico</code></td>
+                                        <td><code>medico123</code></td>
+                                        <td>Gestión de pacientes y citas propias</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="badge info">Recepcionista</span></td>
+                                        <td><code>recepcion</code></td>
+                                        <td><code>recep123</code></td>
+                                        <td>Gestión de citas, pacientes y facturación</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <div>
+                                <strong>Importante:</strong> Cambie las contraseñas predeterminadas en un entorno de producción.
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Módulos del Sistema -->
+                    <section id="modulos" class="doc-section">
+                        <h1><i class="fas fa-th-large"></i> Módulos del Sistema</h1>
+
+                        <div class="module-card">
+                            <div class="module-header">
+                                <i class="fas fa-tachometer-alt"></i>
+                                <h2>Dashboard</h2>
+                            </div>
+                            <p>Panel de control principal que muestra estadísticas en tiempo real, citas del día, pacientes recientes y actividad del sistema.</p>
+                            <h3>Funcionalidades:</h3>
+                            <ul>
+                                <li>Visualización de métricas clave</li>
+                                <li>Citas programadas para el día</li>
+                                <li>Lista de pacientes recientes</li>
+                                <li>Timeline de actividad</li>
+                                <li>Notificaciones del sistema</li>
+                            </ul>
+                        </div>
+
+                        <div class="module-card">
+                            <div class="module-header">
+                                <i class="fas fa-users"></i>
+                                <h2>Gestión de Pacientes</h2>
+                            </div>
+                            <p>Módulo completo para el registro, búsqueda y administración de información de pacientes.</p>
+                            <h3>Funcionalidades:</h3>
+                            <ul>
+                                <li>Registro de nuevos pacientes con validación de datos</li>
+                                <li>Búsqueda avanzada por nombre, DNI o teléfono</li>
+                                <li>Visualización de historial médico</li>
+                                <li>Edición de información del paciente</li>
+                                <li>Vinculación con citas y facturas</li>
+                            </ul>
+                        </div>
+
+                        <div class="module-card">
+                            <div class="module-header">
+                                <i class="fas fa-calendar-alt"></i>
+                                <h2>Gestión de Citas</h2>
+                            </div>
+                            <p>Sistema de programación de citas con calendario interactivo y prevención de conflictos.</p>
+                            <h3>Funcionalidades:</h3>
+                            <ul>
+                                <li>Calendario mensual interactivo</li>
+                                <li>Programación de nuevas citas</li>
+                                <li>Prevención automática de solapamientos</li>
+                                <li>Filtrado por estado y médico</li>
+                                <li>Reprogramación y cancelación de citas</li>
+                                <li>Notificaciones de citas próximas</li>
+                            </ul>
+                        </div>
+
+                        <div class="module-card">
+                            <div class="module-header">
+                                <i class="fas fa-file-invoice-dollar"></i>
+                                <h2>Sistema de Facturación</h2>
+                            </div>
+                            <p>Generación y gestión de facturas con cálculo automático de impuestos.</p>
+                            <h3>Funcionalidades:</h3>
+                            <ul>
+                                <li>Creación de facturas con múltiples servicios</li>
+                                <li>Cálculo automático de IGV (18%)</li>
+                                <li>Múltiples métodos de pago</li>
+                                <li>Impresión y exportación de facturas</li>
+                                <li>Control de facturas pagadas y pendientes</li>
+                                <li>Estadísticas de ingresos</li>
+                            </ul>
+                        </div>
+
+                        <div class="module-card">
+                            <div class="module-header">
+                                <i class="fas fa-chart-bar"></i>
+                                <h2>Reportes y Estadísticas</h2>
+                            </div>
+                            <p>Dashboard analítico con gráficos y reportes detallados del desempeño del centro.</p>
+                            <h3>Funcionalidades:</h3>
+                            <ul>
+                                <li>Gráficos de citas por mes</li>
+                                <li>Análisis de ingresos mensuales</li>
+                                <li>Distribución de servicios</li>
+                                <li>Estado de citas</li>
+                                <li>Pacientes frecuentes</li>
+                                <li>Servicios más rentables</li>
+                                <li>Resumen ejecutivo</li>
+                                <li>Exportación de reportes</li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <!-- Roles de Usuario -->
+                    <section id="roles" class="doc-section">
+                        <h1><i class="fas fa-user-tag"></i> Roles de Usuario</h1>
+
+                        <div class="role-card">
+                            <div class="role-header admin">
+                                <i class="fas fa-user-shield"></i>
+                                <h2>Administrador</h2>
+                            </div>
+                            <h3>Permisos y Accesos:</h3>
+                            <ul>
+                                <li>Acceso completo a todos los módulos del sistema</li>
+                                <li>Gestión de usuarios y permisos</li>
+                                <li>Visualización de todos los reportes</li>
+                                <li>Configuración del sistema</li>
+                                <li>Gestión de pacientes, citas y facturación</li>
+                                <li>Exportación de datos</li>
+                            </ul>
+                        </div>
+
+                        <div class="role-card">
+                            <div class="role-header medico">
+                                <i class="fas fa-user-md"></i>
+                                <h2>Médico</h2>
+                            </div>
+                            <h3>Permisos y Accesos:</h3>
+                            <ul>
+                                <li>Visualización de sus pacientes asignados</li>
+                                <li>Gestión de sus citas programadas</li>
+                                <li>Acceso al historial médico de sus pacientes</li>
+                                <li>Actualización de diagnósticos y tratamientos</li>
+                                <li>Visualización de reportes personales</li>
+                            </ul>
+                        </div>
+
+                        <div class="role-card">
+                            <div class="role-header recepcionista">
+                                <i class="fas fa-user-tie"></i>
+                                <h2>Recepcionista</h2>
+                            </div>
+                            <h3>Permisos y Accesos:</h3>
+                            <ul>
+                                <li>Registro de nuevos pacientes</li>
+                                <li>Programación y gestión de citas</li>
+                                <li>Generación de facturas</li>
+                                <li>Gestión de pagos</li>
+                                <li>Atención de consultas de pacientes</li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <!-- API y Funciones -->
+                    <section id="api" class="doc-section">
+                        <h1><i class="fas fa-code"></i> API y Funciones</h1>
+
+                        <h2>Funciones Principales del Sistema</h2>
+
+                        <div class="api-section">
+                            <h3>OtorongoSystem.getPatients()</h3>
+                            <p>Obtiene la lista completa de pacientes registrados.</p>
+                            <div class="code-block">
+                                <code>
+const patients = OtorongoSystem.getPatients();<br>
+// Retorna: Array de objetos paciente
+                                </code>
+                            </div>
+                        </div>
+
+                        <div class="api-section">
+                            <h3>OtorongoSystem.savePatients(patients)</h3>
+                            <p>Guarda la lista de pacientes en LocalStorage.</p>
+                            <div class="code-block">
+                                <code>
+OtorongoSystem.savePatients(updatedPatients);
+                                </code>
+                            </div>
+                        </div>
+
+                        <div class="api-section">
+                            <h3>OtorongoSystem.getAppointments()</h3>
+                            <p>Obtiene todas las citas programadas.</p>
+                            <div class="code-block">
+                                <code>
+const appointments = OtorongoSystem.getAppointments();
+                                </code>
+                            </div>
+                        </div>
+
+                        <div class="api-section">
+                            <h3>OtorongoSystem.formatDate(dateString)</h3>
+                            <p>Formatea una fecha al formato local español.</p>
+                            <div class="code-block">
+                                <code>
+const formatted = OtorongoSystem.formatDate('2025-01-15');<br>
+// Retorna: "15 de enero de 2025"
+                                </code>
+                            </div>
+                        </div>
+
+                        <div class="api-section">
+                            <h3>OtorongoSystem.formatCurrency(amount)</h3>
+                            <p>Formatea un monto al formato de moneda peruana.</p>
+                            <div class="code-block">
+                                <code>
+const formatted = OtorongoSystem.formatCurrency(150.50);<br>
+// Retorna: "S/. 150.50"
+                                </code>
+                            </div>
+                        </div>
+
+                        <div class="api-section">
+                            <h3>showNotification(message, type, duration)</h3>
+                            <p>Muestra una notificación al usuario.</p>
+                            <div class="code-block">
+                                <code>
+showNotification('Operación exitosa', 'success', 5000);<br>
+// Tipos: 'success', 'error', 'warning', 'info'
+                                </code>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Soporte Técnico -->
+                    <section id="soporte" class="doc-section">
+                        <h1><i class="fas fa-life-ring"></i> Soporte Técnico</h1>
+
+                        <div class="support-grid">
+                            <div class="support-card">
+                                <i class="fas fa-envelope"></i>
+                                <h3>Email</h3>
+                                <p>soporte@otorongo.com</p>
+                                <p class="text-muted">Respuesta en 24-48 horas</p>
+                            </div>
+
+                            <div class="support-card">
+                                <i class="fas fa-phone"></i>
+                                <h3>Teléfono</h3>
+                                <p>(01) 555-0123</p>
+                                <p class="text-muted">Lun - Vie: 8:00 AM - 6:00 PM</p>
+                            </div>
+
+                            <div class="support-card">
+                                <i class="fas fa-comments"></i>
+                                <h3>Chat en Vivo</h3>
+                                <p>Disponible en el sistema</p>
+                                <p class="text-muted">Horario de oficina</p>
+                            </div>
+
+                            <div class="support-card">
+                                <i class="fas fa-book"></i>
+                                <h3>Documentación</h3>
+                                <p>Esta página</p>
+                                <p class="text-muted">Actualizada constantemente</p>
+                            </div>
+                        </div>
+
+                        <h2>Reportar un Problema</h2>
+                        <p>Si encuentra algún error o tiene sugerencias, por favor incluya la siguiente información:</p>
+                        <ul>
+                            <li>Descripción detallada del problema</li>
+                            <li>Pasos para reproducir el error</li>
+                            <li>Navegador y versión utilizada</li>
+                            <li>Capturas de pantalla (si es posible)</li>
+                            <li>Rol de usuario con el que ocurrió</li>
+                        </ul>
+                    </section>
+
+                    <!-- FAQ -->
+                    <section id="faq" class="doc-section">
+                        <h1><i class="fas fa-question-circle"></i> Preguntas Frecuentes</h1>
+
+                        <div class="faq-item">
+                            <h3>¿Cómo cambio mi contraseña?</h3>
+                            <p>Actualmente, las contraseñas deben ser cambiadas por un administrador del sistema. Contacte al soporte técnico para solicitar un cambio de contraseña.</p>
+                        </div>
+
+                        <div class="faq-item">
+                            <h3>¿Los datos se guardan automáticamente?</h3>
+                            <p>Sí, todos los datos se guardan automáticamente en el navegador usando LocalStorage. Sin embargo, se recomienda hacer respaldos periódicos exportando los datos.</p>
+                        </div>
+
+                        <div class="faq-item">
+                            <h3>¿Puedo acceder desde mi teléfono móvil?</h3>
+                            <p>Sí, el sistema tiene un diseño responsivo que se adapta a dispositivos móviles y tablets.</p>
+                        </div>
+
+                        <div class="faq-item">
+                            <h3>¿Qué navegadores son compatibles?</h3>
+                            <p>El sistema es compatible con las versiones más recientes de Chrome, Firefox, Safari y Edge.</p>
+                        </div>
+
+                        <div class="faq-item">
+                            <h3>¿Cómo exporto los datos del sistema?</h3>
+                            <p>Cada módulo tiene un botón de exportación que permite descargar los datos en formato CSV para su análisis en Excel u otras herramientas.</p>
+                        </div>
+
+                        <div class="faq-item">
+                            <h3>¿Puedo imprimir las facturas?</h3>
+                            <p>Sí, el sistema incluye una función de impresión optimizada para facturas. También puede guardarlas como PDF usando la función de impresión del navegador.</p>
+                        </div>
+
+                        <div class="faq-item">
+                            <h3>¿Qué hago si olvido mi contraseña?</h3>
+                            <p>Contacte al administrador del sistema o al soporte técnico para restablecer su contraseña.</p>
+                        </div>
+
+                        <div class="faq-item">
+                            <h3>¿El sistema tiene límite de pacientes o citas?</h3>
+                            <p>No hay límite técnico, pero el rendimiento puede variar según el navegador y dispositivo utilizado con grandes volúmenes de datos.</p>
+                        </div>
+                    </section>
+
+                    <!-- Footer de Documentación -->
+                    <div class="doc-footer">
+                        <p><strong>Sistema Centro Oftalmológico El Otorongo</strong> - Versión 1.0.0</p>
+                        <p>Desarrollado con ❤️ para mejorar la atención médica oftalmológica</p>
+                        <p class="text-muted">© 2025 Centro Oftalmológico El Otorongo. Todos los derechos reservados.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+    <script>
+        // Navegación suave en la documentación
+        document.querySelectorAll('.doc-nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remover clase activa de todos los links
+                document.querySelectorAll('.doc-nav-link').forEach(l => l.classList.remove('active'));
+                
+                // Agregar clase activa al link clickeado
+                this.classList.add('active');
+                
+                // Scroll suave a la sección
+                const targetId = this.getAttribute('href').substring(1);
+                const targetSection = document.getElementById(targetId);
+                
+                if (targetSection) {
+                    const headerHeight = document.querySelector('.header').offsetHeight;
+                    const targetPosition = targetSection.offsetTop - headerHeight - 20;
+                    
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Actualizar link activo al hacer scroll
+        window.addEventListener('scroll', function() {
+            const sections = document.querySelectorAll('.doc-section');
+            const scrollPosition = window.scrollY + 150;
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.offsetHeight;
+                const sectionId = section.getAttribute('id');
+                
+                if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                    document.querySelectorAll('.doc-nav-link').forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${sectionId}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+
+    <style>
+        .documentation-main {
+            margin-top: 80px;
+            padding: 2rem 0;
+            min-height: calc(100vh - 80px);
+            background: var(--gray-50);
+        }
+
+        .doc-layout {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        .doc-sidebar {
+            position: sticky;
+            top: 100px;
+        }
+
+        .sidebar-sticky {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--box-shadow);
+        }
+
+        .sidebar-sticky h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .doc-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .doc-nav-link {
+            padding: 0.75rem 1rem;
+            color: var(--gray-700);
+            text-decoration: none;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            border-left: 3px solid transparent;
+        }
+
+        .doc-nav-link:hover {
+            background: var(--gray-100);
+            color: var(--primary-color);
+        }
+
+        .doc-nav-link.active {
+            background: var(--gray-100);
+            color: var(--primary-color);
+            border-left-color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .doc-content {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 3rem;
+            box-shadow: var(--box-shadow);
+        }
+
+        .doc-section {
+            margin-bottom: 4rem;
+            scroll-margin-top: 100px;
+        }
+
+        .doc-section h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid var(--primary-color);
+        }
+
+        .doc-section h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin: 2rem 0 1rem;
+        }
+
+        .doc-section h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin: 1.5rem 0 1rem;
+        }
+
+        .doc-section p {
+            line-height: 1.8;
+            color: var(--gray-700);
+            margin-bottom: 1rem;
+        }
+
+        .doc-section ul {
+            margin: 1rem 0;
+            padding-left: 2rem;
+        }
+
+        .doc-section li {
+            margin-bottom: 0.75rem;
+            line-height: 1.6;
+            color: var(--gray-700);
+        }
+
+        .lead {
+            font-size: 1.25rem;
+            color: var(--gray-600);
+            margin-bottom: 2rem;
+        }
+
+        .alert {
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            margin: 1.5rem 0;
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .alert i {
+            font-size: 1.5rem;
+        }
+
+        .alert-info {
+            background: rgba(0, 168, 204, 0.1);
+            border-left: 4px solid var(--accent-color);
+            color: var(--dark-color);
+        }
+
+        .alert-warning {
+            background: rgba(255, 193, 7, 0.1);
+            border-left: 4px solid var(--warning-color);
+            color: var(--dark-color);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .feature-card {
+            background: var(--gray-50);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            border: 2px solid var(--gray-200);
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-color);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            color: var(--dark-color);
+            margin-bottom: 0.75rem;
+        }
+
+        .requirements {
+            background: var(--gray-50);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            margin: 1.5rem 0;
+        }
+
+        .requirement-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 0;
+            color: var(--gray-700);
+        }
+
+        .requirement-item i {
+            color: var(--success-color);
+            font-size: 1.2rem;
+        }
+
+        .steps {
+            margin: 2rem 0;
+        }
+
+        .step {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background: var(--gray-50);
+            border-radius: var(--border-radius);
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: var(--primary-color);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .step-content h3 {
+            margin-top: 0;
+        }
+
+        .code-block {
+            background: var(--dark-color);
+            color: #00ff00;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            margin: 1rem 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+
+        .code-block code {
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        code {
+            background: var(--gray-100);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: var(--danger-color);
+            font-size: 0.9em;
+        }
+
+        .credentials-table {
+            margin: 2rem 0;
+        }
+
+        .module-card {
+            background: var(--gray-50);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .module-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .module-header i {
+            font-size: 2rem;
+            color: var(--primary-color);
+        }
+
+        .module-header h2 {
+            margin: 0;
+        }
+
+        .role-card {
+            background: var(--gray-50);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+        }
+
+        .role-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 1.5rem;
+            color: var(--white);
+        }
+
+        .role-header i {
+            font-size: 2rem;
+        }
+
+        .role-header h2 {
+            margin: 0;
+            color: var(--white);
+        }
+
+        .role-header.admin {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .role-header.medico {
+            background: linear-gradient(135deg, var(--success-color), #1e7e34);
+        }
+
+        .role-header.recepcionista {
+            background: linear-gradient(135deg, var(--accent-color), #0086a8);
+        }
+
+        .api-section {
+            background: var(--gray-50);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .api-section h3 {
+            color: var(--dark-color);
+            margin-top: 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .support-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .support-card {
+            background: var(--gray-50);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+            border: 2px solid var(--gray-200);
+            transition: var(--transition);
+        }
+
+        .support-card:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-5px);
+        }
+
+        .support-card i {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .support-card h3 {
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .support-card p {
+            margin-bottom: 0.5rem;
+        }
+
+        .text-muted {
+            color: var(--gray-500);
+            font-size: 0.9rem;
+        }
+
+        .faq-item {
+            background: var(--gray-50);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .faq-item h3 {
+            color: var(--dark-color);
+            margin-top: 0;
+            margin-bottom: 1rem;
+        }
+
+        .doc-footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--gray-200);
+            text-align: center;
+            color: var(--gray-600);
+        }
+
+        .doc-footer p {
+            margin: 0.5rem 0;
+        }
+
+        @media (max-width: 1024px) {
+            .doc-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .doc-sidebar {
+                position: static;
+            }
+
+            .sidebar-sticky {
+                margin-bottom: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .documentation-main {
+                padding: 1rem 0;
+            }
+
+            .doc-content {
+                padding: 1.5rem;
+            }
+
+            .doc-section h1 {
+                font-size: 2rem;
+            }
+
+            .doc-section h2 {
+                font-size: 1.5rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .step {
+                flex-direction: column;
+            }
+
+            .support-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</body>
+</html>
