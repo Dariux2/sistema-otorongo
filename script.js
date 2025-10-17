@@ -187,13 +187,16 @@ function scrollToSection(sectionId) {
 
 // Manejar navegación
 function handleNavigation(e) {
-    e.preventDefault();
-    const href = this.getAttribute('href');
-    
+    const href = this.getAttribute('href') || '';
+
+    // Si es un enlace a una sección interna (ancla), prevenir el comportamiento por defecto
+    // y hacer scroll suave. Para enlaces a otras páginas (p. ej. index.html) dejamos
+    // que el navegador haga la navegación normal.
     if (href.startsWith('#')) {
+        e.preventDefault();
         const sectionId = href.substring(1);
         scrollToSection(sectionId);
-        
+
         // Actualizar navegación activa
         document.querySelectorAll('.nav-link').forEach(link => {
             link.classList.remove('active');
