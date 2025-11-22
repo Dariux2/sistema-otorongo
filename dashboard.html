@@ -31,6 +31,10 @@
                     <button class="btn-profile" onclick="showProfile()">
                         <i class="fas fa-user-circle"></i>
                     </button>
+                    <a href="index.html" class="btn-home" title="Volver al Inicio">
+                        <i class="fas fa-home"></i>
+                        <span class="btn-home-text">Volver al Inicio</span>
+                    </a>
                     <button class="btn-logout" onclick="logout()">
                         <i class="fas fa-sign-out-alt"></i>
                         <span>Salir</span>
@@ -1278,6 +1282,32 @@
         .btn-profile:hover,
         .btn-logout:hover {
             background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Botón volver al inicio en header */
+        .btn-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255,255,255,0.12);
+            color: var(--white);
+            padding: 0.45rem 0.75rem;
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            transition: var(--transition);
+            border: 1px solid rgba(255,255,255,0.12);
+        }
+
+        .btn-home i {
+            font-size: 1rem;
+        }
+
+        .btn-home:hover {
+            background: rgba(255,255,255,0.22);
+        }
+
+        @media (max-width: 480px) {
+            .btn-home-text { display: none; }
         }
 
         .dashboard-nav {

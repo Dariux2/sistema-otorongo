@@ -114,16 +114,24 @@ function populateServiceImages() {
 // Configurar event listeners
 function setupEventListeners() {
     // Navegación móvil
-    const mobileToggle = document.querySelector('.mobile-menu-toggle');
-    if (mobileToggle) {
-        mobileToggle.addEventListener('click', toggleMobileMenu);
+    const mobileToggle = document.querySelector(".mobile-menu-toggle");
+    const nav = document.querySelector(".nav");
+
+    if (mobileToggle && nav) {
+        mobileToggle.addEventListener("click", () => {
+            nav.classList.toggle("nav-open");
+        });
     }
-    
-    // Enlaces de navegación
-    const navLinks = document.querySelectorAll('.nav-link');
-    navLinks.forEach(link => {
-        link.addEventListener('click', handleNavigation);
-    });
+
+    // Enlaces de navegación: cerrar menú al hacer click en un enlace
+    const navLinks = document.querySelectorAll(".nav-link");
+    if (navLinks && nav) {
+        navLinks.forEach(link => {
+            link.addEventListener("click", () => {
+                nav.classList.remove("nav-open");
+            });
+        });
+    }
     
     // Formulario de contacto
     const contactForm = document.getElementById('contactForm');
@@ -208,7 +216,9 @@ function handleNavigation(e) {
 // Toggle menú móvil
 function toggleMobileMenu() {
     const nav = document.querySelector('.nav');
-    nav.classList.toggle('mobile-active');
+    if (nav) {
+        nav.classList.toggle('nav-open');
+    }
 }
 
 // Configurar formularios
