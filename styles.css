@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Roboto+Slab:wght@400;700&family=Nunito:wght@400;600;700&family=Merriweather:wght@300;400;700&display=swap');
+
 /* Reset y Variables CSS */
 * {
     margin: 0;
@@ -26,17 +28,52 @@
     --gray-900: #212529;
     
     --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* Tipografías principales (pares seleccionados)
+         - Primario: Poppins (títulos) + Roboto Slab (cuerpo)
+         - Alternativo: Nunito (cuerpo) + Merriweather (títulos)
+    */
+    --font-sans-primary: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --font-serif-primary: 'Roboto Slab', Georgia, 'Times New Roman', serif;
+    --font-sans-alt: 'Nunito', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+    --font-serif-alt: 'Merriweather', Georgia, 'Times New Roman', serif;
+
+    /* Variables activas (puedes cambiar con la clase .alt-typography en <body>) */
+    --font-heading: var(--font-sans-primary);
+    --font-body: var(--font-serif-primary);
     --border-radius: 8px;
     --box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     --transition: all 0.3s ease;
+    /* Tema: paleta teal-azul suave */
+    --header-gradient: linear-gradient(135deg, #2ec4b6 0%, #3b82d6 100%);
+    --surface: #ffffff;
+    --muted-surface: #fbfdff;
+    --card-accent: rgba(46,196,182,0.06);
+    --accent-strong: #14b8a6;
+    --accent-strong-dark: #0f8f7f;
+    --accent-soft: #e8fffb;
+    --card-radius-lg: 14px;
+    --card-radius-sm: 10px;
 }
 
 /* Estilos Base */
 body {
-    font-family: var(--font-family);
+    font-family: var(--font-body, var(--font-family));
     line-height: 1.6;
     color: var(--gray-800);
     background-color: var(--gray-100);
+}
+
+/* Encabezados y títulos */
+h1, h2, h3, h4, h5, h6, .section-title {
+    font-family: var(--font-heading);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+}
+
+/* Clase para activar tipografía alternativa (Nunito + Merriweather) */
+.alt-typography {
+    --font-heading: var(--font-serif-alt);
+    --font-body: var(--font-sans-alt);
 }
 
 .container {
@@ -126,14 +163,12 @@ body {
     border-radius: 8px;
     box-shadow: var(--box-shadow);
     text-decoration: none;
-    font-size: 1.1rem;
 }
 
-@media (max-width: 768px) {
-    .btn-home-header {
-        display: inline-flex;
-        z-index: 1100;
-    }
+/* Navegación del dashboard: fondo sutil y acento */
+.dashboard-nav {
+    background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.95));
+    border-left: 4px solid var(--accent-soft);
 }
 
 .logo {
@@ -201,6 +236,117 @@ body {
     font-size: 1.5rem;
     cursor: pointer;
     color: var(--primary-color);
+}
+
+/* Estilos específicos para el header del dashboard y páginas internas */
+.dashboard-header-main {
+    background: var(--header-gradient);
+    color: var(--white);
+    padding: 1.1rem 0.6rem;
+    box-shadow: 0 6px 18px rgba(11,84,115,0.08);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+}
+
+.dashboard-header-main .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.dashboard-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--primary-color);
+}
+
+.dashboard-brand i {
+    font-size: 1.6rem;
+}
+
+.dashboard-brand h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.dashboard-user-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.user-welcome {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+    margin-right: 8px;
+}
+
+.user-greeting { font-size: 0.9rem; color: var(--gray-600); }
+.user-name { font-weight: 700; color: var(--dark-color); }
+.user-role { font-size: 0.85rem; color: var(--gray-600); }
+
+.user-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.user-actions button, .user-actions a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--gray-700);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn-notification { position: relative; }
+.notification-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: var(--danger-color);
+    color: white;
+    font-size: 0.7rem;
+    padding: 2px 6px;
+    border-radius: 999px;
+}
+
+.btn-home {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.12);
+    color: var(--white);
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: 0 4px 12px rgba(17,98,111,0.06);
+}
+
+.btn-home .btn-home-text { display: inline-block; font-weight: 700; }
+
+.btn-home:hover {
+    background: rgba(255,255,255,0.22);
+    color: var(--white);
+}
+
+.btn-logout {
+    background: transparent;
+    color: var(--gray-700);
 }
 
 /* Hero Section */
@@ -446,6 +592,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column; /* apilar video + mapa verticalmente */
+    gap: 20px;
 }
 
 .image-placeholder {
@@ -464,6 +612,44 @@ body {
 .image-placeholder i {
     font-size: 4rem;
     margin-bottom: 1rem;
+}
+
+/* Video */
+.about-image .video-wrapper {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    max-width: 720px; /* aumentado */
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--box-shadow);
+    background: #000;
+    margin: 0 auto;
+    display: block;
+}
+
+.about-image .video-wrapper iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+}
+
+/* Map wrapper */
+.about-image .map-wrapper {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    max-width: 720px;
+    margin: 0 auto 0;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--box-shadow);
+}
+
+.about-image .map-wrapper iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
 }
 
 /* Contact Section */
@@ -1094,9 +1280,7 @@ body {
     pointer-events: none;
 }
 
-/* --- Menú móvil mejorado --- */
-
-/* Off-canvas menú móvil (lado derecho) */
+/* --- Menú móvil --- */
 
 .nav-open {
     display: flex !important;
@@ -1112,7 +1296,7 @@ body {
         z-index: 1001;
     }
 
-    /* Off-canvas nav: inicialmente fuera de la pantalla a la derecha */
+    
     .nav {
         display: flex;
         position: fixed;
@@ -1131,7 +1315,7 @@ body {
         overflow-y: auto;
     }
 
-    /* Cuando esté abierto, se coloca alineado al borde derecho */
+
     .nav.nav-open {
         right: 0;
     }

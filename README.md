@@ -208,9 +208,3 @@ El sistema cumple con todos los objetivos establecidos en el sílabo APF1 y est�
 3. Implementación gradual por módulos
 4. Monitoreo y ajustes según feedback del usuario
 
----
-
-**Desarrollado por:** Grupo 9 - APF1 Integrador  
-**Institución:** Carrera de Ingeniería de Sistemas e Informática  
-**Docente:** Jose Manuel Bruno Sarmiento  
-**Año:** 2025
