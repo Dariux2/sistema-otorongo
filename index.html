@@ -154,264 +154,6 @@
         </div>
     </section>
 
-    <style>
-        /* Estilos Elegantes para Servicios */
-        .services {
-            padding: 100px 0;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .services::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 300px;
-            background: linear-gradient(135deg, rgba(44, 90, 160, 0.05) 0%, rgba(74, 144, 226, 0.05) 100%);
-            transform: skewY(-3deg);
-            transform-origin: top left;
-        }
-
-        .services-header {
-            text-align: center;
-            margin-bottom: 60px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .services-badge {
-            display: inline-block;
-            padding: 8px 24px;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: var(--white);
-            border-radius: 50px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(44, 90, 160, 0.3);
-        }
-
-        .services-grid-elegant {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .service-card-elegant {
-            background: var(--white);
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-        }
-
-        .service-card-elegant::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 5px;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.4s ease;
-        }
-
-        .service-card-elegant:hover {
-            transform: translateY(-15px);
-            box-shadow: 0 20px 60px rgba(44, 90, 160, 0.2);
-        }
-
-        .service-card-elegant:hover::before {
-            transform: scaleX(1);
-        }
-
-        .service-card-inner {
-            padding: 40px 30px;
-            position: relative;
-        }
-
-        .service-number {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 4rem;
-            font-weight: 900;
-            color: rgba(44, 90, 160, 0.05);
-            line-height: 1;
-            transition: all 0.3s ease;
-        }
-
-        .service-card-elegant:hover .service-number {
-            color: rgba(44, 90, 160, 0.1);
-            transform: scale(1.1);
-        }
-
-        .service-icon-elegant {
-            width: 90px;
-            height: 90px;
-            margin: 0 auto 25px;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .icon-bg {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            border-radius: 50%;
-            opacity: 0.1;
-            transition: all 0.4s ease;
-        }
-
-        .service-card-elegant:hover .icon-bg {
-            opacity: 1;
-            transform: scale(1.1) rotate(10deg);
-        }
-
-        .service-icon-elegant i {
-            font-size: 2.5rem;
-            color: var(--primary-color);
-            position: relative;
-            z-index: 1;
-            transition: all 0.4s ease;
-        }
-
-        .service-card-elegant:hover .service-icon-elegant i {
-            color: var(--white);
-            transform: scale(1.1);
-        }
-
-        .service-content-elegant {
-            text-align: center;
-        }
-
-        .service-content-elegant h3 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--dark-color);
-            margin-bottom: 15px;
-            transition: color 0.3s ease;
-        }
-
-        .service-card-elegant:hover .service-content-elegant h3 {
-            color: var(--primary-color);
-        }
-
-        .service-content-elegant > p {
-            color: var(--gray-600);
-            line-height: 1.7;
-            margin-bottom: 25px;
-            font-size: 0.95rem;
-        }
-
-        .service-features {
-            list-style: none;
-            padding: 0;
-            margin: 25px 0;
-            text-align: left;
-        }
-
-        .service-features li {
-            padding: 10px 0;
-            color: var(--gray-700);
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            transition: all 0.3s ease;
-        }
-
-        .service-features li:hover {
-            padding-left: 10px;
-            color: var(--primary-color);
-        }
-
-        .service-features i {
-            color: var(--success-color);
-            font-size: 1rem;
-            flex-shrink: 0;
-        }
-
-        .btn-service {
-            margin-top: 25px;
-            padding: 14px 32px;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: var(--white);
-            border: none;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 4px 15px rgba(44, 90, 160, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-service::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .btn-service:hover::before {
-            left: 100%;
-        }
-
-        .btn-service:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(44, 90, 160, 0.4);
-        }
-
-        .btn-service i {
-            transition: transform 0.3s ease;
-        }
-
-        .btn-service:hover i {
-            transform: translateX(5px);
-        }
-
-        @media (max-width: 768px) {
-            .services {
-                padding: 60px 0;
-            }
-
-            .services-grid-elegant {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-
-            .service-card-inner {
-                padding: 30px 20px;
-            }
-
-            .service-number {
-                font-size: 3rem;
-            }
-        }
-    </style>
-
     <!-- About Section -->
     <section id="nosotros" class="about">
         <div class="container">
@@ -469,6 +211,74 @@
                             allowfullscreen
                             loading="lazy"
                             referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>               
+            </div>
+        </div>
+    </section>
+
+    <!-- Preguntas Frecuentes Mejoradas -->
+    <section class="about-faq-modern">
+        <div class="container">
+            <div class="faq-header-modern">
+                <span class="faq-badge">INFORMACIÓN ÚTIL</span>
+                <h3>Preguntas Frecuentes</h3>
+                <p class="faq-subtitle">Encuentra respuestas rápidas a las consultas más comunes</p>
+            </div>
+            
+            <div class="faq-list-modern">
+                <div class="faq-item-modern">
+                    <div class="faq-question-modern">
+                        <span class="question-number-modern">1</span>
+                        <span class="question-text-modern">¿Cómo puedo reservar una cita en línea?</span>
+                        <span class="faq-icon-modern"><i class="fas fa-chevron-down"></i></span>
+                    </div>
+                    <div class="faq-answer-modern">
+                        <p><i class="fas fa-calendar-check"></i> Puedes reservar una cita desde la sección Citas en línea en nuestra web; selecciona fecha, hora y especialista disponible. Es rápido, fácil y seguro. Nuestro sistema está disponible las 24 horas del día para tu comodidad.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item-modern">
+                    <div class="faq-question-modern">
+                        <span class="question-number-modern">2</span>
+                        <span class="question-text-modern">¿Qué documentos debo llevar a mi primera consulta?</span>
+                        <span class="faq-icon-modern"><i class="fas fa-chevron-down"></i></span>
+                    </div>
+                    <div class="faq-answer-modern">
+                        <p><i class="fas fa-file-medical"></i> Trae tu DNI, cualquier examen previo que tengas y la lista de medicamentos que consumes. Si cuentas con seguro, lleva tu tarjeta. Esto nos permitirá brindarte una atención más completa y personalizada desde tu primera visita.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item-modern">
+                    <div class="faq-question-modern">
+                        <span class="question-number-modern">3</span>
+                        <span class="question-text-modern">¿Aceptan seguros como EsSalud o SIS?</span>
+                        <span class="faq-icon-modern"><i class="fas fa-chevron-down"></i></span>
+                    </div>
+                    <div class="faq-answer-modern">
+                        <p><i class="fas fa-check-circle"></i> Sí, trabajamos con EsSalud y SIS. Consulta en recepción los requisitos y cobertura antes de tu cita para asegurar un proceso sin contratiempos. Nuestro personal te ayudará con todos los trámites necesarios.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item-modern">
+                    <div class="faq-question-modern">
+                        <span class="question-number-modern">4</span>
+                        <span class="question-text-modern">¿Cuánto dura una consulta oftalmológica típica?</span>
+                        <span class="faq-icon-modern"><i class="fas fa-chevron-down"></i></span>
+                    </div>
+                    <div class="faq-answer-modern">
+                        <p><i class="fas fa-clock"></i> Generalmente entre 20 y 40 minutos; si se requieren pruebas adicionales puede durar más. Nuestros especialistas se toman el tiempo necesario para realizar un diagnóstico preciso y responder todas tus dudas.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item-modern">
+                    <div class="faq-question-modern">
+                        <span class="question-number-modern">5</span>
+                        <span class="question-text-modern">¿Cómo recibo los resultados de mis exámenes?</span>
+                        <span class="faq-icon-modern"><i class="fas fa-chevron-down"></i></span>
+                    </div>
+                    <div class="faq-answer-modern">
+                        <p><i class="fas fa-envelope"></i> Los resultados se entregan en recepción. También podemos enviarlos por email si lo solicitas al finalizar tu examen. Tu salud visual es nuestra prioridad y nos aseguramos de que tengas acceso rápido a toda tu información médica.</p>
                     </div>
                 </div>
             </div>

@@ -1008,6 +1008,37 @@ function getActivities(limit = 50) {
     }
 }
 
+/* Inicializar acordeón FAQ (se usa en index.html) */
+function initFaqAccordionModern() {
+    try {
+        const faqItems = document.querySelectorAll('.faq-item-modern');
+        if (!faqItems || faqItems.length === 0) return;
+
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question-modern');
+            if (!question) return;
+
+            question.addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
+
+                // Cerrar todos
+                faqItems.forEach(otherItem => otherItem.classList.remove('active'));
+
+                // Abrir sólo si antes estaba cerrado
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+    } catch (err) {
+        console.error('initFaqAccordionModern error:', err);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    initFaqAccordionModern();
+});
+
 // Exportar funciones para uso en otros archivos
 window.OtorongoSystem = {
     // Funciones de utilidad

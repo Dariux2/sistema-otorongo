@@ -518,6 +518,183 @@ h1, h2, h3, h4, h5, h6, .section-title {
     background-color: var(--gray-100);
 }
 
+/* Estilos elegantes para la variante 'services-grid-elegant' usada en index.html */
+.services {
+    padding: 100px 0;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.services::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 300px;
+    background: linear-gradient(135deg, rgba(44, 90, 160, 0.05) 0%, rgba(74, 144, 226, 0.05) 100%);
+    transform: skewY(-3deg);
+    transform-origin: top left;
+}
+
+.services-header {
+    text-align: center;
+    margin-bottom: 60px;
+    position: relative;
+    z-index: 1;
+}
+
+.services-badge {
+    display: inline-block;
+    padding: 8px 24px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: var(--white);
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(44, 90, 160, 0.3);
+}
+
+.services-grid-elegant {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+    position: relative;
+    z-index: 1;
+}
+
+.service-card-elegant {
+    background: var(--white);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+}
+
+.service-card-elegant::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+}
+
+.service-card-elegant:hover {
+    transform: translateY(-15px);
+    box-shadow: 0 20px 60px rgba(44, 90, 160, 0.2);
+}
+
+.service-card-elegant:hover::before {
+    transform: scaleX(1);
+}
+
+.service-card-inner {
+    padding: 40px 30px;
+    position: relative;
+}
+
+.service-number {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 4rem;
+    font-weight: 900;
+    color: rgba(44, 90, 160, 0.05);
+    line-height: 1;
+    transition: all 0.3s ease;
+}
+
+.service-card-elegant:hover .service-number {
+    color: rgba(44, 90, 160, 0.1);
+    transform: scale(1.1);
+}
+
+.service-icon-elegant {
+    width: 90px;
+    height: 90px;
+    margin: 0 auto 25px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-radius: 50%;
+    opacity: 0.1;
+    transition: all 0.4s ease;
+}
+
+.service-card-elegant:hover .icon-bg {
+    opacity: 1;
+    transform: scale(1.1) rotate(10deg);
+}
+
+.service-icon-elegant i {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    position: relative;
+    z-index: 1;
+    transition: all 0.4s ease;
+}
+
+.service-card-elegant:hover .service-icon-elegant i {
+    color: var(--white);
+    transform: scale(1.1);
+}
+
+.service-content-elegant { text-align: center; }
+
+.service-content-elegant h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--dark-color);
+    margin-bottom: 15px;
+    transition: color 0.3s ease;
+}
+
+.service-card-elegant:hover .service-content-elegant h3 { color: var(--primary-color); }
+
+.service-content-elegant > p {
+    color: var(--gray-600);
+    line-height: 1.7;
+    margin-bottom: 25px;
+    font-size: 0.95rem;
+}
+
+.service-features { list-style: none; padding: 0; margin: 25px 0; text-align: left; }
+.service-features li { padding: 10px 0; color: var(--gray-700); font-size: 0.95rem; display: flex; align-items: center; gap: 12px; transition: all 0.3s ease; }
+.service-features li:hover { padding-left: 10px; color: var(--primary-color); }
+.service-features i { color: var(--success-color); font-size: 1rem; flex-shrink: 0; }
+
+.btn-service { margin-top: 25px; padding: 14px 32px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: var(--white); border: none; border-radius: 50px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 4px 15px rgba(44, 90, 160, 0.3); position: relative; overflow: hidden; }
+.btn-service::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); transition: left 0.5s ease; }
+.btn-service:hover::before { left: 100%; }
+.btn-service:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(44, 90, 160, 0.4); }
+.btn-service i { transition: transform 0.3s ease; }
+.btn-service:hover i { transform: translateX(5px); }
+
+@media (max-width: 768px) {
+    .services { padding: 60px 0; }
+    .services-grid-elegant { grid-template-columns: 1fr; gap: 20px; }
+    .service-card-inner { padding: 30px 20px; }
+    .service-number { font-size: 3rem; }
+}
+
 .about-content {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1335,3 +1512,369 @@ h1, h2, h3, h4, h5, h6, .section-title {
     }
 }
 
+/* ==========================================
+   ESTILOS PARA PREGUNTAS FRECUENTES MODERNAS
+   ========================================== */
+
+.about-faq-modern {
+    margin-top: 2rem;
+    padding: 3rem 0;
+    width: 100%;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.faq-header-modern {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.faq-badge {
+    display: inline-block;
+    padding: 8px 24px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: var(--white);
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 15px rgba(44, 90, 160, 0.3);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.faq-header-modern h3 {
+    font-size: 2.2rem;
+    color: var(--dark-color);
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.faq-subtitle {
+    color: var(--gray-600);
+    font-size: 1.1rem;
+    margin-top: 0.5rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 400;
+}
+
+.faq-list-modern {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 100%;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.faq-item-modern {
+    background: var(--white);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    width: 100%;
+}
+
+.faq-item-modern:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    border-color: rgba(44, 90, 160, 0.1);
+}
+
+.faq-question-modern {
+    padding: 1.5rem 2rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: var(--white);
+    font-weight: 600;
+    font-size: 1.05rem;
+    transition: all 0.3s ease;
+    user-select: none;
+    width: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.faq-question-modern:hover {
+    background: linear-gradient(135deg, #3a6db8 0%, #5d8fd5 100%);
+}
+
+.question-number-modern {
+    background: rgba(255, 255, 255, 0.25);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    margin-right: 1.2rem;
+    flex-shrink: 0;
+    font-size: 1rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.question-text-modern {
+    flex: 1;
+    line-height: 1.5;
+    text-align: left;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 600;
+}
+
+.faq-icon-modern {
+    font-size: 1.3rem;
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+    margin-left: 1.5rem;
+    font-family: 'Font Awesome 6 Free';
+}
+
+.faq-item-modern.active .faq-icon-modern {
+    transform: rotate(180deg);
+}
+
+.faq-answer-modern {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.4s ease;
+    background: #f8f9fa;
+}
+
+.faq-item-modern.active .faq-answer-modern {
+    max-height: 500px;
+    padding: 2rem 2rem;
+}
+
+.faq-answer-modern p {
+    color: var(--gray-700);
+    line-height: 1.8;
+    font-size: 1.05rem;
+    margin: 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    font-weight: 400;
+}
+
+.faq-answer-modern i {
+    color: var(--primary-color);
+    font-size: 1.2rem;
+    margin-top: 0.3rem;
+    flex-shrink: 0;
+    font-family: 'Font Awesome 6 Free';
+}
+
+.faq-answer-modern strong {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+/* ==========================================
+   TIPOGRAFÍAS DIFERENTES PARA CADA RESPUESTA
+   ========================================== */
+
+/* Respuesta 1 - Georgia (serif elegante) */
+.faq-item-modern:nth-child(1) .faq-answer-modern p {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.05rem;
+}
+
+.faq-item-modern:nth-child(1) .faq-answer-modern strong {
+    font-family: Georgia, 'Times New Roman', serif;
+}
+
+/* Respuesta 2 - Arial (sans-serif clásica) */
+.faq-item-modern:nth-child(2) .faq-answer-modern p {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.05rem;
+}
+
+.faq-item-modern:nth-child(2) .faq-answer-modern strong {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Respuesta 3 - Trebuchet MS (moderna) */
+.faq-item-modern:nth-child(3) .faq-answer-modern p {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', sans-serif;
+    font-size: 1.05rem;
+}
+
+.faq-item-modern:nth-child(3) .faq-answer-modern strong {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', sans-serif;
+}
+
+/* Respuesta 4 - Verdana (clara y legible) */
+.faq-item-modern:nth-child(4) .faq-answer-modern p {
+    font-family: Verdana, Geneva, sans-serif;
+    font-size: 1rem;
+    letter-spacing: 0.3px;
+}
+
+.faq-item-modern:nth-child(4) .faq-answer-modern strong {
+    font-family: Verdana, Geneva, sans-serif;
+}
+
+/* Respuesta 5 - Palatino (serif profesional) */
+.faq-item-modern:nth-child(5) .faq-answer-modern p {
+    font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+    font-size: 1.05rem;
+}
+
+.faq-item-modern:nth-child(5) .faq-answer-modern strong {
+    font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+}
+
+/* Animación de entrada */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.faq-item-modern {
+    animation: fadeInUp 0.5s ease-out backwards;
+}
+
+.faq-item-modern:nth-child(1) { animation-delay: 0.1s; }
+.faq-item-modern:nth-child(2) { animation-delay: 0.2s; }
+.faq-item-modern:nth-child(3) { animation-delay: 0.3s; }
+.faq-item-modern:nth-child(4) { animation-delay: 0.4s; }
+.faq-item-modern:nth-child(5) { animation-delay: 0.5s; }
+
+/* Ajustes para el contenedor padre */
+.about-content {
+    width: 100%;
+}
+
+/* Asegurar que el FAQ ocupe todo el ancho disponible */
+.about-text {
+    width: 100%;
+    max-width: 100%;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .faq-list-modern {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .about-faq-modern {
+        margin-top: 2rem;
+        padding: 2rem 1rem;
+    }
+
+    .faq-header-modern {
+        margin-bottom: 2rem;
+    }
+
+    .faq-header-modern h3 {
+        font-size: 1.8rem;
+    }
+
+    .faq-subtitle {
+        font-size: 1rem;
+        padding: 0 1rem;
+    }
+
+    .faq-question-modern {
+        padding: 1.2rem 1.2rem;
+        font-size: 0.95rem;
+    }
+
+    .question-number-modern {
+        width: 35px;
+        height: 35px;
+        font-size: 0.9rem;
+        margin-right: 0.8rem;
+    }
+
+    .faq-answer-modern p {
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+
+    .faq-item-modern.active .faq-answer-modern {
+        padding: 1.5rem 1.2rem;
+    }
+
+    .faq-icon-modern {
+        font-size: 1.1rem;
+        margin-left: 0.8rem;
+    }
+    
+    /* Ajustar tamaño de fuentes en móvil */
+    .faq-item-modern:nth-child(1) .faq-answer-modern p,
+    .faq-item-modern:nth-child(2) .faq-answer-modern p,
+    .faq-item-modern:nth-child(3) .faq-answer-modern p,
+    .faq-item-modern:nth-child(5) .faq-answer-modern p {
+        font-size: 0.95rem;
+    }
+    
+    .faq-item-modern:nth-child(4) .faq-answer-modern p {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .faq-badge {
+        font-size: 0.75rem;
+        padding: 6px 18px;
+    }
+
+    .faq-header-modern h3 {
+        font-size: 1.5rem;
+    }
+
+    .faq-subtitle {
+        font-size: 0.9rem;
+    }
+
+    .question-number-modern {
+        width: 32px;
+        height: 32px;
+        font-size: 0.85rem;
+    }
+
+    .faq-question-modern {
+        padding: 1rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .faq-answer-modern p {
+        gap: 0.8rem;
+    }
+
+    .faq-answer-modern i {
+        font-size: 1rem;
+    }
+    
+    /* Ajustar tamaño de fuentes en pantallas pequeñas */
+    .faq-item-modern:nth-child(1) .faq-answer-modern p,
+    .faq-item-modern:nth-child(2) .faq-answer-modern p,
+    .faq-item-modern:nth-child(3) .faq-answer-modern p,
+    .faq-item-modern:nth-child(5) .faq-answer-modern p {
+        font-size: 0.9rem;
+    }
+    
+    .faq-item-modern:nth-child(4) .faq-answer-modern p {
+        font-size: 0.85rem;
+    }
+}
+
+/* Ocultar los estilos antiguos de FAQ si los tienes */
+.about-faq {
+    display: none;
+}
