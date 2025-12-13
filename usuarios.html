@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Usuarios - Centro Oftalmológico El Otorongo</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="dashboard-modals.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="dashboard-page">
+    <!-- Header del Dashboard -->
+    <header class="dashboard-header-main">
+        <div class="container">
+            <div class="dashboard-brand">
+                <i class="fas fa-eye"></i>
+                <h1>Centro Oftalmológico El Otorongo</h1>
+            </div>
+            
+            <div class="dashboard-user-info">
+                <div class="user-welcome">
+                    <span class="user-greeting">Bienvenido,</span>
+                    <span class="user-name" id="userName">Usuario</span>
+                    <span class="user-role" id="userRole">Rol</span>
+                </div>
+                <div class="user-actions">
+                    <a href="dashboard.html" class="btn-home" title="Volver al Dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span class="btn-home-text">Dashboard</span>
+                    </a>
+                    <a href="index.html" class="btn-home" title="Volver al Inicio">
+                        <i class="fas fa-home"></i>
+                        <span class="btn-home-text">Inicio</span>
+                    </a>
+                    <button class="btn-logout" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Salir</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="dashboard-main">
+        <div class="container">
+            <!-- Encabezado de Página -->
+            <div class="page-header">
+                <div class="page-title">
+                    <h2><i class="fas fa-users-cog"></i> Gestión de Usuarios</h2>
+                    <p>Administre los usuarios del sistema</p>
+                </div>
+                <div class="page-actions">
+                    <button class="btn-primary" onclick="openNewUserModal()">
+                        <i class="fas fa-user-plus"></i> Nuevo Usuario
+                    </button>
+                    <button class="btn-secondary" onclick="refreshUsers()">
+                        <i class="fas fa-sync-alt"></i> Actualizar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filtros y Búsqueda -->
+            <div class="filters-section">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchUsers" placeholder="Buscar por nombre, usuario o email..." onkeyup="filterUsers()">
+                </div>
+                <div class="filter-group">
+                    <label for="filterRole">Filtrar por rol:</label>
+                    <select id="filterRole" onchange="filterUsers()">
+                        <option value="">Todos los roles</option>
+                        <option value="administrador">Administrador</option>
+                        <option value="medico">Médico</option>
+                        <option value="recepcionista">Recepcionista</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filterStatus">Estado:</label>
+                    <select id="filterStatus" onchange="filterUsers()">
+                        <option value="">Todos</option>
+                        <option value="1" selected>Activos</option>
+                        <option value="0">Inactivos</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Tabla de Usuarios -->
+            <div class="content-panel">
+                <div class="panel-header">
+                    <h3><i class="fas fa-list"></i> Lista de Usuarios</h3>
+                    <span class="user-count" id="userCount">0 usuarios</span>
+                </div>
+                <div class="panel-content">
+                    <div class="table-responsive">
+                        <table class="data-table" id="usersTable">
+                            <thead>
+                                <tr>
+                                    <th>Usuario</th>
+                                    <th>Nombre</th>
+                                    <th>Email</th>
+                                    <th>Rol</th>
+                                    <th>Estado</th>
+                                    <th>Fecha Creación</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">
+                                <!-- Los usuarios se cargan dinámicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="noUsersMessage" class="empty-state" style="display: none;">
+                        <i class="fas fa-users-slash"></i>
+                        <p>No se encontraron usuarios</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Nuevo Usuario -->
+    <div id="newUserModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-user-plus"></i> Nuevo Usuario
+                </h3>
+                <button class="modal-close" onclick="closeModal('newUserModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="newUserForm" onsubmit="handleNewUser(event)">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="newUsername">
+                                <i class="fas fa-user"></i> Usuario *
+                            </label>
+                            <input type="text" id="newUsername" name="username" required 
+                                   placeholder="usuario123" pattern="[a-zA-Z0-9_]{3,20}">
+                            <small>3-20 caracteres, solo letras, números y guión bajo</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="newPassword">
+                                <i class="fas fa-lock"></i> Contraseña *
+                            </label>
+                            <input type="password" id="newPassword" name="password" required 
+                                   placeholder="••••••••" minlength="6">
+                            <small>Mínimo 6 caracteres</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="newName">
+                                <i class="fas fa-id-card"></i> Nombre Completo *
+                            </label>
+                            <input type="text" id="newName" name="name" required 
+                                   placeholder="Dr. Juan Pérez">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="newEmail">
+                                <i class="fas fa-envelope"></i> Email *
+                            </label>
+                            <input type="email" id="newEmail" name="email" required 
+                                   placeholder="usuario@ejemplo.com">
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="newRole">
+                                <i class="fas fa-user-tag"></i> Rol *
+                            </label>
+                            <select id="newRole" name="role" required>
+                                <option value="">Seleccione un rol</option>
+                                <option value="administrador">Administrador</option>
+                                <option value="medico">Médico</option>
+                                <option value="recepcionista">Recepcionista</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-save"></i> Crear Usuario
+                        </button>
+                        <button type="button" class="btn-secondary" onclick="closeModal('newUserModal')">
+                            <i class="fas fa-times"></i> Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Editar Usuario -->
+    <div id="editUserModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-user-edit"></i> Editar Usuario
+                </h3>
+                <button class="modal-close" onclick="closeModal('editUserModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editUserForm" onsubmit="handleEditUser(event)">
+                    <input type="hidden" id="editUserId" name="id">
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="editUsername">
+                                <i class="fas fa-user"></i> Usuario *
+                            </label>
+                            <input type="text" id="editUsername" name="username" required 
+                                   pattern="[a-zA-Z0-9_]{3,20}">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="editName">
+                                <i class="fas fa-id-card"></i> Nombre Completo *
+                            </label>
+                            <input type="text" id="editName" name="name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="editEmail">
+                                <i class="fas fa-envelope"></i> Email *
+                            </label>
+                            <input type="email" id="editEmail" name="email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="editRole">
+                                <i class="fas fa-user-tag"></i> Rol *
+                            </label>
+                            <select id="editRole" name="role" required>
+                                <option value="administrador">Administrador</option>
+                                <option value="medico">Médico</option>
+                                <option value="recepcionista">Recepcionista</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label>
+                                <input type="checkbox" id="editActive" name="active">
+                                Usuario Activo
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-save"></i> Guardar Cambios
+                        </button>
+                        <button type="button" class="btn-warning" onclick="openChangePasswordModal()">
+                            <i class="fas fa-key"></i> Cambiar Contraseña
+                        </button>
+                        <button type="button" class="btn-secondary" onclick="closeModal('editUserModal')">
+                            <i class="fas fa-times"></i> Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Cambiar Contraseña -->
+    <div id="changePasswordModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-key"></i> Cambiar Contraseña
+                </h3>
+                <button class="modal-close" onclick="closeModal('changePasswordModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="changePasswordForm" onsubmit="handleChangePassword(event)">
+                    <input type="hidden" id="passwordUserId">
+                    
+                    <div class="form-group">
+                        <label for="currentPassword">
+                            <i class="fas fa-lock"></i> Contraseña Actual *
+                        </label>
+                        <input type="password" id="currentPassword" name="currentPassword" required minlength="6">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="newPasswordChange">
+                            <i class="fas fa-lock"></i> Nueva Contraseña *
+                        </label>
+                        <input type="password" id="newPasswordChange" name="newPassword" required minlength="6">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword">
+                            <i class="fas fa-lock"></i> Confirmar Contraseña *
+                        </label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" required minlength="6">
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-save"></i> Cambiar Contraseña
+                        </button>
+                        <button type="button" class="btn-secondary" onclick="closeModal('changePasswordModal')">
+                            <i class="fas fa-times"></i> Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="storage-manager.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // API Base URL
+        const API_URL = 'http://localhost:5000/api';
+        
+        let allUsers = [];
+        let currentEditUserId = null;
+
+        // Verificar autenticación
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuthentication();
+            loadUsers();
+        });
+
+        function checkAuthentication() {
+            const savedUser = localStorage.getItem('otorongo_current_user');
+            
+            if (!savedUser) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            const currentUser = JSON.parse(savedUser);
+            
+            // Solo administradores pueden acceder
+            if (currentUser.role !== 'administrador') {
+                showNotification('No tiene permisos para acceder a esta página', 'error');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 2000);
+                return;
+            }
+            
+            document.getElementById('userName').textContent = currentUser.name;
+            document.getElementById('userRole').textContent = 'Administrador';
+        }
+
+        // Cargar usuarios desde la API
+        async function loadUsers() {
+            try {
+                showNotification('Cargando usuarios...', 'info', 1000);
+                
+                const response = await fetch(`${API_URL}/users`);
+                
+                if (!response.ok) {
+                    throw new Error('Error al cargar usuarios');
+                }
+                
+                allUsers = await response.json();
+                displayUsers(allUsers);
+                updateUserCount(allUsers.length);
+                
+            } catch (error) {
+                console.error('Error al cargar usuarios:', error);
+                showNotification('Error al cargar usuarios. Usando datos locales.', 'warning');
+                
+                // Fallback a localStorage
+                allUsers = OtorongoSystem.getUsers();
+                displayUsers(allUsers);
+                updateUserCount(allUsers.length);
+            }
+        }
+
+        // Mostrar usuarios en la tabla
+        function displayUsers(users) {
+            const tbody = document.getElementById('usersTableBody');
+            const noUsersMsg = document.getElementById('noUsersMessage');
+            
+            if (users.length === 0) {
+                tbody.innerHTML = '';
+                noUsersMsg.style.display = 'block';
+                return;
+            }
+            
+            noUsersMsg.style.display = 'none';
+            
+            tbody.innerHTML = users.map(user => `
+                <tr>
+                    <td><strong>${user.username}</strong></td>
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td>
+                        <span class="badge ${getRoleBadgeClass(user.role)}">
+                            ${getRoleDisplayName(user.role)}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="badge ${user.active !== 0 ? 'success' : 'danger'}">
+                            ${user.active !== 0 ? 'Activo' : 'Inactivo'}
+                        </span>
+                    </td>
+                    <td>${formatDate(user.created_at)}</td>
+                    <td class="actions-cell">
+                        <button class="btn-action btn-edit" onclick="openEditUserModal('${user.id}')" title="Editar">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn-action btn-delete" onclick="confirmDeleteUser('${user.id}', '${user.username}')" title="Eliminar">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Filtrar usuarios
+        function filterUsers() {
+            const searchTerm = document.getElementById('searchUsers').value.toLowerCase();
+            const roleFilter = document.getElementById('filterRole').value;
+            const statusFilter = document.getElementById('filterStatus').value;
+            
+            let filtered = allUsers.filter(user => {
+                const matchesSearch = 
+                    user.username.toLowerCase().includes(searchTerm) ||
+                    user.name.toLowerCase().includes(searchTerm) ||
+                    user.email.toLowerCase().includes(searchTerm);
+                
+                const matchesRole = !roleFilter || user.role === roleFilter;
+                const matchesStatus = !statusFilter || user.active.toString() === statusFilter;
+                
+                return matchesSearch && matchesRole && matchesStatus;
+            });
+            
+            displayUsers(filtered);
+            updateUserCount(filtered.length);
+        }
+
+        // Actualizar contador
+        function updateUserCount(count) {
+            document.getElementById('userCount').textContent = `${count} usuario${count !== 1 ? 's' : ''}`;
+        }
+
+        // Abrir modal nuevo usuario
+        function openNewUserModal() {
+            document.getElementById('newUserForm').reset();
+            openModal('newUserModal');
+        }
+
+        // Manejar creación de usuario
+        async function handleNewUser(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const userData = {
+                username: formData.get('username'),
+                password: formData.get('password'),
+                name: formData.get('name'),
+                email: formData.get('email'),
+                role: formData.get('role')
+            };
+            
+            try {
+                const response = await fetch(`${API_URL}/users`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(userData)
+                });
+                
+                const result = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(result.error || 'Error al crear usuario');
+                }
+                
+                showNotification('Usuario creado exitosamente', 'success');
+                closeModal('newUserModal');
+                loadUsers();
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showNotification(error.message, 'error');
+            }
+        }
+
+        // Abrir modal editar usuario
+        async function openEditUserModal(userId) {
+            currentEditUserId = userId;
+            
+            const user = allUsers.find(u => u.id === userId);
+            
+            if (!user) {
+                showNotification('Usuario no encontrado', 'error');
+                return;
+            }
+            
+            document.getElementById('editUserId').value = user.id;
+            document.getElementById('editUsername').value = user.username;
+            document.getElementById('editName').value = user.name;
+            document.getElementById('editEmail').value = user.email;
+            document.getElementById('editRole').value = user.role;
+            document.getElementById('editActive').checked = user.active !== 0;
+            
+            openModal('editUserModal');
+        }
+
+        // Manejar edición de usuario
+        async function handleEditUser(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const userId = formData.get('id');
+            
+            const updates = {
+                username: formData.get('username'),
+                name: formData.get('name'),
+                email: formData.get('email'),
+                role: formData.get('role'),
+                active: document.getElementById('editActive').checked ? 1 : 0
+            };
+            
+            try {
+                const response = await fetch(`${API_URL}/users/${userId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updates)
+                });
+                
+                const result = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(result.error || 'Error al actualizar usuario');
+                }
+                
+                showNotification('Usuario actualizado exitosamente', 'success');
+                closeModal('editUserModal');
+                loadUsers();
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showNotification(error.message, 'error');
+            }
+        }
+
+        // Abrir modal cambiar contraseña
+        function openChangePasswordModal() {
+            document.getElementById('passwordUserId').value = currentEditUserId;
+            document.getElementById('changePasswordForm').reset();
+            closeModal('editUserModal');
+            openModal('changePasswordModal');
+        }
+
+        // Manejar cambio de contraseña
+        async function handleChangePassword(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const newPassword = formData.get('newPassword');
+            const confirmPassword = formData.get('confirmPassword');
+            
+            if (newPassword !== confirmPassword) {
+                showNotification('Las contraseñas no coinciden', 'error');
+                return;
+            }
+            
+            const userId = document.getElementById('passwordUserId').value;
+            
+            const data = {
+                currentPassword: formData.get('currentPassword'),
+                newPassword: newPassword
+            };
+            
+            try {
+                const response = await fetch(`${API_URL}/users/${userId}/password`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(result.error || 'Error al cambiar contraseña');
+                }
+                
+                showNotification('Contraseña actualizada exitosamente', 'success');
+                closeModal('changePasswordModal');
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showNotification(error.message, 'error');
+            }
+        }
+
+        // Confirmar eliminación
+        function confirmDeleteUser(userId, username) {
+            if (confirm(`¿Está seguro que desea eliminar el usuario "${username}"?\n\nEsta acción desactivará el usuario.`)) {
+                deleteUser(userId);
+            }
+        }
+
+        // Eliminar usuario
+        async function deleteUser(userId) {
+            try {
+                const response = await fetch(`${API_URL}/users/${userId}`, {
+                    method: 'DELETE'
+                });
+                
+                const result = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(result.error || 'Error al eliminar usuario');
+                }
+                
+                showNotification('Usuario desactivado exitosamente', 'success');
+                loadUsers();
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showNotification(error.message, 'error');
+            }
+        }
+
+        // Actualizar lista
+        function refreshUsers() {
+            const btn = event.target.closest('button');
+            const icon = btn.querySelector('i');
+            
+            icon.style.animation = 'spin 1s linear infinite';
+            btn.disabled = true;
+            
+            loadUsers().then(() => {
+                icon.style.animation = '';
+                btn.disabled = false;
+                showNotification('Lista actualizada', 'success');
+            });
+        }
+
+        // Funciones auxiliares
+        function getRoleDisplayName(role) {
+            const roles = {
+                'administrador': 'Administrador',
+                'medico': 'Médico',
+                'recepcionista': 'Recepcionista'
+            };
+            return roles[role] || role;
+        }
+
+        function getRoleBadgeClass(role) {
+            const classes = {
+                'administrador': 'danger',
+                'medico': 'primary',
+                'recepcionista': 'info'
+            };
+            return classes[role] || 'secondary';
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('es-PE', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        // Animación de rotación
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes spin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+
+    <style>
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .page-title h2 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .page-title p {
+            color: var(--gray-600);
+            margin: 0;
+        }
+
+        .page-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .filters-section {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 300px;
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-400);
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-group label {
+            font-weight: 500;
+            color: var(--gray-700);
+            white-space: nowrap;
+        }
+
+        .filter-group select {
+            padding: 0.75rem;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table thead {
+            background: var(--gray-50);
+        }
+
+        .data-table th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--dark-color);
+            border-bottom: 2px solid var(--gray-200);
+        }
+
+        .data-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .data-table tbody tr:hover {
+            background: var(--gray-50);
+        }
+
+        .actions-cell {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-action {
+            padding: 0.5rem;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+
+        .btn-action.btn-edit {
+            background: var(--accent-color);
+            color: var(--white);
+        }
+
+        .btn-action.btn-edit:hover {
+            background: #138496;
+        }
+
+        .btn-action.btn-delete {
+            background: var(--danger-color);
+            color: var(--white);
+        }
+
+        .btn-action.btn-delete:hover {
+            background: #c82333;
+        }
+
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge.primary {
+            background: var(--primary-color);
+            color: var(--white);
+        }
+
+        .badge.danger {
+            background: var(--danger-color);
+            color: var(--white);
+        }
+
+        .badge.info {
+            background: var(--accent-color);
+            color: var(--white);
+        }
+
+        .badge.success {
+            background: var(--success-color);
+            color: var(--white);
+        }
+
+        .badge.secondary {
+            background: var(--gray-500);
+            color: var(--white);
+        }
+
+        .user-count {
+            color: var(--gray-600);
+            font-weight: 500;
+        }
+
+        .form-group small {
+            display: block;
+            margin-top: 0.25rem;
+            color: var(--gray-500);
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .page-actions {
+                width: 100%;
+            }
+
+            .page-actions button {
+                flex: 1;
+            }
+
+            .filters-section {
+                flex-direction: column;
+            }
+
+            .search-box {
+                min-width: 100%;
+            }
+
+            .table-responsive {
+                font-size: 0.9rem;
+            }
+
+            .data-table th,
+            .data-table td {
+                padding: 0.5rem;
+            }
+        }
+    </style>

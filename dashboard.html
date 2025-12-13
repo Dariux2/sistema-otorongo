@@ -31,6 +31,9 @@
                     <button class="btn-profile" onclick="showProfile()">
                         <i class="fas fa-user-circle"></i>
                     </button>
+                    <button class="btn-backup" onclick="showBackupOptions()" title="Gestión de Respaldos">
+                        <i class="fas fa-database"></i>
+                    </button>
                     <a href="index.html" class="btn-home" title="Volver al Inicio">
                         <i class="fas fa-home"></i>
                         <span class="btn-home-text">Volver al Inicio</span>
@@ -346,6 +349,7 @@
         </div>
     </div>
 
+    <script src="storage-manager.js"></script>
     <script src="script.js"></script>
     <script>
         // Variables del dashboard
@@ -426,6 +430,7 @@
                     { icon: 'fas fa-users', text: 'Pacientes', page: 'pacientes' },
                     { icon: 'fas fa-calendar-alt', text: 'Citas', page: 'citas' },
                     { icon: 'fas fa-file-invoice-dollar', text: 'Facturación', page: 'facturacion' },
+                    { icon: 'fas fa-book', text: 'Reclamaciones', page: 'reclamaciones', highlight: true },
                     { icon: 'fas fa-chart-bar', text: 'Reportes', page: 'reportes' },
                     { icon: 'fas fa-user-md', text: 'Personal', page: 'personal' },
                     { icon: 'fas fa-cog', text: 'Configuración', page: 'configuracion' }
@@ -450,10 +455,11 @@
             
             menuContainer.innerHTML = userMenu.map(item => `
                 <li>
-                    <a href="#" class="nav-item ${item.active ? 'active' : ''}" 
+                    <a href="#" class="nav-item ${item.active ? 'active' : ''} ${item.highlight ? 'highlight-menu' : ''}" 
                        onclick="loadPage('${item.page}')" data-page="${item.page}">
                         <i class="${item.icon}"></i>
                         <span>${item.text}</span>
+                        ${item.highlight ? '<span class="menu-badge">Nuevo</span>' : ''}
                     </a>
                 </li>
             `).join('');
@@ -642,58 +648,91 @@
 
         // Cargar actividad reciente
         function loadRecentActivity() {
-            // Simular actividad reciente
-            const activities = [
-                {
-                    type: 'appointment',
-                    icon: 'fas fa-calendar-plus',
-                    title: 'Nueva cita programada',
-                    description: 'Cita para Juan Pérez - Consulta General',
-                    time: '2 horas atrás',
-                    color: 'success'
-                },
-                {
-                    type: 'patient',
-                    icon: 'fas fa-user-plus',
-                    title: 'Nuevo paciente registrado',
-                    description: 'María Rodríguez se registró en el sistema',
-                    time: '4 horas atrás',
-                    color: 'info'
-                },
-                {
-                    type: 'payment',
-                    icon: 'fas fa-dollar-sign',
-                    title: 'Pago recibido',
-                    description: 'Factura #001 pagada - S/. 94.40',
-                    time: '6 horas atrás',
-                    color: 'primary'
-                },
-                {
-                    type: 'appointment',
-                    icon: 'fas fa-calendar-check',
-                    title: 'Cita completada',
-                    description: 'Consulta de control - Dr. Carlos Mendoza',
-                    time: '1 día atrás',
-                    color: 'success'
-                }
-            ];
-
+            const activities = OtorongoSystem.getActivities(10);
             const container = document.getElementById('activityTimeline');
-            container.innerHTML = activities.map(activity => `
-                <div class="activity-item">
-                    <div class="activity-icon ${activity.color}">
-                        <i class="${activity.icon}"></i>
+            
+            if (activities.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-history"></i>
+                        <p>No hay actividad reciente registrada</p>
                     </div>
-                    <div class="activity-content">
-                        <div class="activity-title">${activity.title}</div>
-                        <div class="activity-description">${activity.description}</div>
-                        <div class="activity-time">
-                            <i class="fas fa-clock"></i>
-                            ${activity.time}
+                `;
+                return;
+            }
+
+            container.innerHTML = activities.map(activity => {
+                const icon = getActivityIcon(activity.type);
+                const color = getActivityColor(activity.type);
+                const timeAgo = getTimeAgo(activity.timestamp);
+                
+                return `
+                    <div class="activity-item">
+                        <div class="activity-icon ${color}">
+                            <i class="${icon}"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">${activity.description}</div>
+                            <div class="activity-description">
+                                <i class="fas fa-user"></i> ${activity.user}
+                            </div>
+                            <div class="activity-time">
+                                <i class="fas fa-clock"></i>
+                                ${timeAgo}
+                            </div>
                         </div>
                     </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
+        }
+        
+        function getActivityIcon(type) {
+            const icons = {
+                'patient_created': 'fas fa-user-plus',
+                'patient_updated': 'fas fa-user-edit',
+                'appointment_created': 'fas fa-calendar-plus',
+                'appointment_updated': 'fas fa-calendar-alt',
+                'appointment_completed': 'fas fa-calendar-check',
+                'appointment_cancelled': 'fas fa-calendar-times',
+                'payment_received': 'fas fa-dollar-sign',
+                'invoice_created': 'fas fa-file-invoice',
+                'user_login': 'fas fa-sign-in-alt',
+                'user_logout': 'fas fa-sign-out-alt',
+                'message_received': 'fas fa-envelope-open-text'
+            };
+            return icons[type] || 'fas fa-info-circle';
+        }
+        
+        function getActivityColor(type) {
+            const colors = {
+                'patient_created': 'info',
+                'patient_updated': 'primary',
+                'appointment_created': 'success',
+                'appointment_updated': 'warning',
+                'appointment_completed': 'success',
+                'appointment_cancelled': 'danger',
+                'payment_received': 'primary',
+                'invoice_created': 'info',
+                'user_login': 'primary',
+                'user_logout': 'warning',
+                'message_received': 'info'
+            };
+            return colors[type] || 'info';
+        }
+        
+        function getTimeAgo(timestamp) {
+            const now = new Date();
+            const time = new Date(timestamp);
+            const diffMs = now - time;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+            
+            if (diffMins < 1) return 'Hace un momento';
+            if (diffMins < 60) return `Hace ${diffMins} minuto${diffMins > 1 ? 's' : ''}`;
+            if (diffHours < 24) return `Hace ${diffHours} hora${diffHours > 1 ? 's' : ''}`;
+            if (diffDays < 7) return `Hace ${diffDays} día${diffDays > 1 ? 's' : ''}`;
+            return OtorongoSystem.formatDate(timestamp);
         }
 
         // Configurar actualización automática
@@ -702,6 +741,7 @@
             setInterval(() => {
                 loadDashboardStats();
                 loadTodayAppointments();
+                loadRecentActivity();
             }, 300000);
         }
 
@@ -723,6 +763,7 @@
                 'pacientes': 'pacientes.html',
                 'citas': 'citas.html',
                 'facturacion': 'facturacion.html',
+                'reclamaciones': 'pages/dashboard/gestion-reclamaciones.html',
                 'reportes': 'reportes.html',
                 'personal': 'personal.html',
                 'configuracion': 'configuracion.html',
@@ -978,7 +1019,7 @@
                 refreshBtn.disabled = false;
                 
                 showNotification('Dashboard actualizado correctamente', 'success');
-            }, 1500);
+            }, 1000);
         }
 
         function markAsRead(notificationId) {
@@ -997,6 +1038,169 @@
 
         function editProfile() {
             showNotification('Función de editar perfil en desarrollo', 'info');
+        }
+
+        // ============================================
+        // FUNCIONES DE RESPALDO Y EXPORTACIÓN
+        // ============================================
+        
+        function showBackupOptions() {
+            const modal = document.createElement('div');
+            modal.id = 'backupModal';
+            modal.className = 'modal active';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">
+                            <i class="fas fa-database"></i> Gestión de Respaldos
+                        </h3>
+                        <button class="modal-close" onclick="closeModal('backupModal')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="backup-options">
+                            <div class="backup-section">
+                                <h4><i class="fas fa-download"></i> Exportar Datos</h4>
+                                <p>Descargue una copia de seguridad de todos los datos del sistema</p>
+                                <button class="btn-primary" onclick="exportSystemData()">
+                                    <i class="fas fa-file-export"></i> Exportar a JSON
+                                </button>
+                            </div>
+                            
+                            <div class="backup-section">
+                                <h4><i class="fas fa-upload"></i> Importar Datos</h4>
+                                <p>Restaure datos desde un archivo de respaldo</p>
+                                <input type="file" id="importFile" accept=".json" style="display: none;" onchange="handleImportFile(this)">
+                                <button class="btn-secondary" onclick="document.getElementById('importFile').click()">
+                                    <i class="fas fa-file-import"></i> Importar desde JSON
+                                </button>
+                            </div>
+                            
+                            <div class="backup-section">
+                                <h4><i class="fas fa-history"></i> Respaldos Automáticos</h4>
+                                <p>Respaldos creados automáticamente por el sistema</p>
+                                <div id="backupsList"></div>
+                                <button class="btn-info" onclick="loadBackupsList()">
+                                    <i class="fas fa-sync-alt"></i> Actualizar Lista
+                                </button>
+                            </div>
+                            
+                            <div class="backup-section">
+                                <h4><i class="fas fa-chart-pie"></i> Estadísticas de Almacenamiento</h4>
+                                <div id="storageStats"></div>
+                                <button class="btn-warning" onclick="showStorageStats()">
+                                    <i class="fas fa-info-circle"></i> Ver Estadísticas
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            loadBackupsList();
+            showStorageStats();
+        }
+        
+        function exportSystemData() {
+            try {
+                OtorongoSystem.exportAllData();
+                showNotification('Datos exportados correctamente', 'success');
+            } catch (error) {
+                showNotification('Error al exportar datos: ' + error.message, 'error');
+            }
+        }
+        
+        function handleImportFile(input) {
+            const file = input.files[0];
+            if (file) {
+                if (confirm('¿Está seguro que desea importar estos datos? Esto sobrescribirá los datos actuales.')) {
+                    OtorongoSystem.importDataFromFile(file);
+                }
+            }
+        }
+        
+        function loadBackupsList() {
+            if (!window.storageManager) {
+                document.getElementById('backupsList').innerHTML = '<p class="text-muted">Sistema de respaldos no disponible</p>';
+                return;
+            }
+            
+            const backups = window.storageManager.getAvailableBackups();
+            const container = document.getElementById('backupsList');
+            
+            if (backups.length === 0) {
+                container.innerHTML = '<p class="text-muted">No hay respaldos automáticos disponibles</p>';
+                return;
+            }
+            
+            container.innerHTML = `
+                <div class="backups-list">
+                    ${backups.map(backup => `
+                        <div class="backup-item">
+                            <div class="backup-info">
+                                <i class="fas fa-save"></i>
+                                <span>${backup.dateFormatted}</span>
+                            </div>
+                            <button class="btn-sm btn-success" onclick="restoreBackup('${backup.key}')">
+                                <i class="fas fa-undo"></i> Restaurar
+                            </button>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+        
+        function restoreBackup(backupKey) {
+            if (confirm('¿Está seguro que desea restaurar este respaldo? Los datos actuales serán reemplazados.')) {
+                try {
+                    window.storageManager.restoreFromBackup(backupKey);
+                    showNotification('Respaldo restaurado correctamente. Recargando...', 'success');
+                    setTimeout(() => window.location.reload(), 2000);
+                } catch (error) {
+                    showNotification('Error al restaurar respaldo: ' + error.message, 'error');
+                }
+            }
+        }
+        
+        function showStorageStats() {
+            if (!window.storageManager) {
+                document.getElementById('storageStats').innerHTML = '<p class="text-muted">Estadísticas no disponibles</p>';
+                return;
+            }
+            
+            const stats = window.storageManager.getStorageStats();
+            const container = document.getElementById('storageStats');
+            
+            container.innerHTML = `
+                <div class="storage-stats">
+                    <div class="stat-row">
+                        <span>Espacio Usado:</span>
+                        <strong>${stats.usedFormatted}</strong>
+                    </div>
+                    <div class="stat-row">
+                        <span>Espacio Disponible:</span>
+                        <strong>${stats.availableFormatted}</strong>
+                    </div>
+                    <div class="stat-row">
+                        <span>Porcentaje:</span>
+                        <strong>${stats.percentage.toFixed(2)}%</strong>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${stats.percentage}%"></div>
+                    </div>
+                    <div class="storage-items">
+                        <h5>Desglose por tipo:</h5>
+                        ${Object.entries(stats.items).map(([key, item]) => `
+                            <div class="item-row">
+                                <span>${key}:</span>
+                                <span>${item.sizeFormatted}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
         }
 
         // Cerrar sesión
@@ -1247,6 +1451,7 @@
 
         .btn-notification,
         .btn-profile,
+        .btn-backup,
         .btn-logout {
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -1281,6 +1486,7 @@
 
         .btn-notification:hover,
         .btn-profile:hover,
+        .btn-backup:hover,
         .btn-logout:hover {
             background: rgba(255, 255, 255, 0.2);
         }
@@ -1715,6 +1921,22 @@
             align-items: center;
             gap: 0.25rem;
         }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--gray-500);
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        
+        .empty-state p {
+            font-size: 1.1rem;
+        }
 
         .notifications-list {
             display: flex;
@@ -1928,6 +2150,145 @@
             }
         }
 
+        /* Estilos para gestión de respaldos */
+        .backup-options {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .backup-section {
+            padding: 1.5rem;
+            background: var(--gray-50);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--gray-200);
+        }
+
+        .backup-section h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .backup-section p {
+            color: var(--gray-600);
+            margin-bottom: 1rem;
+        }
+
+        .backups-list {
+            display: grid;
+            gap: 0.75rem;
+            margin: 1rem 0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .backup-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--border-radius);
+        }
+
+        .backup-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gray-700);
+        }
+
+        .btn-sm {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.85rem;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .btn-sm.btn-success {
+            background: var(--success-color);
+            color: var(--white);
+        }
+
+        .btn-sm.btn-success:hover {
+            background: #218838;
+        }
+
+        .storage-stats {
+            margin-top: 1rem;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .stat-row:last-child {
+            border-bottom: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: var(--gray-200);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success-color), var(--primary-color));
+            transition: width 0.3s ease;
+        }
+
+        .storage-items {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .storage-items h5 {
+            color: var(--dark-color);
+            margin-bottom: 0.75rem;
+        }
+
+        .item-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.4rem 0;
+            font-size: 0.9rem;
+            color: var(--gray-600);
+        }
+
+        .btn-info {
+            background: var(--accent-color);
+            color: var(--white);
+        }
+
+        .btn-info:hover {
+            background: #138496;
+        }
+
+        .btn-warning {
+            background: var(--warning-color);
+            color: var(--gray-800);
+        }
+
+        .btn-warning:hover {
+            background: #e0a800;
+        }
+
         /* Animación de rotación para el botón actualizar */
         @keyframes spin {
             from {
@@ -2036,3 +2397,39 @@
         .stat-card:nth-child(2) { animation-delay: 0.2s; }
         .stat-card:nth-child(3) { animation-delay: 0.3s; }
         .stat-card:nth-child(4) { animation-delay: 0.4s; }
+
+        /* Estilos para el menú de reclamaciones */
+        .nav-item.highlight-menu {
+            position: relative;
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), rgba(255, 152, 0, 0.1));
+            border-left: 3px solid var(--warning-color);
+        }
+
+        .nav-item.highlight-menu:hover {
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.2), rgba(255, 152, 0, 0.2));
+        }
+
+        .menu-badge {
+            display: inline-block;
+            background: var(--warning-color);
+            color: var(--gray-800);
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+            margin-left: 8px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 0.9;
+            }
+        }

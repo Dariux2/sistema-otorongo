@@ -1,4 +1,415 @@
-# Sistema Centro Oftalmológico El Otorongo
+# 🏥 Sistema Centro Oftalmológico El Otorongo
+
+## Sistema de Gestión Médica Integral con Base de Datos SQLite
+
+[![Node.js](https://img.shields.io/badge/Node.js-14%2B-green)](https://nodejs.org/)
+[![SQLite](https://img.shields.io/badge/SQLite-3-blue)](https://www.sqlite.org/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Tests](https://img.shields.io/badge/Tests-Passing-brightgreen)](tests/)
+
+---
+
+## 📖 Descripción
+
+Sistema de información integral desarrollado para optimizar la atención al paciente en el Centro Oftalmológico El Otorongo. Incluye gestión completa de pacientes, citas médicas, facturación, usuarios y reportes, con una base de datos SQLite robusta y tests automatizados.
+
+### 🆕 Nuevas Características
+
+- ✅ **Base de Datos SQLite** - Almacenamiento persistente y confiable
+- ✅ **API REST** - Backend con Express.js
+- ✅ **Gestión de Usuarios** - Módulo completo para administrar usuarios del sistema
+- ✅ **Tests Automatizados** - Suite completa de pruebas con Jest
+- ✅ **Seguridad Mejorada** - Encriptación de contraseñas con bcrypt
+- ✅ **Documentación Completa** - Guías de instalación y uso
+
+---
+
+## 🎯 Características Principales
+
+### 👥 Gestión de Usuarios (NUEVO)
+- Crear, editar y eliminar usuarios
+- Asignación de roles (Administrador, Médico, Recepcionista)
+- Cambio de contraseñas
+- Activación/desactivación de cuentas
+- Filtros y búsqueda avanzada
+
+### 🏥 Gestión de Pacientes
+- Registro completo de pacientes
+- Historial médico detallado
+- Búsqueda y filtrado avanzado
+- Gestión de seguros médicos
+
+### 📅 Gestión de Citas
+- Programación de citas médicas
+- Calendario interactivo
+- Notificaciones y recordatorios
+- Control de estados (programada, completada, cancelada)
+
+### 💰 Facturación
+- Generación de facturas
+- Control de pagos
+- Reportes financieros
+- Integración con citas médicas
+
+### 📊 Reportes y Estadísticas
+- Dashboard con métricas en tiempo real
+- Reportes personalizados
+- Exportación de datos
+- Análisis de actividad
+
+### 🔐 Seguridad
+- Autenticación de usuarios
+- Control de acceso por roles
+- Encriptación de contraseñas
+- Sesiones seguras
+
+---
+
+## 🛠️ Tecnologías Utilizadas
+
+### Backend
+- **Node.js** - Entorno de ejecución
+- **Express.js** - Framework web
+- **SQLite3** - Base de datos
+- **bcryptjs** - Encriptación de contraseñas
+- **CORS** - Manejo de peticiones cross-origin
+
+### Frontend
+- **HTML5** - Estructura
+- **CSS3** - Estilos y diseño responsivo
+- **JavaScript (ES6+)** - Lógica del cliente
+- **Font Awesome** - Iconografía
+
+### Testing
+- **Jest** - Framework de testing
+- **Supertest** - Testing de APIs
+
+---
+
+## 📦 Instalación Rápida
+
+```bash
+# 1. Clonar o descargar el proyecto
+cd sistema-otorongo-main
+
+# 2. Instalar dependencias
+npm install
+
+# 3. Iniciar el servidor
+npm start
+
+# 4. Abrir en el navegador
+# http://localhost:5000
+```
+
+Para instrucciones detalladas, consulta [GUIA_INSTALACION.md](GUIA_INSTALACION.md)
+
+---
+
+## 🚀 Uso del Sistema
+
+### Iniciar el Servidor
+
+```bash
+# Modo desarrollo (con recarga automática)
+npm run dev
+
+# Modo producción
+npm start
+
+# Solo frontend
+npm run client
+```
+
+### Ejecutar Tests
+
+```bash
+# Ejecutar todos los tests
+npm test
+
+# Tests en modo watch
+npm run test:watch
+
+# Ver cobertura
+npm test -- --coverage
+```
+
+### Usuarios de Prueba
+
+| Rol | Usuario | Contraseña | Permisos |
+|-----|---------|------------|----------|
+| Administrador | `admin` | `admin123` | Acceso completo |
+| Médico | `medico` | `medico123` | Pacientes y citas |
+| Recepcionista | `recepcion` | `recep123` | Citas y facturación |
+
+---
+
+## 📁 Estructura del Proyecto
+
+```
+sistema-otorongo-main/
+├── 📄 server.js                 # Servidor Express
+├── 📄 database.js               # Configuración SQLite
+├── 📄 storage-manager.js        # Gestor de almacenamiento
+├── 📄 script.js                 # Lógica principal
+├── 🌐 index.html                # Página principal
+├── 🌐 login.html                # Login
+├── 🌐 dashboard.html            # Dashboard
+├── 🌐 pacientes.html            # Gestión pacientes
+├── 🌐 citas.html                # Gestión citas
+├── 🌐 facturacion.html          # Facturación
+├── 🌐 reportes.html             # Reportes
+├── 🌐 usuarios.html             # Gestión usuarios (NUEVO)
+├── 🎨 styles.css                # Estilos principales
+├── 🎨 dashboard-modals.css      # Estilos modales
+├── 🧪 tests/                    # Tests automatizados
+│   └── system.test.js
+├── 💾 otorongo.db               # Base de datos SQLite
+├── 📋 package.json              # Configuración npm
+├── ⚙️ jest.config.js            # Configuración Jest
+├── 📖 README.md                 # Este archivo
+├── 📖 GUIA_INSTALACION.md       # Guía de instalación
+└── 📖 TODO_IMPLEMENTACION.md    # Progreso del proyecto
+```
+
+---
+
+## 🧪 Tests
+
+El sistema incluye una suite completa de tests automatizados:
+
+### Cobertura de Tests
+
+- ✅ Autenticación de usuarios
+- ✅ CRUD de usuarios
+- ✅ CRUD de pacientes
+- ✅ CRUD de citas
+- ✅ Gestión de facturas
+- ✅ Registro de mensajes
+- ✅ Registro de actividades
+- ✅ Manejo de errores
+
+### Ejecutar Tests
+
+```bash
+npm test
+```
+
+### Resultados Esperados
+
+```
+PASS  tests/system.test.js
+  Sistema Centro Oftalmológico El Otorongo - Tests Completos
+    Autenticación
+      ✓ Login exitoso con credenciales válidas
+      ✓ Login fallido con credenciales inválidas
+      ✓ Login fallido sin credenciales
+    Gestión de Usuarios
+      ✓ Obtener lista de usuarios
+      ✓ Crear nuevo usuario
+      ✓ No permitir crear usuario con username duplicado
+      ✓ Obtener usuario por ID
+      ✓ Actualizar usuario
+      ✓ Desactivar usuario
+    ... y más tests
+
+Test Suites: 1 passed, 1 total
+Tests:       25+ passed, 25+ total
+```
+
+---
+
+## 📊 Base de Datos
+
+### Esquema de la Base de Datos
+
+El sistema utiliza SQLite con las siguientes tablas:
+
+- **users** - Usuarios del sistema
+- **patients** - Pacientes registrados
+- **appointments** - Citas médicas
+- **medical_history** - Historial médico
+- **invoices** - Facturas
+- **invoice_services** - Servicios de facturas
+- **messages** - Mensajes de contacto
+- **activities** - Registro de actividades
+
+### Respaldo de Datos
+
+```bash
+# Exportar datos
+# Usar la función de exportación en el dashboard
+
+# Respaldo manual de la base de datos
+cp otorongo.db otorongo_backup.db
+```
+
+---
+
+## 🔌 API REST
+
+El sistema expone una API REST completa:
+
+### Endpoints Principales
+
+#### Autenticación
+```
+POST /api/auth/login
+```
+
+#### Usuarios
+```
+GET    /api/users
+GET    /api/users/:id
+POST   /api/users
+PUT    /api/users/:id
+DELETE /api/users/:id
+PUT    /api/users/:id/password
+```
+
+#### Pacientes
+```
+GET    /api/patients
+GET    /api/patients/:id
+POST   /api/patients
+PUT    /api/patients/:id
+DELETE /api/patients/:id
+```
+
+#### Citas
+```
+GET    /api/appointments
+POST   /api/appointments
+PUT    /api/appointments/:id
+DELETE /api/appointments/:id
+```
+
+#### Facturas
+```
+GET    /api/invoices
+POST   /api/invoices
+```
+
+#### Mensajes
+```
+GET    /api/messages
+POST   /api/messages
+```
+
+#### Actividades
+```
+GET    /api/activities
+POST   /api/activities
+```
+
+---
+
+## 👨‍💻 Equipo de Desarrollo
+
+### Grupo 9 - APF1 Integrador
+
+- **Brayan Mamani Eusebio**
+- **Jeremy Yosmar Alvarez Luque**
+
+### Institución
+Carrera de Ingeniería de Sistemas e Informática
+
+### Profesor
+Jose Manuel Bruno Sarmiento
+
+### Año
+2025
+
+---
+
+## 📹 Video Demostración
+
+[Ver video en YouTube](https://youtu.be/L6rDaF81g3Y)
+
+---
+
+## 📝 Documentación Adicional
+
+- [Guía de Instalación](GUIA_INSTALACION.md)
+- [Instrucciones de Tests](TEST_INSTRUCTIONS.md)
+- [Reporte de Validación](VALIDATION_REPORT.md)
+- [Documentación Técnica](DOCUMENTACION_TECNICA.md)
+- [Progreso del Proyecto](TODO_IMPLEMENTACION.md)
+
+---
+
+## 🐛 Reporte de Bugs
+
+Si encuentras algún bug o problema:
+
+1. Verifica que estés usando la última versión
+2. Revisa la documentación
+3. Ejecuta los tests para verificar el sistema
+4. Reporta el issue con detalles específicos
+
+---
+
+## 🤝 Contribuciones
+
+Este es un proyecto académico. Para contribuir:
+
+1. Fork el proyecto
+2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
+
+---
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
+
+---
+
+## 🙏 Agradecimientos
+
+- Font Awesome por los iconos
+- Comunidad de Node.js y Express
+- SQLite por la base de datos
+- Jest por el framework de testing
+
+---
+
+## 📞 Contacto
+
+Para consultas sobre el proyecto:
+
+- **Email:** admin@otorongo.com
+- **GitHub:** [github.com/grupo9/sistema-otorongo](https://github.com/grupo9/sistema-otorongo)
+
+---
+
+## 🔄 Actualizaciones Recientes
+
+### Versión 2.0.0 (Enero 2025)
+
+- ✅ Migración a base de datos SQLite
+- ✅ Implementación de API REST
+- ✅ Módulo de gestión de usuarios
+- ✅ Suite completa de tests automatizados
+- ✅ Mejoras de seguridad
+- ✅ Documentación completa
+
+### Versión 1.0.0 (Diciembre 2024)
+
+- ✅ Sistema base con localStorage
+- ✅ Gestión de pacientes y citas
+- ✅ Facturación básica
+- ✅ Dashboard interactivo
+
+---
+
+**⭐ Si te gusta este proyecto, dale una estrella en GitHub!**
+
+---
+
+© 2025 Centro Oftalmológico El Otorongo - Todos los derechos reservados
 
 ## 📋 Descripción del Proyecto
 

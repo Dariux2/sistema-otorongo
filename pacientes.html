@@ -230,6 +230,7 @@
         </div>
     </div>
 
+    <script src="storage-manager.js"></script>
     <script src="script.js"></script>
     <script>
         // Variables globales para pacientes
@@ -501,7 +502,6 @@
             }
 
             const patientData = {
-                id: OtorongoSystem.generateId(),
                 dni: dni,
                 nombres: formData.get('nombres'),
                 apellidos: formData.get('apellidos'),
@@ -515,14 +515,18 @@
                 historialMedico: []
             };
 
-            patients.push(patientData);
-            OtorongoSystem.savePatients(patients);
-            
-            loadPatients();
-            closeModal('newPatientModal');
-            e.target.reset();
-            
-            showNotification('Paciente registrado correctamente', 'success');
+            try {
+                // Usar la nueva función addPatient que maneja timestamps automáticamente
+                OtorongoSystem.addPatient(patientData);
+                
+                loadPatients();
+                closeModal('newPatientModal');
+                e.target.reset();
+                
+                showNotification('Paciente registrado correctamente', 'success');
+            } catch (error) {
+                showNotification('Error al registrar paciente: ' + error.message, 'error');
+            }
         }
 
         // Ver detalles del paciente
@@ -590,9 +594,81 @@
         }
 
         function editPatientFromView() {
+            const patient = patients.find(p => p.id === selectedPatientId);
+            if (!patient) return;
+            
             closeModal('viewPatientModal');
-            showNotification('Función de editar paciente en desarrollo', 'info');
+            
+            // Prellenar formulario con datos del paciente
+            document.getElementById('patientDni').value = patient.dni;
+            document.getElementById('patientDni').disabled = true; // No permitir cambiar DNI
+            document.getElementById('patientNames').value = patient.nombres;
+            document.getElementById('patientLastNames').value = patient.apellidos;
+            document.getElementById('patientBirthDate').value = patient.fechaNacimiento;
+            document.getElementById('patientPhone').value = patient.telefono;
+            document.getElementById('patientEmail').value = patient.email || '';
+            document.getElementById('patientAddress').value = patient.direccion;
+            document.getElementById('patientInsurance').value = patient.seguro;
+            document.getElementById('patientNotes').value = patient.observaciones || '';
+            
+            // Cambiar el comportamiento del formulario para editar
+            const form = document.getElementById('newPatientForm');
+            form.onsubmit = function(e) {
+                e.preventDefault();
+                handleEditPatient(selectedPatientId);
+            };
+            
+            // Cambiar título del modal
+            document.querySelector('#newPatientModal .modal-title').innerHTML = '<i class="fas fa-user-edit"></i> Editar Paciente';
+            document.querySelector('#newPatientModal button[type="submit"]').innerHTML = '<i class="fas fa-save"></i> Guardar Cambios';
+            
+            openModal('newPatientModal');
         }
+        
+        function handleEditPatient(patientId) {
+            const formData = new FormData(document.getElementById('newPatientForm'));
+            
+            const updates = {
+                nombres: formData.get('nombres'),
+                apellidos: formData.get('apellidos'),
+                fechaNacimiento: formData.get('fechaNacimiento'),
+                telefono: formData.get('telefono'),
+                email: formData.get('email') || '',
+                direccion: formData.get('direccion'),
+                seguro: formData.get('seguro'),
+                observaciones: formData.get('observaciones') || ''
+            };
+            
+            try {
+                OtorongoSystem.updatePatient(patientId, updates);
+                
+                loadPatients();
+                closeModal('newPatientModal');
+                resetPatientForm();
+                
+                showNotification('Paciente actualizado correctamente', 'success');
+            } catch (error) {
+                showNotification('Error al actualizar paciente: ' + error.message, 'error');
+            }
+        }
+        
+        function resetPatientForm() {
+            const form = document.getElementById('newPatientForm');
+            form.reset();
+            form.onsubmit = handleNewPatient;
+            document.getElementById('patientDni').disabled = false;
+            document.querySelector('#newPatientModal .modal-title').innerHTML = '<i class="fas fa-user-plus"></i> Nuevo Paciente';
+            document.querySelector('#newPatientModal button[type="submit"]').innerHTML = '<i class="fas fa-save"></i> Registrar Paciente';
+        }
+        
+        // Resetear formulario al cerrar modal
+        const originalCloseModal = window.closeModal;
+        window.closeModal = function(modalId) {
+            if (modalId === 'newPatientModal') {
+                resetPatientForm();
+            }
+            originalCloseModal(modalId);
+        };
 
         function refreshPatients() {
             loadPatients();

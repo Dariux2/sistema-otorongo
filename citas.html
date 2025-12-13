@@ -264,6 +264,7 @@
         </div>
     </div>
 
+    <script src="storage-manager.js"></script>
     <script src="script.js"></script>
     <script>
         // Variables globales
@@ -284,6 +285,7 @@
             loadUserData();
             setupRoleBasedMenu();
             loadPatients();
+            loadDoctors();
             loadAppointments();
             generateCalendar();
             setupForms();
@@ -356,12 +358,47 @@
         function loadPatients() {
             patients = OtorongoSystem.getPatients();
             const select = document.getElementById('appointmentPatient');
-            select.innerHTML = '<option value="">Seleccione un paciente</option>' +
-                patients.map(p => `<option value="${p.id}">${p.nombres} ${p.apellidos} - DNI: ${p.dni}</option>`).join('');
+            if (select) {
+                select.innerHTML = '<option value="">Seleccione un paciente</option>' +
+                    patients.map(p => `<option value="${p.id}">${p.nombres} ${p.apellidos} - DNI: ${p.dni}</option>`).join('');
+                
+                // Si hay un paciente preseleccionado, seleccionarlo
+                const preselectedPatient = localStorage.getItem('preselected_patient');
+                if (preselectedPatient) {
+                    select.value = preselectedPatient;
+                    localStorage.removeItem('preselected_patient');
+                }
+            }
+        }
+
+        function loadDoctors() {
+            const doctorSelect = document.getElementById('appointmentDoctor');
+            if (!doctorSelect) return;
+
+            const doctors = (OtorongoSystem.getDoctors ? OtorongoSystem.getDoctors() : OtorongoSystem.getUsers().filter(u => u.role === 'medico'));
+            if (!doctors.length) {
+                doctorSelect.innerHTML = '<option value="">No hay m&eacute;dicos registrados</option>';
+                return;
+            }
+
+            doctorSelect.innerHTML = '<option value="">Seleccione un m&eacute;dico</option>' +
+                doctors.map(doc => {
+                    const label = doc.name || doc.username;
+                    return `<option value="${label}">${label}</option>`;
+                }).join('');
+
+            if (currentUser && currentUser.role === 'medico') {
+                const preferred = currentUser.name || currentUser.username;
+                const match = doctors.find(d => (d.name === preferred) || (d.username === preferred));
+                if (match) {
+                    doctorSelect.value = preferred;
+                }
+            }
         }
 
         function loadAppointments() {
             appointments = OtorongoSystem.getAppointments();
+            patients = OtorongoSystem.getPatients(); // Recargar pacientes también
             displayAppointmentsForDate(selectedDate);
             updateNotificationCount();
         }
@@ -506,13 +543,6 @@
         function setupForms() {
             const form = document.getElementById('newAppointmentForm');
             form.addEventListener('submit', handleNewAppointment);
-            
-            // Verificar paciente preseleccionado
-            const preselectedPatient = localStorage.getItem('preselected_patient');
-            if (preselectedPatient) {
-                document.getElementById('appointmentPatient').value = preselectedPatient;
-                localStorage.removeItem('preselected_patient');
-            }
         }
 
         function handleNewAppointment(e) {
@@ -520,7 +550,6 @@
             
             const formData = new FormData(e.target);
             const appointmentData = {
-                id: OtorongoSystem.generateId(),
                 pacienteId: formData.get('pacienteId'),
                 fecha: formData.get('fecha'),
                 hora: formData.get('hora'),
@@ -528,8 +557,7 @@
                 tipo: formData.get('tipo'),
                 duracion: formData.get('duracion') || '60',
                 observaciones: formData.get('observaciones') || '',
-                estado: 'programada',
-                fechaCreacion: new Date().toISOString()
+                estado: 'programada'
             };
             
             // Verificar conflictos de horario
@@ -545,14 +573,18 @@
                 return;
             }
             
-            appointments.push(appointmentData);
-            OtorongoSystem.saveAppointments(appointments);
-            
-            loadAppointments();
-            closeModal('newAppointmentModal');
-            e.target.reset();
-            
-            showNotification('Cita agendada correctamente', 'success');
+            try {
+                // Usar la nueva función addAppointment que maneja timestamps automáticamente
+                OtorongoSystem.addAppointment(appointmentData);
+                
+                loadAppointments();
+                closeModal('newAppointmentModal');
+                e.target.reset();
+                
+                showNotification('Cita agendada correctamente', 'success');
+            } catch (error) {
+                showNotification('Error al agendar cita: ' + error.message, 'error');
+            }
         }
 
         function viewAppointmentDetails(appointmentId) {
@@ -609,32 +641,114 @@
         function completeAppointment() {
             if (!selectedAppointmentId) return;
             
-            const appointment = appointments.find(apt => apt.id === selectedAppointmentId);
-            if (appointment) {
-                appointment.estado = 'completada';
-                OtorongoSystem.saveAppointments(appointments);
+            try {
+                OtorongoSystem.updateAppointment(selectedAppointmentId, { estado: 'completada' });
                 loadAppointments();
                 closeModal('viewAppointmentModal');
                 showNotification('Cita marcada como completada', 'success');
+            } catch (error) {
+                showNotification('Error al completar cita: ' + error.message, 'error');
             }
         }
 
         function rescheduleAppointment() {
+            const appointment = appointments.find(apt => apt.id === selectedAppointmentId);
+            if (!appointment) return;
+            
             closeModal('viewAppointmentModal');
-            showNotification('Función de reprogramar en desarrollo', 'info');
+            
+            // Prellenar formulario con datos de la cita
+            document.getElementById('appointmentPatient').value = appointment.pacienteId;
+            document.getElementById('appointmentDate').value = appointment.fecha;
+            document.getElementById('appointmentTime').value = appointment.hora;
+            document.getElementById('appointmentDoctor').value = appointment.medico;
+            document.getElementById('appointmentType').value = appointment.tipo;
+            document.getElementById('appointmentDuration').value = appointment.duracion;
+            document.getElementById('appointmentNotes').value = appointment.observaciones || '';
+            
+            // Cambiar el comportamiento del formulario para reprogramar
+            const form = document.getElementById('newAppointmentForm');
+            form.onsubmit = function(e) {
+                e.preventDefault();
+                handleRescheduleAppointment(selectedAppointmentId);
+            };
+            
+            // Cambiar título del modal
+            document.querySelector('#newAppointmentModal .modal-title').innerHTML = '<i class="fas fa-calendar-alt"></i> Reprogramar Cita';
+            document.querySelector('#newAppointmentModal button[type="submit"]').innerHTML = '<i class="fas fa-save"></i> Guardar Cambios';
+            
+            openModal('newAppointmentModal');
         }
+        
+        function handleRescheduleAppointment(appointmentId) {
+            const formData = new FormData(document.getElementById('newAppointmentForm'));
+            
+            const updates = {
+                pacienteId: formData.get('pacienteId'),
+                fecha: formData.get('fecha'),
+                hora: formData.get('hora'),
+                medico: formData.get('medico'),
+                tipo: formData.get('tipo'),
+                duracion: formData.get('duracion') || '60',
+                observaciones: formData.get('observaciones') || '',
+                estado: 'programada'
+            };
+            
+            // Verificar conflictos de horario (excluyendo la cita actual)
+            const hasConflict = appointments.some(apt => 
+                apt.id !== appointmentId &&
+                apt.fecha === updates.fecha &&
+                apt.hora === updates.hora &&
+                apt.medico === updates.medico &&
+                apt.estado !== 'cancelada'
+            );
+            
+            if (hasConflict) {
+                showNotification('Ya existe una cita programada para ese médico en ese horario', 'error');
+                return;
+            }
+            
+            try {
+                OtorongoSystem.updateAppointment(appointmentId, updates);
+                
+                loadAppointments();
+                closeModal('newAppointmentModal');
+                resetAppointmentForm();
+                
+                showNotification('Cita reprogramada correctamente', 'success');
+            } catch (error) {
+                showNotification('Error al reprogramar cita: ' + error.message, 'error');
+            }
+        }
+        
+        function resetAppointmentForm() {
+            const form = document.getElementById('newAppointmentForm');
+            form.reset();
+            form.onsubmit = handleNewAppointment;
+            document.querySelector('#newAppointmentModal .modal-title').innerHTML = '<i class="fas fa-calendar-plus"></i> Nueva Cita';
+            document.querySelector('#newAppointmentModal button[type="submit"]').innerHTML = '<i class="fas fa-save"></i> Agendar Cita';
+        }
+        
+        // Resetear formulario al cerrar modal
+        const originalCloseModal = window.closeModal;
+        window.closeModal = function(modalId) {
+            if (modalId === 'newAppointmentModal') {
+                resetAppointmentForm();
+            }
+            originalCloseModal(modalId);
+        };
 
         function cancelAppointment() {
             if (!selectedAppointmentId) return;
             
             if (confirm('¿Está seguro que desea cancelar esta cita?')) {
-                const appointment = appointments.find(apt => apt.id === selectedAppointmentId);
-                if (appointment) {
-                    appointment.estado = 'cancelada';
-                    OtorongoSystem.saveAppointments(appointments);
+                try {
+                    OtorongoSystem.updateAppointment(selectedAppointmentId, { estado: 'cancelada' });
                     loadAppointments();
                     closeModal('viewAppointmentModal');
                     showNotification('Cita cancelada', 'warning');
+                } catch (error) {
+                    showNotification('Error al cancelar cita: ' + error.message, 'error');
                 }
             }
         }
@@ -645,6 +759,8 @@
 
         function refreshAppointments() {
             loadAppointments();
+            loadPatients(); // Recargar lista de pacientes
+            loadDoctors(); // Recargar lista de m&eacute;dicos
             showNotification('Citas actualizadas', 'success');
         }
 
@@ -675,6 +791,9 @@
 
         function logout() {
             if (confirm('¿Está seguro que desea cerrar sesión?')) {
+                if (window.OtorongoSystem && OtorongoSystem.logActivity) {
+                    OtorongoSystem.logActivity('user_logout', `Cierre de sesiИn de ${currentUser ? (currentUser.name || currentUser.username) : 'usuario'}`);
+                }
                 localStorage.removeItem('otorongo_current_user');
                 localStorage.removeItem('otorongo_login_time');
                 showNotification('Sesión cerrada correctamente', 'success');

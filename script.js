@@ -5,15 +5,20 @@
 let currentUser = null;
 let currentPage = 'inicio';
 
-// Inicializar usuarios de prueba si no existen
-if (!localStorage.getItem('otorongo_users')) {
-    const demoUsers = [
-        { username: 'admin', password: 'admin123', role: 'administrador' },
-        { username: 'medico', password: 'medico123', role: 'medico' },
-        { username: 'recepcion', password: 'recep123', role: 'recepcionista' }
-    ];
-    localStorage.setItem('otorongo_users', JSON.stringify(demoUsers));
-}
+// Esperar a que StorageManager esté disponible
+document.addEventListener('DOMContentLoaded', function() {
+    // Dar tiempo para que storage-manager se cargue
+    setTimeout(() => {
+        if (window.storageManager) {
+            window.storageManager.initializeSampleData();
+        } else {
+            // Fallback: inicializar con método antiguo
+            if (!localStorage.getItem('otorongo_patients')) {
+                initializeSampleData();
+            }
+        }
+    }, 100);
+});
 
 // Proteger acceso solo para usuarios autenticados (solo en dashboards, no en index/login)
 if (
@@ -41,6 +46,7 @@ if (
 
 // Función para cerrar sesión
 function logout() {
+    logActivity('user_logout', 'Cierre de sesión');
     localStorage.removeItem('otorongo_current_user');
     window.location.href = 'login.html';
 }
@@ -340,6 +346,7 @@ function handleContactForm(e) {
             estado: 'nuevo'
         });
         localStorage.setItem('otorongo_messages', JSON.stringify(messages));
+        logActivity('message_received', `Nuevo mensaje de ${data.nombre || 'contacto'}`, data);
         
         showNotification('¡Mensaje enviado correctamente! Nos pondremos en contacto pronto.', 'success');
         e.target.reset();
@@ -603,38 +610,276 @@ function initializeSampleData() {
     console.log('Datos de ejemplo inicializados');
 }
 
-// Funciones de datos
+// Funciones de datos mejoradas con StorageManager
 function getPatients() {
+    if (window.storageManager) {
+        return window.storageManager.getData('patients') || [];
+    }
     return JSON.parse(localStorage.getItem('otorongo_patients') || '[]');
 }
 
 function savePatients(patients) {
+    if (window.storageManager) {
+        return window.storageManager.saveData('patients', patients);
+    }
     localStorage.setItem('otorongo_patients', JSON.stringify(patients));
+    return true;
 }
 
 function getAppointments() {
+    if (window.storageManager) {
+        return window.storageManager.getData('appointments') || [];
+    }
     return JSON.parse(localStorage.getItem('otorongo_appointments') || '[]');
 }
 
 function saveAppointments(appointments) {
+    if (window.storageManager) {
+        return window.storageManager.saveData('appointments', appointments);
+    }
     localStorage.setItem('otorongo_appointments', JSON.stringify(appointments));
+    return true;
 }
 
 function getInvoices() {
+    if (window.storageManager) {
+        return window.storageManager.getData('invoices') || [];
+    }
     return JSON.parse(localStorage.getItem('otorongo_invoices') || '[]');
 }
 
 function saveInvoices(invoices) {
+    if (window.storageManager) {
+        return window.storageManager.saveData('invoices', invoices);
+    }
     localStorage.setItem('otorongo_invoices', JSON.stringify(invoices));
+    return true;
 }
 
 function getUsers() {
+    if (window.storageManager) {
+        return window.storageManager.getData('users') || [];
+    }
     return JSON.parse(localStorage.getItem('otorongo_users') || '[]');
 }
 
+function saveUsers(users) {
+    if (window.storageManager) {
+        return window.storageManager.saveData('users', users);
+    }
+    localStorage.setItem('otorongo_users', JSON.stringify(users));
+    return true;
+}
+
+function addUser(userData) {
+    const payload = { ...userData };
+    if (window.storageManager) {
+        return window.storageManager.addItem('users', payload);
+    }
+    const users = getUsers();
+    payload.id = generateId();
+    users.push(payload);
+    return saveUsers(users);
+}
+
+function updateUser(userId, updates) {
+    if (window.storageManager) {
+        return window.storageManager.updateItem('users', userId, updates);
+    }
+    const users = getUsers();
+    const index = users.findIndex(u => u.id === userId);
+    if (index === -1) return false;
+    users[index] = { ...users[index], ...updates };
+    return saveUsers(users);
+}
+
+function getDoctors() {
+    return getUsers().filter(user => user.role === 'medico');
+}
+
 function getMessages() {
+    if (window.storageManager) {
+        return window.storageManager.getData('messages') || [];
+    }
     return JSON.parse(localStorage.getItem('otorongo_messages') || '[]');
 }
+
+// Nuevas funciones para operaciones CRUD mejoradas
+function addPatient(patientData) {
+    if (window.storageManager) {
+        try {
+            const result = window.storageManager.addItem('patients', patientData);
+            // Registrar actividad
+            logActivity('patient_created', `Nuevo paciente: ${patientData.nombres} ${patientData.apellidos}`, patientData);
+            return result;
+        } catch (error) {
+            console.error('Error al agregar paciente:', error);
+            throw error;
+        }
+    }
+    // Fallback al método antiguo
+    const patients = getPatients();
+    patientData.id = generateId();
+    patientData.fechaRegistro = new Date().toISOString().split('T')[0];
+    patients.push(patientData);
+    logActivity('patient_created', `Nuevo paciente: ${patientData.nombres} ${patientData.apellidos}`, patientData);
+    return savePatients(patients);
+}
+
+function updatePatient(patientId, updates) {
+    if (window.storageManager) {
+        try {
+            const result = window.storageManager.updateItem('patients', patientId, updates);
+            // Registrar actividad
+            logActivity('patient_updated', `Paciente actualizado: ${updates.nombres || ''} ${updates.apellidos || ''}`, { id: patientId, ...updates });
+            return result;
+        } catch (error) {
+            console.error('Error al actualizar paciente:', error);
+            throw error;
+        }
+    }
+    // Fallback al método antiguo
+    const patients = getPatients();
+    const index = patients.findIndex(p => p.id === patientId);
+    if (index !== -1) {
+        patients[index] = { ...patients[index], ...updates };
+        logActivity('patient_updated', `Paciente actualizado: ${updates.nombres || ''} ${updates.apellidos || ''}`, { id: patientId, ...updates });
+        return savePatients(patients);
+    }
+    return false;
+}
+
+function deletePatient(patientId) {
+    if (window.storageManager) {
+        try {
+            return window.storageManager.deleteItem('patients', patientId);
+        } catch (error) {
+            console.error('Error al eliminar paciente:', error);
+            throw error;
+        }
+    }
+    // Fallback al método antiguo
+    const patients = getPatients();
+    const filtered = patients.filter(p => p.id !== patientId);
+    return savePatients(filtered);
+}
+
+function addAppointment(appointmentData) {
+    if (window.storageManager) {
+        try {
+            const result = window.storageManager.addItem('appointments', appointmentData);
+            // Registrar actividad
+            const patient = getPatientById(appointmentData.pacienteId);
+            const patientName = patient ? `${patient.nombres} ${patient.apellidos}` : 'Paciente';
+            logActivity('appointment_created', `Nueva cita: ${patientName} - ${appointmentData.tipo}`, appointmentData);
+            return result;
+        } catch (error) {
+            console.error('Error al agregar cita:', error);
+            throw error;
+        }
+    }
+    // Fallback al método antiguo
+    const appointments = getAppointments();
+    appointmentData.id = generateId();
+    appointments.push(appointmentData);
+    const patient = getPatientById(appointmentData.pacienteId);
+    const patientName = patient ? `${patient.nombres} ${patient.apellidos}` : 'Paciente';
+    logActivity('appointment_created', `Nueva cita: ${patientName} - ${appointmentData.tipo}`, appointmentData);
+    return saveAppointments(appointments);
+}
+
+function updateAppointment(appointmentId, updates) {
+    if (window.storageManager) {
+        try {
+            const result = window.storageManager.updateItem('appointments', appointmentId, updates);
+            // Registrar actividad
+            const action = updates.estado === 'completada' ? 'appointment_completed' : 
+                          updates.estado === 'cancelada' ? 'appointment_cancelled' : 'appointment_updated';
+            logActivity(action, `Cita ${updates.estado || 'actualizada'}`, { id: appointmentId, ...updates });
+            return result;
+        } catch (error) {
+            console.error('Error al actualizar cita:', error);
+            throw error;
+        }
+    }
+    // Fallback al método antiguo
+    const appointments = getAppointments();
+    const index = appointments.findIndex(a => a.id === appointmentId);
+    if (index !== -1) {
+        appointments[index] = { ...appointments[index], ...updates };
+        const action = updates.estado === 'completada' ? 'appointment_completed' : 
+                      updates.estado === 'cancelada' ? 'appointment_cancelled' : 'appointment_updated';
+        logActivity(action, `Cita ${updates.estado || 'actualizada'}`, { id: appointmentId, ...updates });
+        return saveAppointments(appointments);
+    }
+    return false;
+}
+
+function deleteAppointment(appointmentId) {
+    if (window.storageManager) {
+        try {
+            return window.storageManager.deleteItem('appointments', appointmentId);
+        } catch (error) {
+            console.error('Error al eliminar cita:', error);
+            throw error;
+        }
+    }
+    // Fallback al método antiguo
+    const appointments = getAppointments();
+    const filtered = appointments.filter(a => a.id !== appointmentId);
+    return saveAppointments(filtered);
+}
+
+// Funciones de respaldo y exportación
+function exportAllData() {
+    if (window.storageManager) {
+        const data = window.storageManager.exportData();
+        const blob = new Blob([data], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `otorongo_backup_${new Date().toISOString().split('T')[0]}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showNotification('Datos exportados correctamente', 'success');
+    } else {
+        showNotification('Sistema de exportación no disponible', 'error');
+    }
+}
+
+function importDataFromFile(file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            if (window.storageManager) {
+                window.storageManager.importData(e.target.result);
+                showNotification('Datos importados correctamente. Recargando página...', 'success');
+                setTimeout(() => window.location.reload(), 2000);
+            } else {
+                showNotification('Sistema de importación no disponible', 'error');
+            }
+        } catch (error) {
+            showNotification('Error al importar datos: ' + error.message, 'error');
+        }
+    };
+    reader.readAsText(file);
+}
+
+function createAutoBackup() {
+    if (window.storageManager) {
+        const backupKey = window.storageManager.createBackup();
+        if (backupKey) {
+            console.log('Respaldo automático creado:', backupKey);
+            return true;
+        }
+    }
+    return false;
+}
+
+// Crear respaldo automático cada hora
+setInterval(createAutoBackup, 3600000);
 
 // Funciones de búsqueda y filtrado
 function searchPatients(query) {
@@ -724,6 +969,45 @@ notificationStyles.textContent = `
 
 document.head.appendChild(notificationStyles);
 
+// Sistema de registro de actividad
+function logActivity(type, description, data = {}) {
+    try {
+        const activities = JSON.parse(localStorage.getItem('otorongo_activities') || '[]');
+        const currentUser = JSON.parse(localStorage.getItem('otorongo_current_user') || '{}');
+        
+        const activity = {
+            id: generateId(),
+            type: type,
+            description: description,
+            user: currentUser.name || currentUser.username || 'Sistema',
+            timestamp: new Date().toISOString(),
+            data: data
+        };
+        
+        activities.unshift(activity); // Agregar al inicio
+        
+        // Mantener solo las últimas 100 actividades
+        if (activities.length > 100) {
+            activities.splice(100);
+        }
+        
+        localStorage.setItem('otorongo_activities', JSON.stringify(activities));
+        console.log('Actividad registrada:', type, description);
+    } catch (error) {
+        console.error('Error al registrar actividad:', error);
+    }
+}
+
+function getActivities(limit = 50) {
+    try {
+        const activities = JSON.parse(localStorage.getItem('otorongo_activities') || '[]');
+        return limit ? activities.slice(0, limit) : activities;
+    } catch (error) {
+        console.error('Error al obtener actividades:', error);
+        return [];
+    }
+}
+
 // Exportar funciones para uso en otros archivos
 window.OtorongoSystem = {
     // Funciones de utilidad
@@ -735,7 +1019,7 @@ window.OtorongoSystem = {
     openModal,
     closeModal,
     
-    // Funciones de datos
+    // Funciones de datos (lectura)
     getPatients,
     savePatients,
     getAppointments,
@@ -743,13 +1027,34 @@ window.OtorongoSystem = {
     getInvoices,
     saveInvoices,
     getUsers,
+    saveUsers,
+    addUser,
+    updateUser,
+    getDoctors,
     getMessages,
+    
+    // Funciones CRUD mejoradas
+    addPatient,
+    updatePatient,
+    deletePatient,
+    addAppointment,
+    updateAppointment,
+    deleteAppointment,
     
     // Funciones de búsqueda
     searchPatients,
     getPatientById,
     getAppointmentsByDate,
     getAppointmentsByPatient,
+    
+    // Funciones de respaldo
+    exportAllData,
+    importDataFromFile,
+    createAutoBackup,
+    
+    // Funciones de actividad
+    logActivity,
+    getActivities,
     
     // Variables globales
     get currentUser() { return currentUser; },
