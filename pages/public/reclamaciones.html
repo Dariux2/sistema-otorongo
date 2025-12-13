@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Libro de Reclamaciones - Centro Oftalmológico El Otorongo</title>
+    <link rel="stylesheet" href="../../assets/css/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-eye"></i>
+                <h1>Centro Oftalmológico El Otorongo</h1>
+            </div>
+            <nav class="nav">
+                <a href="../../index.html" class="nav-link">
+                    <i class="fas fa-home"></i> Volver al Inicio
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Sección de Reclamaciones -->
+    <section class="complaints-section">
+        <div class="container">
+            <div class="complaints-header">
+                <div style="font-size: 4rem; color: var(--primary-color); margin-bottom: 1rem;">
+                    <i class="fas fa-book"></i>
+                </div>
+                <h2>Libro de Reclamaciones</h2>
+                <p>
+                    Conforme a lo establecido en el Código de Protección y Defensa del Consumidor,
+                    ponemos a su disposición nuestro Libro de Reclamaciones virtual.
+                </p>
+            </div>
+
+            <div class="complaints-form-container">
+                <div class="complaints-info">
+                    <h3>
+                        <i class="fas fa-info-circle"></i>
+                        Información Importante
+                    </h3>
+                    <p>
+                        <strong>¿Qué es el Libro de Reclamaciones?</strong><br>
+                        Es un documento donde los consumidores pueden registrar sus quejas, reclamos o sugerencias
+                        sobre los productos o servicios que han adquirido.
+                    </p>
+                    <p style="margin-top: 0.75rem;">
+                        <strong>Diferencia entre Queja y Reclamo:</strong><br>
+                        • <strong>Queja:</strong> Disconformidad no relacionada con los productos o servicios.<br>
+                        • <strong>Reclamo:</strong> Disconformidad relacionada con los productos o servicios.<br>
+                        • <strong>Sugerencia:</strong> Propuesta de mejora para nuestros servicios.
+                    </p>
+                </div>
+
+                <form id="complaintsForm">
+                    <h3 style="color: var(--dark-color); margin-bottom: 1.5rem; border-bottom: 2px solid var(--primary-color); padding-bottom: 0.5rem;">
+                        <i class="fas fa-file-alt"></i> Formulario de Registro
+                    </h3>
+
+                    <!-- Número de Reclamo (Auto-generado) -->
+                    <div class="form-group full-width">
+                        <label for="complaintNumber">
+                            <i class="fas fa-hashtag"></i> Número de Registro
+                        </label>
+                        <input type="text" id="complaintNumber" name="numero" readonly 
+                               style="background-color: var(--gray-100); font-weight: 700; color: var(--primary-color);">
+                    </div>
+
+                    <!-- Tipo de Reclamación -->
+                    <div class="form-group full-width">
+                        <label for="complaintType">
+                            <i class="fas fa-list"></i> Tipo *
+                        </label>
+                        <select id="complaintType" name="tipo" required>
+                            <option value="">Seleccione el tipo</option>
+                            <option value="queja">Queja</option>
+                            <option value="reclamo">Reclamo</option>
+                            <option value="sugerencia">Sugerencia</option>
+                        </select>
+                    </div>
+
+                    <h4 style="color: var(--dark-color); margin: 2rem 0 1rem; border-bottom: 2px solid var(--gray-300); padding-bottom: 0.5rem;">
+                        <i class="fas fa-user"></i> Datos del Reclamante
+                    </h4>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="nombreCompleto">
+                                <i class="fas fa-user"></i> Nombre Completo *
+                            </label>
+                            <input type="text" id="nombreCompleto" name="nombreCompleto" required 
+                                   placeholder="Nombres y Apellidos">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="dni">
+                                <i class="fas fa-id-card"></i> DNI *
+                            </label>
+                            <input type="text" id="dni" name="dni" required maxlength="8" 
+                                   pattern="[0-9]{8}" placeholder="12345678">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="telefono">
+                                <i class="fas fa-phone"></i> Teléfono *
+                            </label>
+                            <input type="tel" id="telefono" name="telefono" required 
+                                   placeholder="987654321">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">
+                                <i class="fas fa-envelope"></i> Email *
+                            </label>
+                            <input type="email" id="email" name="email" required 
+                                   placeholder="correo@ejemplo.com">
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="direccion">
+                                <i class="fas fa-map-marker-alt"></i> Dirección *
+                            </label>
+                            <textarea id="direccion" name="direccion" rows="2" required 
+                                      placeholder="Dirección completa"></textarea>
+                        </div>
+                    </div>
+
+                    <h4 style="color: var(--dark-color); margin: 2rem 0 1rem; border-bottom: 2px solid var(--gray-300); padding-bottom: 0.5rem;">
+                        <i class="fas fa-clipboard-list"></i> Detalles del Incidente
+                    </h4>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="fechaIncidente">
+                                <i class="fas fa-calendar"></i> Fecha del Incidente *
+                            </label>
+                            <input type="date" id="fechaIncidente" name="fechaIncidente" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="servicioRelacionado">
+                                <i class="fas fa-stethoscope"></i> Servicio Relacionado *
+                            </label>
+                            <select id="servicioRelacionado" name="servicioRelacionado" required>
+                                <option value="">Seleccione el servicio</option>
+                                <option value="Consulta Oftalmológica">Consulta Oftalmológica</option>
+                                <option value="Cirugía de Cataratas">Cirugía de Cataratas</option>
+                                <option value="Tratamiento de Pterigión">Tratamiento de Pterigión</option>
+                                <option value="Refracción y Lentes">Refracción y Lentes</option>
+                                <option value="Atención al Cliente">Atención al Cliente</option>
+                                <option value="Facturación">Facturación</option>
+                                <option value="Otro">Otro</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="descripcion">
+                                <i class="fas fa-comment-alt"></i> Descripción Detallada *
+                            </label>
+                            <textarea id="descripcion" name="descripcion" rows="4" required 
+                                      placeholder="Describa detalladamente lo acontecido..."></textarea>
+                            <small style="color: var(--gray-600); font-size: 0.85rem;">
+                                Por favor, sea lo más específico posible sobre lo ocurrido.
+                            </small>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="pedido">
+                                <i class="fas fa-hand-holding-heart"></i> Pedido / Solución Solicitada *
+                            </label>
+                            <textarea id="pedido" name="pedido" rows="3" required 
+                                      placeholder="Indique qué solución o acción espera de nuestra parte..."></textarea>
+                        </div>
+                    </div>
+
+                    <div style="background: var(--gray-100); padding: 1rem; border-radius: 8px; margin: 1.5rem 0; border-left: 4px solid var(--primary-color);">
+                        <p style="margin: 0; font-size: 0.9rem; color: var(--gray-700);">
+                            <i class="fas fa-shield-alt"></i>
+                            <strong>Protección de Datos:</strong> Sus datos personales serán tratados conforme a la 
+                            Ley de Protección de Datos Personales (Ley N° 29733) y serán utilizados únicamente 
+                            para dar respuesta a su reclamo.
+                        </p>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="window.location.href='../../index.html'">
+                            <i class="fas fa-times"></i> Cancelar
+                        </button>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-paper-plane"></i> Enviar Reclamación
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Información Adicional -->
+            <div style="max-width: 800px; margin: 3rem auto 0; padding: 2rem; background: var(--white); border-radius: 8px; box-shadow: var(--box-shadow);">
+                <h3 style="color: var(--primary-color); margin-bottom: 1rem;">
+                    <i class="fas fa-question-circle"></i> Preguntas Frecuentes
+                </h3>
+                
+                <div style="margin-bottom: 1.5rem;">
+                    <h4 style="color: var(--dark-color); margin-bottom: 0.5rem;">
+                        ¿Cuánto tiempo demora la respuesta?
+                    </h4>
+                    <p style="color: var(--gray-600); margin: 0;">
+                        Nos comprometemos a responder su reclamo en un plazo máximo de 48 horas hábiles.
+                    </p>
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <h4 style="color: var(--dark-color); margin-bottom: 0.5rem;">
+                        ¿Cómo puedo hacer seguimiento?
+                    </h4>
+                    <p style="color: var(--gray-600); margin: 0;">
+                        Al enviar su reclamo, recibirá un número de registro único. Guarde este número para 
+                        consultar el estado de su reclamo.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 style="color: var(--dark-color); margin-bottom: 0.5rem;">
+                        ¿Qué pasa si no estoy satisfecho con la respuesta?
+                    </h4>
+                    <p style="color: var(--gray-600); margin: 0;">
+                        Si no está conforme con nuestra respuesta, puede acudir a INDECOPI para presentar su caso.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-eye"></i>
+                        <h3>Centro Oftalmológico El Otorongo</h3>
+                    </div>
+                    <p>Cuidando tu visión con excelencia y tecnología de vanguardia.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Contacto</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> Faucett 326, Callao</p>
+                    <p><i class="fas fa-phone"></i> (01) 555-0123</p>
+                    <p><i class="fas fa-envelope"></i> info@otorongo.com</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Centro Oftalmológico El Otorongo. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../assets/js/reclamaciones.js"></script>
+    <script>
+        // Establecer fecha máxima para el incidente (hoy)
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('fechaIncidente').setAttribute('max', today);
+        });
+    </script>
+</body>
+</html>

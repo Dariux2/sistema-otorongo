@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Reclamaciones - Centro Oftalmológico El Otorongo</title>
+    <link rel="stylesheet" href="../../assets/css/styles.css">
+    <link rel="stylesheet" href="../../dashboard-modals.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="dashboard-page">
+    <!-- Header del Dashboard -->
+    <header class="dashboard-header-main">
+        <div class="container">
+            <div class="dashboard-brand">
+                <i class="fas fa-eye"></i>
+                <h1>Centro Oftalmológico El Otorongo</h1>
+            </div>
+            
+            <div class="dashboard-user-info">
+                <div class="user-welcome">
+                    <span class="user-greeting">Bienvenido,</span>
+                    <span class="user-name" id="userName">Usuario</span>
+                    <span class="user-role" id="userRole">Administrador</span>
+                </div>
+                <div class="user-actions">
+                    <a href="../../dashboard.html" class="btn-home" title="Volver al Dashboard">
+                        <i class="fas fa-home"></i>
+                        <span class="btn-home-text">Dashboard</span>
+                    </a>
+                    <button class="btn-logout" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Salir</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="dashboard-main complaints-management">
+        <div class="container">
+            <!-- Título y Estadísticas -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <i class="fas fa-book"></i> Gestión de Reclamaciones
+                    </h2>
+                    <button class="btn-primary" onclick="window.open('../public/reclamaciones.html', '_blank')">
+                        <i class="fas fa-external-link-alt"></i> Ver Formulario Público
+                    </button>
+                </div>
+            </div>
+
+            <!-- Estadísticas -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="statTotal">0</div>
+                        <div class="stat-label">Total Reclamaciones</div>
+                    </div>
+                </div>
+
+                <div class="stat-card warning">
+                    <div class="stat-icon">
+                        <i class="fas fa-exclamation-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="statNuevas">0</div>
+                        <div class="stat-label">Nuevas</div>
+                    </div>
+                </div>
+
+                <div class="stat-card info">
+                    <div class="stat-icon">
+                        <i class="fas fa-spinner"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="statProceso">0</div>
+                        <div class="stat-label">En Proceso</div>
+                    </div>
+                </div>
+
+                <div class="stat-card success">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="statResueltas">0</div>
+                        <div class="stat-label">Resueltas</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filtros -->
+            <div class="complaints-filters">
+                <h3 style="margin-bottom: 1rem; color: var(--dark-color);">
+                    <i class="fas fa-filter"></i> Filtros
+                </h3>
+                <form id="complaintsFilters">
+                    <div class="filters-grid">
+                        <div class="form-group">
+                            <label for="filterTipo">Tipo</label>
+                            <select id="filterTipo" name="tipo">
+                                <option value="">Todos</option>
+                                <option value="queja">Queja</option>
+                                <option value="reclamo">Reclamo</option>
+                                <option value="sugerencia">Sugerencia</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="filterEstado">Estado</label>
+                            <select id="filterEstado" name="estado">
+                                <option value="">Todos</option>
+                                <option value="nueva">Nueva</option>
+                                <option value="en-proceso">En Proceso</option>
+                                <option value="resuelta">Resuelta</option>
+                                <option value="cerrada">Cerrada</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="filterFechaDesde">Desde</label>
+                            <input type="date" id="filterFechaDesde" name="fechaDesde">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="filterFechaHasta">Hasta</label>
+                            <input type="date" id="filterFechaHasta" name="fechaHasta">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="complaintsSearch">Buscar</label>
+                            <input type="text" id="complaintsSearch" placeholder="Número, nombre, DNI...">
+                        </div>
+
+                        <div class="form-group" style="display: flex; align-items: flex-end; gap: 0.5rem;">
+                            <button type="submit" class="btn-primary" style="flex: 1;">
+                                <i class="fas fa-search"></i> Buscar
+                            </button>
+                            <button type="button" id="resetFilters" class="btn-secondary">
+                                <i class="fas fa-redo"></i> Limpiar
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Tabla de Reclamaciones -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-list"></i> Lista de Reclamaciones
+                    </h3>
+                    <button class="btn-success" onclick="exportComplaintsToCSV()">
+                        <i class="fas fa-file-excel"></i> Exportar a Excel
+                    </button>
+                </div>
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Número</th>
+                                <th>Tipo</th>
+                                <th>Fecha</th>
+                                <th>Reclamante</th>
+                                <th>DNI</th>
+                                <th>Servicio</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="complaintsTableBody">
+                            <tr>
+                                <td colspan="8" style="text-align: center; padding: 3rem; color: var(--gray-500);">
+                                    <i class="fas fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 1rem; display: block;"></i>
+                                    Cargando reclamaciones...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="../../script.js"></script>
+    <script src="../../assets/js/reclamaciones.js"></script>
+    <script>
+        // Verificar autenticación
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentUser = localStorage.getItem('otorongo_current_user');
+            
+            if (!currentUser) {
+                alert('Debe iniciar sesión para acceder a esta página');
+                window.location.href = '../../login.html';
+                return;
+            }
+
+            const userData = JSON.parse(currentUser);
+            
+            // Solo administradores pueden acceder
+            if (userData.role !== 'administrador') {
+                alert('No tiene permisos para acceder a esta página');
+                window.location.href = '../../dashboard.html';
+                return;
+            }
+
+            // Actualizar información del usuario
+            document.getElementById('userName').textContent = userData.name || userData.username;
+            document.getElementById('userRole').textContent = 'Administrador';
+        });
+
+        // Función para exportar a CSV
+        function exportComplaintsToCSV() {
+            const complaints = window.ComplaintsSystem.getComplaints();
+            
+            if (complaints.length === 0) {
+                alert('No hay reclamaciones para exportar');
+                return;
+            }
+
+            // Crear CSV
+            let csv = 'Número,Tipo,Fecha Registro,Nombre,DNI,Teléfono,Email,Servicio,Estado,Descripción\n';
+            
+            complaints.forEach(c => {
+                csv += `"${c.numero}","${c.tipo}","${c.fechaRegistro}","${c.nombreCompleto}","${c.dni}","${c.telefono}","${c.email}","${c.servicioRelacionado}","${c.estado}","${c.descripcion.replace(/"/g, '""')}"\n`;
+            });
+
+            // Descargar archivo
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute('href', url);
+            link.setAttribute('download', `reclamaciones_${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            if (window.OtorongoSystem && window.OtorongoSystem.showNotification) {
+                window.OtorongoSystem.showNotification('Archivo exportado correctamente', 'success');
+            }
+        }
+
+        // Función de logout
+        function logout() {
+            if (confirm('¿Está seguro que desea cerrar sesión?')) {
+                localStorage.removeItem('otorongo_current_user');
+                window.location.href = '../../login.html';
+            }
+        }
+    </script>
+
+    <style>
+        /* Estilos adicionales específicos para esta página */
+        .btn-action {
+            background: var(--gray-100);
+            border: 1px solid var(--gray-300);
+            color: var(--gray-600);
+            padding: 0.5rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-action:hover {
+            background: var(--primary-color);
+            color: var(--white);
+            border-color: var(--primary-color);
+        }
+
+        .table {
+            font-size: 0.9rem;
+        }
+
+        .table th {
+            white-space: nowrap;
+        }
+
+        .table td {
+            vertical-align: middle;
+        }
+
+        @media (max-width: 768px) {
+            .table-container {
+                overflow-x: auto;
+            }
+
+            .table {
+                font-size: 0.8rem;
+            }
+
+            .btn-home-text {
+                display: none;
+            }
+        }
+    </style>
+</body>
+</html>
